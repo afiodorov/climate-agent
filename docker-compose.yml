@@ -1,0 +1,20 @@
+# Session storage. The agents still talk over an in-process bus — this is only
+# where conversations live so they survive a restart of the API.
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    # appendonly gives us durability across a `docker compose down`; the named
+    # volume is what makes that survive the container being recreated.
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  redis-data:
