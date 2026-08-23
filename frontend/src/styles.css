@@ -615,10 +615,29 @@ h1 {
   border-radius: 4px;
   padding: 1px 5px;
 }
+/* The table's own scroller — see COMPONENTS in Answer.tsx for why it is not
+   the transcript's job. `width: 100%` on the table still lets it grow past the
+   container when its columns cannot fit, which is exactly the case that needs
+   scrolling. */
+.answer .table-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+  margin-bottom: 12px;
+}
+.answer .table-scroll:last-child {
+  margin-bottom: 0;
+}
+
 .answer table {
   border-collapse: collapse;
   width: 100%;
   font-size: 13.5px;
+}
+/* Wrapping inside a cell is what keeps the table narrow enough to mostly fit;
+   a long city name must not be what forces the scroll. */
+.answer th,
+.answer td {
+  overflow-wrap: break-word;
 }
 .answer th,
 .answer td {
