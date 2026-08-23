@@ -1,1 +1,0 @@
-{"root":["./src/app.tsx","./src/api.ts","./src/main.tsx","./src/types.ts","./src/components/answer.tsx","./src/components/askbar.tsx","./src/components/conversationpanel.tsx","./src/components/progresslog.tsx","./src/components/turn.tsx","./src/hooks/usechat.ts","./src/hooks/usetheme.ts"],"version":"6.0.3"}
