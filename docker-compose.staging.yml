@@ -1,0 +1,65 @@
+# The staging stack for this app: https://climate.staging.fiodorov.es
+#
+# Nothing here publishes a host port. Caddy, on the shared `staging` network,
+# is the only way in, and it is what enforces the GitHub login — see
+# ../staging-infra. That invariant is the security boundary, not a style rule:
+# Docker's published ports bypass ufw, so a `ports:` line here would put the
+# service straight on the internet.
+#
+# Deliberately a separate compose *project* from docker-compose.yml. They share
+# a directory, so without this `name:` both would be project "climate-agent"
+# and `make redis-down` would start reaching into staging.
+name: climate-agent-staging
+
+services:
+  # Service and container names must be unique across every project that joins
+  # `staging`: Docker registers both as DNS aliases on that network, so two
+  # projects each calling their web service `app` would resolve `app` to both,
+  # round-robin. Convention: <repo> and <repo>-staging.
+  climate-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: climate-agent:staging
+    container_name: climate-agent-staging
+    restart: unless-stopped
+    env_file:
+      - .env.staging
+    environment:
+      # Its own Redis, on this stack's private network. The dev Redis on :6379
+      # is a different server with different data: both use the `climate:v2:`
+      # key prefix, so sharing a database would merge dev and staging
+      # conversations into one rail.
+      REDIS_URL: redis://redis:6379/0
+      PORT: "8000"
+      LOG_LEVEL: INFO
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - default   # reaches redis
+      - staging   # reachable by caddy
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    # No `ports:` and not on the `staging` network. Nothing outside this stack
+    # has any business talking to it, and the way to guarantee that is to give
+    # it no route rather than to firewall one.
+
+volumes:
+  # Becomes climate-agent-staging_redis-data — a different volume from dev's
+  # climate-agent_redis-data. That is the isolation, and it is checkable.
+  redis-data:
+
+networks:
+  staging:
+    external: true

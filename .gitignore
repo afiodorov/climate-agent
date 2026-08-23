@@ -1,5 +1,6 @@
 .venv/
 .env
+.env.staging
 __pycache__/
 *.pyc
 .pytest_cache/

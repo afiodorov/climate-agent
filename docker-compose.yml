@@ -4,7 +4,7 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
     # appendonly gives us durability across a `docker compose down`; the named
     # volume is what makes that survive the container being recreated.
     command: redis-server --appendonly yes

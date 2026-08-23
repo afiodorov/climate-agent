@@ -1,4 +1,5 @@
-.PHONY: dev api ui build test eval eval-view format lint fmt imports clean redis redis-down
+.PHONY: dev api ui build test eval eval-view format lint fmt imports clean redis redis-down \
+        staging staging-down staging-logs staging-prune
 
 NODE_MODULES := frontend/node_modules
 
@@ -69,3 +70,32 @@ lint:
 
 clean:
 	rm -rf frontend/dist frontend/node_modules .pytest_cache
+
+STAGING := docker compose -f docker-compose.staging.yml
+
+# Staging on this box: https://climate.staging.fiodorov.es, behind a GitHub
+# login. Builds the image from the working tree — no commit, no push, no
+# Railway — so what you are looking at is what is checked out right now. Prod
+# still deploys from a push to GitHub and is untouched by any of this.
+#
+# The shared Caddy + oauth2-proxy edge lives in ../staging-infra and has to be
+# up first; this only brings up the app and its own Redis, neither of which
+# publishes a port.
+staging:
+	@docker network inspect staging >/dev/null 2>&1 || \
+		{ echo "no 'staging' network — run 'make up' in ../staging-infra first"; exit 1; }
+	$(STAGING) up -d --build
+
+staging-down:
+	$(STAGING) down
+
+staging-logs:
+	$(STAGING) logs -f climate-agent
+
+# Every `make staging` orphans the previous image and grows the build cache.
+# Neither is urgent on a 955 GB disk, but a month of them adds up. Deliberately
+# not folded into `staging` — that would throw away the cache that makes the
+# rebuild fast. Safe: nothing in use is removed.
+staging-prune:
+	docker image prune -f
+	docker builder prune -f

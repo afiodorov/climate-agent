@@ -320,6 +320,49 @@ railway domain                             # public URL
 injects it as a reference variable. `PORT` is supplied by Railway at runtime;
 the Dockerfile's `CMD` reads it directly.
 
+## Staging on the box
+
+Prod is Railway. Staging is this machine, at
+`https://climate.staging.fiodorov.es`, behind a GitHub login that only lets
+`afiodorov` through — because `/api/sessions` is unscoped and there is no rate
+limit, so an open staging URL is an open invitation to spend someone's DeepSeek
+budget reading someone else's conversations.
+
+The reverse proxy and the login are not in this repo. They live once, in
+`../staging-infra`, and every staging app shares them: one Caddy terminating
+TLS, one oauth2-proxy holding one cookie scoped to `.staging.fiodorov.es`, so
+signing in to one app signs you in to all of them. This repo contributes a
+compose file describing the app and its own Redis, and nothing else.
+
+```sh
+cd ../staging-infra && make up    # once, and after a Caddyfile change
+cp .env.staging.example .env.staging && $EDITOR .env.staging
+make staging                      # build from the working tree, then restart
+make staging-logs
+make staging-down
+```
+
+`make staging` builds the image from whatever is checked out right now — no
+commit, no push, no Railway. That is the whole point of it: prod redeploys when
+`main` moves, staging redeploys when you say so.
+
+Staging has its own Redis, on the stack's private network, with its own volume.
+It is not the `make redis` container: both use the `climate:v2:` key prefix, so
+one database would put your dev conversations and your staging conversations in
+the same rail. Neither the app nor its Redis publishes a host port; Caddy is the
+only container on the box that does, and that — not the firewall — is what keeps
+them off the internet. Docker publishes ports by DNAT through the FORWARD chain,
+which skips ufw's INPUT rules entirely, so a stray `ports:` line is a public
+service no matter what `ufw status` says.
+
+| Where | What it holds |
+|---|---|
+| `../staging-infra/.env` | GitHub OAuth client id + secret, cookie secret. Shared by every staging app. |
+| `.env.staging` | `DEEPSEEK_API_KEY`. This app only. |
+
+Adding the *next* app is four steps, and none of them is DNS: the A record is a
+wildcard. See the runbook in `../staging-infra/README.md`.
+
 ## Known rough edges
 
 - The climate node often mentions a caveat itself (it can read
