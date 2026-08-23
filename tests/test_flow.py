@@ -15,12 +15,20 @@ from climate_agent import climate, gateway, progress, store
 from climate_agent.schemas import Final
 
 
+async def _allow(question, history):
+    """The scope filter, stubbed open. Tests here are about the flow, not the
+    guard; `test_guard.py` is where refusing is exercised."""
+    return True
+
+
 class Bus:
     """A graph plus the store it shares with the gateway, torn down cleanly."""
 
-    def __init__(self, ask):
+    def __init__(self, ask, guard=_allow):
         self.store = store.MemoryStore()
-        self.gateway = gateway.Gateway(climate.build_graph(ask=ask), store_=self.store)
+        self.gateway = gateway.Gateway(
+            climate.build_graph(ask=ask, guard=guard), store_=self.store
+        )
 
     async def __aenter__(self):
         return self
@@ -89,7 +97,12 @@ async def test_streams_step_timings_before_the_answer():
 
     steps = [payload for kind, payload in events if kind == "step"]
     seen = {(s.step, s.status) for s in steps}
-    assert {("answer", "start"), ("sql", "start"), ("caveats", "done")} <= seen
+    assert {
+        ("guard", "start"),
+        ("answer", "start"),
+        ("sql", "start"),
+        ("caveats", "done"),
+    } <= seen
 
     finished = [s for s in steps if s.status == "done"]
     assert finished and all(s.ms is not None and s.ms >= 0 for s in finished)

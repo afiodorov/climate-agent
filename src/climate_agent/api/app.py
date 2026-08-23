@@ -178,5 +178,7 @@ if _static_dir.is_dir():
     app.mount("/", StaticFiles(directory=_static_dir, html=True), name="static")
 else:  # dev: `npm run dev` serves the UI on :5173 and proxies /api here
     log.warning(
-        "no built frontend at %s; run `make ui` or use the Vite dev server", _static_dir
+        "no built frontend at %s; run `make build`, or `make ui` for the Vite dev "
+        "server on :5173",
+        _static_dir,
     )
