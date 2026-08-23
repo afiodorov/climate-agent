@@ -60,6 +60,18 @@ body {
 
 /* ---- Layout ---- */
 
+/* React mounts here, between body's flex column and .layout. Without it
+   joining that column, .layout's `flex: 1` has no flex parent to grow into:
+   the transcript collapses to its content instead of scrolling, and the
+   composer falls off the bottom of the fold — which on a phone means opening
+   a long conversation leaves no ask bar on screen at all. */
+#root {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 /* The transcript scrolls; the header and composer do not. That is the whole
    reason this is a flex column rather than ordinary document flow. */
 .layout {
@@ -89,6 +101,14 @@ body {
   /* Let the scrollbar sit outside the cards' shadows. */
   margin-inline: -4px;
   padding: 0 4px 8px;
+}
+
+/* Before the first question there is nothing to scroll, so the transcript
+   claims no space at all. Left at `flex: 1` it holds open a screenful of
+   nothing between the header and the ask bar — worst on a phone, where the
+   keyboard scrolls the header away and that empty band is all you see. */
+.transcript.is-empty {
+  flex: 0 0 auto;
 }
 
 .composer {
@@ -131,11 +151,58 @@ body {
   background: none;
 }
 
-/* Below this the rail would overlap the 820px column, so it steps aside
-   entirely rather than fighting the chat for room. */
-@media (max-width: 1100px) {
-  .rail {
-    display: none;
+/* Narrow screens have no room beside the 820px column, so the rail stops being
+   a column and comes over the chat as a drawer — opened by the header's ☰,
+   dismissed by the backdrop, the × or Escape. It used to `display: none` below
+   1100px, which left prior conversations unreachable on a phone entirely.
+   useRail owns the breakpoint and adds this class; there is no @media here on
+   purpose, so the two cannot drift apart. */
+.rail.drawer {
+  top: 0;
+  width: min(310px, 84vw);
+  padding: 16px 12px calc(16px + env(safe-area-inset-bottom));
+  box-shadow: 6px 0 28px rgb(0 0 0 / 0.22);
+  animation: rail-in 0.18s ease-out;
+}
+@keyframes rail-in {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+/* A button, not a div: dismissing the drawer by tapping outside it is a real
+   control, and screen readers should be able to reach it. */
+.rail-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  border: none;
+  padding: 0;
+  background: rgb(0 0 0 / 0.42);
+  cursor: pointer;
+  animation: backdrop-in 0.18s ease-out;
+}
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail.drawer,
+  .rail-backdrop {
+    animation: none;
+  }
+}
+
+/* Reveal-on-hover has no equivalent on a touch screen, so the delete would
+   never appear. The drawer is a touch surface whatever the pointer says. */
+.rail.drawer .rail-delete {
+  opacity: 1;
+}
+@media (hover: none) {
+  .rail-delete {
+    opacity: 1;
   }
 }
 
@@ -276,6 +343,7 @@ body {
   display: flex;
   gap: 14px;
   align-items: flex-start;
+  min-width: 0;
 }
 
 .logo {
@@ -311,6 +379,7 @@ h1 {
   gap: 8px;
 }
 
+.rail-menu,
 .theme-toggle,
 .new-chat {
   flex: 0 0 auto;
@@ -322,8 +391,15 @@ h1 {
   cursor: pointer;
   font-size: 15px;
 }
-.theme-toggle {
+.theme-toggle,
+.rail-menu {
   width: 34px;
+}
+/* Leads the header, so it reads as "what is behind this screen" rather than
+   as one more action alongside New chat. */
+.rail-menu {
+  align-self: flex-start;
+  margin-top: 4px;
 }
 .new-chat {
   padding: 0 12px;
@@ -332,6 +408,7 @@ h1 {
   font-weight: 500;
   white-space: nowrap;
 }
+.rail-menu:hover,
 .theme-toggle:hover,
 .new-chat:hover {
   color: var(--accent);
@@ -612,5 +689,34 @@ footer {
   }
   .tagline {
     display: none;
+  }
+  /* A phone has no vertical room to spare, and every pixel the header keeps is
+     one the transcript does not get. */
+  .layout {
+    padding: 0 14px;
+  }
+  .header {
+    gap: 10px;
+    padding: 16px 0 14px;
+  }
+  .brand {
+    gap: 10px;
+  }
+  .logo {
+    font-size: 20px;
+    width: 34px;
+    height: 34px;
+    flex-basis: 34px;
+    border-radius: 10px;
+  }
+  h1 {
+    font-size: 18px;
+  }
+  .rail-menu {
+    margin-top: 0;
+  }
+  footer {
+    margin-top: 10px;
+    font-size: 11.5px;
   }
 }

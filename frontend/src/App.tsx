@@ -3,6 +3,7 @@ import { AskBar } from './components/AskBar'
 import { ConversationPanel } from './components/ConversationPanel'
 import { Turn } from './components/Turn'
 import { useChat } from './hooks/useChat'
+import { useRail } from './hooks/useRail'
 import { useTheme } from './hooks/useTheme'
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
     removeConversation,
   } = useChat()
   const { theme, toggle } = useTheme()
+  const rail = useRail()
   const transcriptRef = useRef<HTMLDivElement>(null)
 
   // Follow the conversation as it grows: a new turn, and each step landing in
@@ -31,12 +33,30 @@ export default function App() {
       <ConversationPanel
         conversations={conversations}
         activeId={sessionId}
+        narrow={rail.narrow}
+        open={rail.open}
+        onToggle={rail.toggle}
+        onClose={rail.close}
         onOpen={openConversation}
         onDelete={removeConversation}
       />
 
       <div className="layout">
         <header className="header">
+          {/* Narrow only: the drawer has no chevron of its own to reopen it,
+              so this is the one way back to the conversation list. */}
+          {rail.narrow && (
+            <button
+              type="button"
+              className="rail-menu"
+              onClick={rail.toggle}
+              aria-label="Show conversations"
+              aria-expanded={rail.open}
+              title="Conversations"
+            >
+              ☰
+            </button>
+          )}
           <div className="brand">
             <span className="logo">☀</span>
             <div>
@@ -70,7 +90,12 @@ export default function App() {
           </div>
         </header>
 
-        <main className="transcript" ref={transcriptRef}>
+        {/* is-empty collapses it: with no turns the ask bar belongs under the
+            header, not pushed to the bottom of a blank screen. */}
+        <main
+          className={turns.length ? 'transcript' : 'transcript is-empty'}
+          ref={transcriptRef}
+        >
           {turns.map((turn) => (
             <Turn key={turn.id} turn={turn} />
           ))}
