@@ -21,6 +21,7 @@ from sse_starlette import EventSourceResponse, ServerSentEvent
 
 from .. import climate, gateway, query, store
 from ..main import _load_env
+from . import agents
 
 log = logging.getLogger(__name__)
 
@@ -42,9 +43,13 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         ) from exc
 
     app.state.gateway = gateway.Gateway(climate.build_graph(), store_=sessions)
+    agents.attach(app.state.gateway)
     log.info("graph up")
     try:
-        yield
+        # The MCP transport keeps its own task group; it lives exactly as long
+        # as the app does.
+        async with agents.server.session_manager.run():
+            yield
     finally:
         await sessions.close()
 
@@ -169,6 +174,13 @@ async def delete_session(session_id: str) -> Response:
 @app.get("/api/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+# The machine-facing surface: /mcp, /api/schema, /api/query, /api/caveats and
+# /llms.txt. Registered before the static mount below, which would otherwise
+# swallow /llms.txt and /mcp as files that do not exist.
+app.include_router(agents.router)
+app.add_route(agents.MCP_PATH, agents.mcp_app, methods=["GET", "POST", "DELETE"])
 
 
 _static_dir = Path(

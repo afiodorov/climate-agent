@@ -297,10 +297,54 @@ Caveats
 | `STATIC_DIR` | Where the built UI lives, default `frontend/dist`. |
 
 ```sh
-make test            # 91 tests, no API key needed — the model is stubbed
+make test            # 104 tests, no API key needed — the model is stubbed
 make eval            # 33-case guardrail eval; calls DeepSeek, needs a key
 make format lint     # ruff, line length 88
 ```
+
+## For other agents
+
+An agent with its own model does not need the chat: it needs the data and the
+caveats, and it wants to do the reasoning itself. So the pieces the `climate`
+node is built from are also handed out one by one, on three transports that
+share one set of functions (`src/climate_agent/api/agents.py`):
+
+| Surface | What | For |
+|---|---|---|
+| `/mcp` | Streamable HTTP MCP, stateless, JSON responses | Claude Code, claude.ai connectors, the Claude API, OpenAI Responses / Agents SDK, ChatGPT |
+| `/api/schema`, `/api/query?sql=`, `/api/caveats?answer=` | the same tools as GET routes returning JSON | anything that only has a web fetch; `/openapi.json` describes them |
+| `/llms.txt` | what this is, the schema, where the above live | the first thing an agent reads |
+
+The MCP tools:
+
+- `describe_rankings()` — both views, every column, and the honesty notes.
+- `query_rankings(sql)` — read-only DuckDB, at most 60 rows. Same allowlist as
+  the model's own tool: `SELECT`/`WITH` only, nothing that touches the filesystem.
+- `caveats_for(answer)` — the `caveats` node as a function: pass a draft answer,
+  get the notes that apply. No LLM.
+- `ask(question, session_id="")` — the whole graph, for a caller that would
+  rather have the finished answer and pay for the DeepSeek turn.
+
+Pointing an agent at it:
+
+```sh
+claude mcp add --transport http climate https://climate.fiodorov.es/mcp
+```
+
+```python
+# Claude Messages API
+mcp_servers=[{"type": "url", "url": "https://climate.fiodorov.es/mcp", "name": "climate"}]
+
+# OpenAI Responses API
+tools=[{"type": "mcp", "server_label": "climate",
+        "server_url": "https://climate.fiodorov.es/mcp", "require_approval": "never"}]
+```
+
+No auth, by design: the data is public and read-only, and `/api/ask` was
+already open. Nothing here widens a door; it adds better-shaped ones. On
+staging the GitHub login in front of everything means an external agent cannot
+reach `/mcp` there — test against prod, or exempt the path in
+`../staging-infra`.
 
 ## Deploying to Railway
 

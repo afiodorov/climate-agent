@@ -6,6 +6,11 @@ nodes: `guard` (cheap DeepSeek scope classifier, fails open) → `climate`
 (tool-calling loop over `query_rankings(sql)`) → `caveats` (deterministic, no
 LLM). Same graph behind the FastAPI/SSE server and the CLI.
 
+Other agents get the pieces directly: `/mcp` (Streamable HTTP MCP, tools
+`describe_rankings`, `query_rankings`, `caveats_for`, `ask`), the same as JSON
+under `/api/schema`, `/api/query`, `/api/caveats`, and `/llms.txt` as the map.
+All in `src/climate_agent/api/agents.py`, all unauthenticated on purpose.
+
 The model is **DeepSeek**, not Anthropic. `climate.ask_claude` is a historical
 name — do not "fix" it into an Anthropic call.
 
@@ -37,7 +42,7 @@ make ui                       # Vite on :5173, hot reload, proxies /api to :8000
 make staging                  # build + deploy to climate.staging.fiodorov.es
 make staging-logs             # follow the staging app
 make staging-down
-make test                     # 91 tests, no API key — the model is stubbed
+make test                     # 104 tests, no API key — the model is stubbed
 make eval                     # 33-case guardrail eval; calls DeepSeek for real, costs money
 make format lint              # ruff, line length 88
 ```

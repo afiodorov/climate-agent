@@ -12,6 +12,7 @@ import logging
 import os
 import re
 import time
+from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 
@@ -100,12 +101,26 @@ def _connection() -> duckdb.DuckDBPyConnection:
     return con
 
 
-def run_sql(sql: str) -> str:
-    """Run a read-only SELECT and return the result as a markdown-ish table.
+@dataclass(frozen=True)
+class QueryResult:
+    """Rows as DuckDB returned them, before any rendering.
 
-    Everything the model asks for is logged at DEBUG, including the queries this
-    refuses to run — watching the SQL is the cheapest way to see what the agent
-    actually believes about the schema. `LOG_LEVEL=DEBUG` turns it on.
+    `run_sql` renders this as text for the model's tool result; the agent-facing
+    HTTP and MCP surface hands it out as JSON instead. Same query, same cap on
+    rows, two shapes.
+    """
+
+    columns: list[str]
+    rows: list[list[object]]
+    truncated: bool
+
+
+def run_query(sql: str) -> QueryResult:
+    """Run a read-only SELECT and return at most `MAX_ROWS` rows.
+
+    Everything asked for is logged at DEBUG, including the queries this refuses
+    to run — watching the SQL is the cheapest way to see what a caller actually
+    believes about the schema. `LOG_LEVEL=DEBUG` turns it on.
     """
     flat = " ".join(sql.split())
     if not _ALLOWED_START.match(sql) or _FORBIDDEN.search(sql):
@@ -132,15 +147,19 @@ def run_sql(sql: str) -> str:
         " (truncated)" if truncated else "",
         (time.perf_counter() - started) * 1e3,
     )
+    return QueryResult(columns, [list(r) for r in rows[:MAX_ROWS]], truncated)
 
-    if not rows:
+
+def run_sql(sql: str) -> str:
+    """`run_query`, rendered as the markdown-ish table the model reads."""
+    result = run_query(sql)
+    if not result.rows:
         return "(no rows)"
 
-    rows = rows[:MAX_ROWS]
-    lines = [" | ".join(columns)]
-    for row in rows:
+    lines = [" | ".join(result.columns)]
+    for row in result.rows:
         lines.append(" | ".join("" if v is None else _fmt(v) for v in row))
-    if truncated:
+    if result.truncated:
         lines.append(f"... truncated at {MAX_ROWS} rows; add LIMIT or aggregate.")
     return "\n".join(lines)
 
