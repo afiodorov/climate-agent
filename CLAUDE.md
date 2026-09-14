@@ -1,10 +1,23 @@
 # climate-agent
 
 A LangGraph agent answering natural-language questions about outdoor-comfort
-city rankings by writing DuckDB SQL over two vendored CSVs in `data/`. Three
-nodes: `guard` (cheap DeepSeek scope classifier, fails open) → `climate`
-(tool-calling loop over `query_rankings(sql)`) → `caveats` (deterministic, no
-LLM). Same graph behind the FastAPI/SSE server and the CLI.
+city rankings by writing DuckDB SQL over one vendored run of `../climate` in
+`data/`: the published CSVs plus `agent/*.parquet`, the hourly record
+re-aggregated (UTCI histogram by month / light / dew point, month × hour
+profile) so SQL can rebuild the ranking under another band, at night, or
+without humid hours. Three nodes: `guard` (cheap DeepSeek scope classifier,
+fails open) → `climate` (tool-calling loop over `query_rankings(sql)` and
+`read_methodology`) → `caveats` (deterministic, no LLM). Same graph behind the
+FastAPI/SSE server and the CLI.
+
+The prompt's schema text, counts and comfort band are rendered from `data/` at
+first use (`query.schema()`), and the caveats node reads its numbers from the
+same files. Do not type those numbers into prose anywhere.
+
+**All of `data/` must come from one pipeline run.** Regenerate with the
+sequence in the README ("The data") and `make data`; never copy one file over
+on its own. `tests/test_query.py` checks the histogram reproduces
+`rankings.csv`, and a mismatch means mixed runs.
 
 Other agents get the pieces directly: `/mcp` (Streamable HTTP MCP, tools
 `describe_rankings`, `query_rankings`, `caveats_for`, `ask`), the same as JSON
@@ -42,7 +55,8 @@ make ui                       # Vite on :5173, hot reload, proxies /api to :8000
 make staging                  # build + deploy to climate.staging.fiodorov.es
 make staging-logs             # follow the staging app
 make staging-down
-make test                     # 104 tests, no API key — the model is stubbed
+make test                     # ~120 tests, no API key — the model is stubbed
+make data                     # vendor a fresh ../climate/out (all files, one run)
 make eval                     # 33-case guardrail eval; calls DeepSeek for real, costs money
 make format lint              # ruff, line length 88
 ```

@@ -49,32 +49,48 @@ def attach(human: gateway.Gateway) -> None:
     _gateway = human
 
 
-ABOUT = """\
-A ranking of the 1118 cities with population >= 500,000 by outdoor thermal comfort: \
-how many daylight hours a year the UTCI (Universal Thermal Climate Index, computed \
-hourly from ERA5 reanalysis, 2010-2024) falls inside a comfortable band. \
-`comfort_hours_yr` is the headline metric; `composite` additionally penalises \
-seasonal unevenness and PM2.5, and is what `rank` sorts by. Smaller cities appear \
-as unranked reference rows."""
+def about() -> str:
+    c = query.counts()
+    return (
+        f"A ranking of the {c['n_cities']} cities with population >= 500,000 by outdoor "
+        "thermal comfort: how many daylight hours a year the UTCI (Universal Thermal "
+        "Climate Index, computed hourly from ERA5 reanalysis, "
+        f"{c['start_year']}-{c['end_year']}) falls inside a comfortable band. "
+        "`comfort_hours_yr` is the headline metric; `composite` additionally penalises "
+        "seasonal unevenness and PM2.5, and is what `rank` sorts by. Smaller cities "
+        "appear as unranked reference rows. The same hourly record is also here "
+        "re-aggregated — a UTCI histogram by month, daylight and dew point, and a "
+        "month-by-hour profile — so SQL can rebuild the ranking under another comfort "
+        "band, at night, or with a humidity filter."
+    )
 
-# What every reader should know before quoting a number. The same facts the
-# `caveats` node attaches to chat answers, stated once up front.
-HONESTY = """\
+
+def honesty() -> str:
+    """What every reader should know before quoting a number. The same facts
+    the `caveats` node attaches to chat answers, stated once up front."""
+    c = query.counts()
+    tau = query.sensitivity_summary().get("metric_raw_hours", 0.56)
+    return f"""\
 - "Best" depends on the metric. Raw comfort hours and the composite agree only \
-moderately (Kendall tau ~= 0.56); say which one you ranked by.
-- `microclimate_risk` is True for 578 of 1118 cities: the ERA5 grid cell may not \
-represent the city itself (coast, steep relief). Mention it when you name one.
-- `sensitivity.rank_volatility` is how far a city's rank moves across 17 scoring \
-variants. A city whose spread exceeds its own rank is a scoring artefact, not a fact.
+moderately (Kendall tau ~= {tau:.2f}); say which one you ranked by.
+- `microclimate_risk` is True for {c["n_flagged"]} of {c["n_cities"]} cities: the ERA5 \
+grid cell may not represent the city itself (coast, steep relief). Mention it when you \
+name one.
+- `sensitivity.rank_volatility` is how far a city's rank moves across \
+{c["n_variants"]} scoring variants. A city whose spread exceeds its own rank is a \
+scoring artefact, not a fact.
 - `is_reference` rows are below the population floor and carry no rank.
+- Anything rebuilt from `utci_histogram` or `hourly_profile` is recomputed under your \
+own assumptions, not the published ranking; say so. Humidity is ERA5's cell-mean dew \
+point, and UTCI already includes it.
 - Never state a number you have not read out of a query result."""
 
 
 def describe() -> dict[str, Any]:
     return {
-        "about": ABOUT,
-        "schema": query.SCHEMA.strip(),
-        "notes": HONESTY,
+        "about": about(),
+        "schema": query.schema().strip(),
+        "notes": honesty(),
         "max_rows": query.MAX_ROWS,
     }
 
@@ -94,23 +110,38 @@ server = MCPServer(
     "climate",
     title="City outdoor comfort rankings",
     instructions=(
-        f"{ABOUT}\n\nCall describe_rankings once for the schema, then "
-        "query_rankings with DuckDB SQL. Pass your draft answer to caveats_for "
-        "before presenting it.\n\n" + HONESTY
+        "A ranking of the world's 500k+ cities by outdoor thermal comfort, plus the "
+        "aggregated hourly UTCI record behind it. Call describe_rankings once for the "
+        "schema, then query_rankings with DuckDB SQL. Pass your draft answer to "
+        "caveats_for before presenting it. read_methodology explains how the index "
+        "is built and what it leaves out."
     ),
 )
 
 
 @server.tool()
 def describe_rankings() -> dict[str, Any]:
-    """The two views, every column and what it means, and the caveats that apply
-    to any answer built on them. Read this once before writing SQL."""
+    """Every view and table, every column and what it means, the SQL macros, worked
+    recipes, and the caveats that apply to any answer built on them. Read this
+    once before writing SQL."""
     return describe()
 
 
 @server.tool()
+def read_methodology(section: str = "") -> str:
+    """The pipeline's own write-up: method, sun exposure, the five metrics,
+    sensitivity, known limitations, reproduction. Pass a `##` heading to get one
+    section, or nothing for the whole document.
+
+    Args:
+        section: Part of a section heading, e.g. "limitations". Empty = all.
+    """
+    return query.methodology(section)
+
+
+@server.tool()
 async def query_rankings(sql: str) -> dict[str, Any]:
-    """Run a read-only DuckDB SELECT over the `rankings` and `sensitivity` views.
+    """Run a read-only DuckDB SELECT over the views and tables `describe_rankings` lists.
 
     Returns columns and at most 60 rows; `truncated` is true when there were more,
     so add LIMIT or aggregate. Only SELECT and WITH statements are accepted.
@@ -194,6 +225,12 @@ async def run(sql: str = "") -> dict[str, Any]:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
+@router.get("/api/methodology", response_class=PlainTextResponse)
+def methodology(section: str = "") -> str:
+    """The pipeline's methodology document, whole or one `## section`."""
+    return query.methodology(section)
+
+
 @router.get("/api/caveats")
 async def notes(answer: str = "") -> dict[str, list[str]]:
     """The caveats that apply to a draft answer. JSON twin of `caveats_for`."""
@@ -205,14 +242,14 @@ def llms_txt(base: str) -> str:
     return f"""\
 # Climate: city outdoor comfort rankings
 
-> {ABOUT}
+> {about()}
 
 Free, read-only, no auth. Query it directly rather than scraping the chat UI.
 
 ## MCP (preferred)
 
 Streamable HTTP endpoint: {base}{MCP_PATH}
-Tools: describe_rankings, query_rankings(sql), caveats_for(answer), ask(question).
+Tools: describe_rankings, query_rankings(sql), caveats_for(answer), read_methodology(section), ask(question).
 
 - Claude Code: `claude mcp add --transport http climate {base}{MCP_PATH}`
 - Claude API: mcp_servers=[{{"type": "url", "url": "{base}{MCP_PATH}", "name": "climate"}}]
@@ -223,16 +260,17 @@ Tools: describe_rankings, query_rankings(sql), caveats_for(answer), ask(question
 - {base}/api/schema — views, columns, caveats (JSON)
 - {base}/api/query?sql=SELECT+name,+rank+FROM+rankings+ORDER+BY+rank+LIMIT+10 — read-only DuckDB, max {query.MAX_ROWS} rows (JSON)
 - {base}/api/caveats?answer=... — honesty notes for a draft answer (JSON)
+- {base}/api/methodology?section=limitations — how the index is built and what it misses (text)
 - {base}/api/ask?q=... — the hosted agent, as server-sent events
 - {base}/openapi.json — the OpenAPI description of all of the above
 
 ## Before you quote a number
 
-{HONESTY}
+{honesty()}
 
 ## Schema
 
-{query.SCHEMA.strip()}
+{query.schema().strip()}
 """
 
 

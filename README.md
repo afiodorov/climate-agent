@@ -14,13 +14,14 @@ step cost.
 src/climate_agent/
   schemas.py     Step/Final types the gateway yields and the API serializes
   progress.py    LangGraph custom-stream step emitter
-  query.py       DuckDB over ./data/*.csv
+  query.py       DuckDB over ./data: the CSVs, the agent parquet tables, the macros
   climate.py     the graph: guard -> DeepSeek + query_rankings tool -> caveats
   guard.py       the scope filter (cheap classifier call, short-circuits to END)
   caveats.py     the honesty sidecar (no LLM)
   gateway.py     session bookkeeping + the CLI repl
   api/app.py     FastAPI: /api/ask (SSE) + the built UI
-data/            rankings.csv, sensitivity.csv — vendored, not a sibling checkout
+data/            one run of ../climate, vendored: rankings.csv, sensitivity*.csv,
+                 methodology.md, agent/*.parquet (see "The data")
 evals/           promptfoo guardrail eval: cases.yaml + a provider shim
 frontend/        Vite + React 19 + TS; npm run build -> dist/, which the API mounts
 ```
@@ -133,12 +134,16 @@ a bare follow-up ("and in February?", "why?") is judged as the follow-up it is.
 See [Guardrails](#guardrails) for why this isn't just a line in the system
 prompt.
 
-**`climate` node** (`climate.py`) answers questions with DeepSeek and a single
-`query_rankings(sql)` tool over `data/rankings.csv` (1118 cities × 47 columns)
-and `data/sensitivity.csv`. Built with `langchain.agents.create_agent` — a
-ReAct tool-calling loop — wrapped in a graph node so its own progress events
-(emitted from inside the tool, several frames down) get forwarded onto the
-outer graph's stream.
+**`climate` node** (`climate.py`) answers questions with DeepSeek and two
+tools: `query_rankings(sql)` over everything in `data/` (the published ranking,
+the sweep, and the aggregated hourly tables — see [The data](#the-data)) and
+`read_methodology(section)` for "how does this work" questions. Built with
+`langchain.agents.create_agent` — a ReAct tool-calling loop — wrapped in a
+graph node so its own progress events (emitted from inside the tool, several
+frames down) get forwarded onto the outer graph's stream. Its system prompt is
+rendered from the data at first use: column lists come from DuckDB, counts and
+the comfort band from the files, so a regenerated `data/` cannot drift from
+what the model is told.
 
 **`caveats` node** (`caveats.py`) is why the graph earns its keep. It reads the
 draft `climate` wrote and appends the caveats a chat answer would otherwise
@@ -241,6 +246,46 @@ Unlike `make test`, this calls DeepSeek for real: one cheap classifier call per
 case, a fraction of a cent per run. It is deliberately not wired into
 `make test`, which must stay runnable without a key.
 
+## The data
+
+`data/` is one run of the sibling [`../climate`](../climate) pipeline, vendored
+so nothing here needs that checkout:
+
+| file | what |
+|---|---|
+| `rankings.csv` | the published ranking, one row per city, 47 columns |
+| `sensitivity.csv`, `sensitivity_summary.csv` | rank under 17 scoring variants; Kendall's τ per variant |
+| `methodology.md` | the pipeline's generated write-up, served by `read_methodology` and `/api/methodology` |
+| `agent/utci_histogram.parquet` | hours per year by city × month × light (day / twilight / night) × dew-point class × 1 °C UTCI bin |
+| `agent/hourly_profile.parquet` | city × month × local hour: UTCI mean and percentiles, dew point, comfort hours day and night, sun and shade |
+| `agent/yearly.parquet` | city × year totals |
+| `agent/city_extras.parquet` | derived per-city columns folded into `rankings`: night comfort, dry comfort, humidity |
+| `agent/manifest.json` | when, from what, under which knobs |
+
+The histogram is the interesting one. The comfort weight is a trapezoid, so it
+is linear inside any whole-degree bin, and every band the pipeline uses has
+whole-degree knots; summing `hours_rain_adj × comfort_weight(utci_mean_c, …)`
+over bins therefore reproduces `comfort_hours_yr` to floating-point precision
+and any other whole-degree band just as exactly. That is what lets the model
+answer "what if the band were 2 °C warmer", "an index for night-time" or
+"comfortable but not humid" from ~30 MB instead of the 14 GB hourly cache —
+by SQL, with the arithmetic checked by `tests/test_query.py`. `query.py`
+defines the `comfort_weight` and `baseline_weight` macros; the schema text the
+model reads carries worked recipes for each of those questions.
+
+Everything in `data/` must come from **one** pipeline run. To refresh it:
+
+```sh
+cd ../climate
+uv run cli.py fetch-utci      # ~2-3 h from CDS; resumable
+uv run cli.py score && uv run cli.py sweep && uv run cli.py report
+uv run cli.py export-agent    # writes out/agent/
+cd ../climate-agent && make data
+make test
+```
+
+`make data` refuses to copy when `rankings.csv` is newer than the export.
+
 ## Running it
 
 Needs `DEEPSEEK_API_KEY` in `.env` (or the environment). The ranking data ships
@@ -333,11 +378,19 @@ claude mcp add --transport http climate https://climate.fiodorov.es/mcp
 
 ```python
 # Claude Messages API
-mcp_servers=[{"type": "url", "url": "https://climate.fiodorov.es/mcp", "name": "climate"}]
+mcp_servers = [
+    {"type": "url", "url": "https://climate.fiodorov.es/mcp", "name": "climate"}
+]
 
 # OpenAI Responses API
-tools=[{"type": "mcp", "server_label": "climate",
-        "server_url": "https://climate.fiodorov.es/mcp", "require_approval": "never"}]
+tools = [
+    {
+        "type": "mcp",
+        "server_label": "climate",
+        "server_url": "https://climate.fiodorov.es/mcp",
+        "require_approval": "never",
+    }
+]
 ```
 
 No auth, by design: the data is public and read-only, and `/api/ask` was

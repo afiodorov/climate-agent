@@ -74,3 +74,30 @@ def test_trimming_drops_whole_turns_not_halves_of_them():
 def test_a_short_session_is_left_alone():
     messages = [_q("q"), _a("a")]
     assert climate._trim_session(messages) == messages
+
+
+def test_sql_of_last_turn_reads_only_the_current_turn():
+    messages = [
+        HumanMessage("first"),
+        AIMessage(
+            "",
+            tool_calls=[
+                {"name": "query_rankings", "args": {"sql": "SELECT 1"}, "id": "a"}
+            ],
+        ),
+        ToolMessage("1", tool_call_id="a"),
+        AIMessage("one"),
+        HumanMessage("second"),
+        AIMessage(
+            "",
+            tool_calls=[
+                {"name": "query_rankings", "args": {"sql": "SELECT 2"}, "id": "b"},
+                {"name": "read_methodology", "args": {"section": ""}, "id": "c"},
+            ],
+        ),
+        ToolMessage("2", tool_call_id="b"),
+        ToolMessage("doc", tool_call_id="c"),
+        AIMessage("two"),
+    ]
+    assert climate.sql_of_last_turn(messages) == ["SELECT 2"]
+    assert climate.sql_of_last_turn([]) == []

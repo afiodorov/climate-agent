@@ -9,10 +9,13 @@ import inspect
 
 import httpx
 import openai
+from conftest import flagged_city, has_data
 from langchain_core.messages import AIMessage, HumanMessage
 
 from climate_agent import climate, gateway, progress, store
 from climate_agent.schemas import Final
+
+FLAGGED = flagged_city() if has_data else "Lima"
 
 
 async def _allow(question, history):
@@ -50,7 +53,7 @@ async def test_question_reaches_the_agent_and_the_answer_comes_back():
 
 async def test_caveat_node_annotates_without_the_climate_node_knowing():
     async def ask(question, history):
-        return "Lima is the best city on raw comfort hours.", history
+        return f"{FLAGGED} is the best city on raw comfort hours.", history
 
     async with Bus(ask) as bus:
         final = await bus.gateway.ask("where is best?", timeout=10)
@@ -59,7 +62,7 @@ async def test_caveat_node_annotates_without_the_climate_node_knowing():
     assert any("Microclimate risk" in c for c in final.caveats)
     assert any('"Best" depends' in c for c in final.caveats)
     # The draft itself is untouched — the caveats node appends, it does not rewrite.
-    assert final.answer == "Lima is the best city on raw comfort hours."
+    assert final.answer == f"{FLAGGED} is the best city on raw comfort hours."
 
 
 async def test_concurrent_questions_do_not_cross_wires():
@@ -263,7 +266,7 @@ async def test_the_transcript_keeps_the_caveats_the_model_never_sees():
     climate node — caveats are attached downstream and never reach the model."""
 
     async def ask(question, history):
-        return "Lima is the best city on raw comfort hours.", history
+        return f"{FLAGGED} is the best city on raw comfort hours.", history
 
     async with Bus(ask) as bus:
         await bus.gateway.ask("where is best?", "s1", timeout=10)

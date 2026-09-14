@@ -1,5 +1,5 @@
 .PHONY: dev api ui build test eval eval-view format lint fmt imports clean redis redis-down \
-        staging staging-down staging-logs staging-prune
+        staging staging-down staging-logs staging-prune data
 
 NODE_MODULES := frontend/node_modules
 
@@ -40,6 +40,23 @@ $(NODE_MODULES): frontend/package.json frontend/package-lock.json
 
 cli:
 	uv run climate-agent
+
+# Vendor a fresh pipeline run from the sibling checkout. Everything in data/
+# must come from ONE run of ../climate (score, sweep, report, export-agent):
+# the histogram is checked against rankings.csv, and a mismatch is a bug. The
+# manifest is written last by the pipeline, so it being older than
+# rankings.csv means the export was not re-run.
+CLIMATE_OUT := ../climate/out
+data:
+	@test -f $(CLIMATE_OUT)/agent/manifest.json || \
+		{ echo "no $(CLIMATE_OUT)/agent/manifest.json — run 'uv run cli.py export-agent' in ../climate"; exit 1; }
+	@test ! $(CLIMATE_OUT)/rankings.csv -nt $(CLIMATE_OUT)/agent/manifest.json || \
+		{ echo "rankings.csv is newer than the agent export — re-run export-agent in ../climate"; exit 1; }
+	mkdir -p data/agent
+	cp $(CLIMATE_OUT)/rankings.csv $(CLIMATE_OUT)/sensitivity.csv $(CLIMATE_OUT)/sensitivity_summary.csv data/
+	cp $(CLIMATE_OUT)/README.md data/methodology.md
+	cp $(CLIMATE_OUT)/agent/*.parquet $(CLIMATE_OUT)/agent/manifest.json data/agent/
+	@du -sh data
 
 test:
 	uv run pytest -q

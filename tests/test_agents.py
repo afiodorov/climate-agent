@@ -11,10 +11,13 @@ import asyncio
 import httpx
 import pytest
 import pytest_asyncio
+from conftest import flagged_city, has_data
 
 from climate_agent import climate, gateway, query, store
 from climate_agent.api import agents
 from climate_agent.api.app import app
+
+FLAGGED = flagged_city() if has_data else "Lima"
 
 pytestmark = [
     pytest.mark.skipif(
@@ -40,7 +43,7 @@ async def _allow(question, history):
 
 
 async def _ask(question, history):
-    return f"Lima is the best city. (asked: {question})", history
+    return f"{FLAGGED} is the best city. (asked: {question})", history
 
 
 @pytest_asyncio.fixture(scope="module", loop_scope="module")
@@ -131,14 +134,16 @@ async def test_query_route_refuses_writes(client):
 
 
 async def test_query_route_caps_rows(client):
-    r = await client.get("/api/query", params={"sql": "SELECT name FROM rankings"})
+    r = await client.get(
+        "/api/query", params={"sql": "SELECT name FROM rankings CROSS JOIN range(100)"}
+    )
     body = r.json()
     assert len(body["rows"]) == query.MAX_ROWS
     assert body["truncated"] is True
 
 
 async def test_caveats_route(client):
-    r = await client.get("/api/caveats", params={"answer": "Lima is the best."})
+    r = await client.get("/api/caveats", params={"answer": f"{FLAGGED} is the best."})
     assert r.status_code == 200
     assert any("Microclimate risk" in c for c in r.json()["caveats"])
 
@@ -159,7 +164,22 @@ async def test_mcp_lists_the_tools(client):
     )
     assert r.status_code == 200, r.text
     names = {t["name"] for t in r.json()["result"]["tools"]}
-    assert names == {"describe_rankings", "query_rankings", "caveats_for", "ask"}
+    assert names == {
+        "describe_rankings",
+        "query_rankings",
+        "caveats_for",
+        "read_methodology",
+        "ask",
+    }
+
+
+async def test_methodology_route_and_tool(client):
+    r = await client.get("/api/methodology", params={"section": "sensitivity"})
+    assert r.status_code == 200
+    assert r.text.startswith("## ")
+    result = await _call(client, "read_methodology", section="sensitivity")
+    assert result["isError"] is False
+    assert result["content"][0]["text"].startswith("## ")
 
 
 async def test_mcp_query_returns_structured_rows(client):
@@ -179,7 +199,7 @@ async def test_mcp_query_error_is_readable(client):
 
 
 async def test_mcp_caveats_tool(client):
-    result = await _call(client, "caveats_for", answer="Lima is the best.")
+    result = await _call(client, "caveats_for", answer=f"{FLAGGED} is the best.")
     assert result["isError"] is False
     assert any("Microclimate risk" in c["text"] for c in result["content"])
 

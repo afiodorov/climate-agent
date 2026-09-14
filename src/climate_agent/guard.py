@@ -71,8 +71,9 @@ The assistant it guards answers questions about ONE dataset: a ranking of the 11
 world cities with population >= 500,000 by how comfortable they are to be outdoors, \
 scored from hourly UTCI (thermal comfort) computed from ERA5 reanalysis 2010-2024, \
 plus per-city PM2.5, seasonality, month-by-month comfort hours, sun/shade exposure, \
-and a sensitivity analysis of how each city's rank moves under different scoring \
-choices.
+humidity and dew point, night-time and hour-of-day comfort, and a sensitivity \
+analysis of how each city's rank moves under different scoring choices or a \
+different comfort band.
 
 Reply ALLOW for:
 - anything about the outdoor comfort, climate, weather, temperature, air quality, \

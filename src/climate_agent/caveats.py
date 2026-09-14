@@ -19,9 +19,10 @@ _MIN_NAME = 4
 _MAX_NAMED = 6
 
 # An ordering claim: a superlative, or any appeal to rank. "best month" and
-# "worst month" are column names, not claims, so they do not count.
+# "worst month" are column names, and "best hour" / "best time" is a
+# time-of-day answer, not a claim about which city wins, so they do not count.
 _ORDERING = re.compile(
-    r"\b(best|worst)\b(?!\s+month)"
+    r"\b(best|worst)\b(?!\s+(month|hour|time|window|stretch))"
     r"|\b(top|highest|lowest|number one|most comfortable|winner|leads?)\b"
     r"|\brank(s|ed|ing)?\b|#1",
     re.IGNORECASE,
@@ -30,6 +31,22 @@ _ORDERING = re.compile(
 # ...unless the answer already did the disambiguation itself, in which case
 # repeating it is noise.
 _ALREADY_HEDGED = re.compile(r"composite", re.IGNORECASE)
+
+# An answer built from the aggregated hourly record rather than the published
+# table: a night-time index, a shifted band, a time of day. Those numbers are
+# recomputed under the answer's own assumptions, and the reader should know.
+_RECOMPUTED = re.compile(
+    r"\b(night-?time|at night|after dark|evenings?|time of day|hour of the day|"
+    r"custom band|shifted band|warmer band|cooler band|recomput\w*|rebuil[dt]\w*)\b",
+    re.IGNORECASE,
+)
+
+# Humidity claims rest on ERA5's dew point over a ~31 km cell. Explicit terms
+# only: an answer that calls a climate "humid" in passing is not making one.
+_HUMIDITY = re.compile(
+    r"\b(dew ?points?|muggy|humidity|humid hours|not humid|without humidity)\b",
+    re.IGNORECASE,
+)
 
 
 @lru_cache(maxsize=1)
@@ -81,11 +98,17 @@ def _join(names: list[str]) -> str:
     return text
 
 
-def caveats_for(answer: str) -> list[str]:
-    """Every caveat the published columns say applies to this answer."""
+def caveats_for(answer: str, sql: list[str] | None = None) -> list[str]:
+    """Every caveat the published columns say applies to this answer.
+
+    `sql` is what the turn actually ran, when the caller has it (the graph
+    does). It decides the "recomputed" note precisely; without it the note
+    falls back to reading the answer's wording.
+    """
     cities = cities_mentioned(answer)
     index = query.city_index()
     volatility = query.volatility_index()
+    counts = query.counts()
     notes: list[str] = []
 
     risky = [c for c in cities if index.get(c, {}).get("microclimate_risk")]
@@ -105,8 +128,8 @@ def caveats_for(answer: str) -> list[str]:
         )
         notes.append(
             f"Microclimate risk ({why}): the ERA5 grid cell may not represent "
-            f"conditions in the city itself for {_join(risky)}. 578 of the 1118 "
-            "cities carry this flag."
+            f"conditions in the city itself for {_join(risky)}. "
+            f"{counts['n_flagged']} of the {counts['n_cities']} cities carry this flag."
         )
 
     unstable = [
@@ -117,7 +140,8 @@ def caveats_for(answer: str) -> list[str]:
     for city in unstable[:3]:
         entry = volatility[city]
         notes.append(
-            f"{city}'s position is unstable: across the 17 scoring variants its rank "
+            f"{city}'s position is unstable: across the {counts['n_variants']} scoring "
+            f"variants its rank "
             f"spans {entry['rank_volatility']:.0f} places (median {entry['rank_median']:.0f}). "
             "Treat it as indicative, not exact."
         )
@@ -130,10 +154,33 @@ def caveats_for(answer: str) -> list[str]:
         )
 
     if _ORDERING.search(answer) and not _ALREADY_HEDGED.search(answer):
+        tau = query.sensitivity_summary().get("metric_raw_hours", 0.56)
         notes.append(
             '"Best" depends on the metric. Raw comfort hours and the composite score '
-            "agree only moderately (Kendall tau ~= 0.56), so roughly a fifth of city "
-            "pairs swap order between them."
+            f"agree only moderately (Kendall tau ~= {tau:.2f}), so roughly a fifth of "
+            "city pairs swap order between them."
+        )
+
+    recomputed = (
+        any(query.recomputes(s) for s in sql)
+        if sql is not None
+        else bool(_RECOMPUTED.search(answer))
+    )
+    if counts["has_agent_tables"] and recomputed:
+        notes.append(
+            "Night-time, time-of-day and custom-band figures are recomputed from the "
+            "aggregated hourly record (1 degC UTCI bins, half-sun exposure, "
+            f"{counts['start_year']}-{counts['end_year']} climatology) under the "
+            "assumptions stated in the answer. They are not the published ranking, and "
+            "the published sensitivity analysis does not cover them."
+        )
+
+    if _HUMIDITY.search(answer):
+        notes.append(
+            "Humidity here is ERA5's 2 m dew point over a ~31 km grid cell. Coastal and "
+            "lakeside cities are often more humid than their cell, and UTCI already "
+            "accounts for humidity, so a dew-point filter counts it a second time on "
+            "purpose."
         )
 
     return notes
