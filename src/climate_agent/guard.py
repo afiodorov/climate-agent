@@ -53,7 +53,7 @@ CONTEXT_QUESTIONS = 3
 
 REFUSAL_TEXT = (
     "I only answer questions about this outdoor-comfort dataset — how comfortable "
-    "it is to be outside across the world's 1,118 cities of 500,000+ people, scored "
+    "it is to be outside across the world's large cities, scored "
     "from ERA5 reanalysis. Ask me something like *which cities are most comfortable "
     "year-round?*, *what is February like in Lisbon?*, or *how does Porto compare "
     "with Cape Town in the shade?*"
@@ -67,8 +67,9 @@ TOO_LONG_TEXT = (
 SYSTEM = """You are a scope filter guarding a climate-data assistant. You do not \
 answer questions; you classify them.
 
-The assistant it guards answers questions about ONE dataset: a ranking of the 1118 \
-world cities with population >= 500,000 by how comfortable they are to be outdoors, \
+The assistant it guards answers questions about ONE dataset: a ranking of the world's \
+large cities (every urban centre above a population floor) by how comfortable they \
+are to be outdoors, \
 scored from hourly UTCI (thermal comfort) computed from ERA5 reanalysis 2010-2024, \
 plus per-city PM2.5, seasonality, month-by-month comfort hours, sun/shade exposure, \
 humidity and dew point, night-time and hour-of-day comfort, and a sensitivity \

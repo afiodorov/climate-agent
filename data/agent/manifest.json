@@ -6,7 +6,8 @@
     "end_year": 2024
   },
   "backend": "cds",
-  "n_cities": 1118,
+  "n_cities": 1906,
+  "min_population": 300000,
   "n_years": 15.00068473815918,
   "utci_bin_width_c": 1.0,
   "light": {
@@ -83,9 +84,9 @@
     "enabled": true
   },
   "rows": {
-    "utci_histogram": 2165296,
-    "hourly_profile": 321984,
-    "yearly": 16770,
-    "city_extras": 1118
+    "utci_histogram": 3672769,
+    "hourly_profile": 548928,
+    "yearly": 28590,
+    "city_extras": 1906
   }
 }

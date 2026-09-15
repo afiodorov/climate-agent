@@ -63,7 +63,7 @@ def _matcher() -> re.Pattern[str] | None:
 
 
 # Instability has to be measured relative to the city's own rank. Median
-# volatility across all 1118 cities is ~89 places, but a mid-pack city moving
+# volatility across the whole list is on the order of 90 places, but a mid-pack city moving
 # from 500th to 600th means nothing, while Lima moving 12 places off rank 3
 # means its podium finish is an artefact of scoring choices. A city whose rank
 # swings by more than its own rank is unstable in the way that matters; that
@@ -149,7 +149,8 @@ def caveats_for(answer: str, sql: list[str] | None = None) -> list[str]:
     reference = [c for c in cities if index.get(c, {}).get("is_reference")]
     if reference:
         notes.append(
-            f"{_join(reference)} sit below the 500,000 population floor and are shown "
+            f"{_join(reference)} sit below the {counts['min_population']:,} population floor "
+            "and are shown "
             "for comparison only — they carry no rank."
         )
 

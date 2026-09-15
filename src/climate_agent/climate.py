@@ -77,7 +77,7 @@ def system_prompt() -> str:
     c = query.counts()
     return f"""You answer questions about where in the world it is comfortable to be \
 outdoors, using a precomputed ranking of the {c["n_cities"]} cities with population \
->= 500,000 and the aggregated hourly data behind it.
+>= {c["min_population"]:,} and the aggregated hourly data behind it.
 
 The ranking scores each city by how many daylight hours a year its UTCI (Universal \
 Thermal Climate Index, computed hourly from ERA5 reanalysis, \

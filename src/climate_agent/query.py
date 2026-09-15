@@ -272,6 +272,8 @@ def counts() -> dict:
     period = m.get("period", {})
     return {
         "n_cities": _scalar("SELECT count(*) FROM rankings", 1118),
+        # Exports before min_population was written were all at the 500k floor.
+        "min_population": int(m.get("min_population", 500000)),
         "n_ranked": _scalar(
             "SELECT count(*) FROM rankings WHERE rank IS NOT NULL", 1114
         ),
@@ -358,10 +360,10 @@ def volatility_index() -> dict[str, dict]:
 NOTES: dict[str, dict[str, str]] = {
     "rankings": {
         "rank": "1 = most comfortable. NULL for reference cities.",
-        "rank_if_eligible": "rank the city would hold if the 500k population floor were dropped",
+        "rank_if_eligible": "rank the city would hold if the population floor were dropped",
         "microclimate_risk": "BOOLEAN. True when the ERA5 grid cell probably does not represent the city (coast or steep relief).",
         "microclimate_reason": "'coastal', 'relief', or 'coastal+relief'",
-        "is_reference": "BOOLEAN. True for sub-500k cities shown for comparison only.",
+        "is_reference": "BOOLEAN. True for cities below the population floor, shown for comparison only.",
         "comfort_hours_yr": "THE HEADLINE METRIC: daylight hours per year in the comfort band (baseline band, half-sun exposure, rain-adjusted)",
         "comfort_fraction": "comfort_hours_yr / daylight_hours_yr",
         "worst_month_hours": "the lowest of the 12 month_XX_hours",
@@ -545,7 +547,8 @@ def schema() -> str:
     c = counts()
     b = c["band"]
     header = (
-        f"Data: {c['n_cities']} cities with population >= 500,000 ({c['n_ranked']} ranked, the rest "
+        f"Data: {c['n_cities']} cities with population >= {c['min_population']:,} "
+        f"({c['n_ranked']} ranked, the rest "
         f"reference rows), UTCI computed hourly from ERA5 reanalysis {c['start_year']}-{c['end_year']}"
         + (f", exported {c['generated_on']}" if c["generated_on"] else "")
         + f". Baseline: '{c['profile']}' comfort band {b['cold_zero']:g}/{b['cold_full']:g}/"

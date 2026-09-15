@@ -76,7 +76,7 @@ export default function App() {
             <div>
               <h1>Climate Agent</h1>
               <p className="tagline">
-                1,118 cities ranked by comfortable daylight hours, from hourly
+                The world's large cities ranked by comfortable daylight hours, from hourly
                 UTCI over ERA5 (2010–2024).
               </p>
             </div>

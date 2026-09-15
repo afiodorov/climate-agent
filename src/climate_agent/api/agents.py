@@ -52,7 +52,8 @@ def attach(human: gateway.Gateway) -> None:
 def about() -> str:
     c = query.counts()
     return (
-        f"A ranking of the {c['n_cities']} cities with population >= 500,000 by outdoor "
+        f"A ranking of the {c['n_cities']} cities with population >= "
+        f"{c['min_population']:,} by outdoor "
         "thermal comfort: how many daylight hours a year the UTCI (Universal Thermal "
         "Climate Index, computed hourly from ERA5 reanalysis, "
         f"{c['start_year']}-{c['end_year']}) falls inside a comfortable band. "
@@ -110,7 +111,7 @@ server = MCPServer(
     "climate",
     title="City outdoor comfort rankings",
     instructions=(
-        "A ranking of the world's 500k+ cities by outdoor thermal comfort, plus the "
+        "A ranking of the world's large cities by outdoor thermal comfort, plus the "
         "aggregated hourly UTCI record behind it. Call describe_rankings once for the "
         "schema, then query_rankings with DuckDB SQL. Pass your draft answer to "
         "caveats_for before presenting it. read_methodology explains how the index "

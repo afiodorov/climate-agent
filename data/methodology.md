@@ -3,8 +3,8 @@
 How many daylight hours a year is it thermally comfortable to be outdoors,
 walking around or going for a casual run?
 
-Generated 2026-09-15 from 1118 scored cities
-(1114 eligible for the ranking, subset `all`), UTCI over
+Generated 2026-09-15 from 1906 scored cities
+(1904 eligible for the ranking, subset `all`), UTCI over
 2010-2024.
 
 **Read the sensitivity section before quoting a rank.** Several of the choices
@@ -13,7 +13,7 @@ alongside the assumptions that produced it.
 
 ## Method
 
-1. **Cities** — JRC GHS-UCDB R2024A urban centres, population >= 500,000.
+1. **Cities** — JRC GHS-UCDB R2024A urban centres, population >= 300,000.
    Urban centres rather than administrative units: admin boundaries are not
    internationally comparable (Chongqing's municipality is 82,000 km2 of mostly
    mountain).
@@ -78,9 +78,9 @@ Most sun-sensitive cities in this run:
 | Mangaluru | 504 | 1,750 | +247% |
 | Kollam | 526 | 1,784 | +239% |
 | Reykjavik | 1,615 | 1,055 | -35% |
+| Brighton | 2,383 | 1,636 | -31% |
+| Oruro | 3,288 | 2,266 | -31% |
 | Liverpool | 2,301 | 1,685 | -27% |
-| Leeds | 2,250 | 1,713 | -24% |
-| Dublin | 2,548 | 1,956 | -23% |
 
 ## The five metrics are five different questions
 
@@ -117,37 +117,37 @@ who disagrees with the weighting can rebuild the ranking without rerunning.
 
 | # | City | Country | Hours/yr | Sun | Shade | Frac | Worst mo | Bad run | Even | PM2.5 | AQ | Composite | Flags |
 | ---: | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| – | Santa Cruz de Tenerife | Spain | 4,434 | 4,315 | 4,280 | 0.93 | 285 | 3 | 0.87 | 8.5 | 1.00 | 3,836 | <500k ref coast+rel |
-| – | Las Palmas de Gran Canaria | Spain | 4,338 | 4,043 | 4,297 | 0.91 | 283 | 2 | 0.88 | 9.4 | 1.00 | 3,810 | <500k ref coast+rel |
-| 1 | Lima | Peru | 4,360 | 3,568 | 4,496 | 0.94 | 278 | 0 | 0.89 | 13.0 | 0.93 | 3,642 | coast+rel |
-| 2 | Sana'a | Yemen | 4,087 | 2,957 | 4,350 | 0.86 | 309 | 1 | 0.95 | 13.2 | 0.93 | 3,623 | relief |
-| 3 | Honolulu | United States | 4,124 | 3,278 | 4,434 | 0.88 | 296 | 2 | 0.88 | 7.6 | 1.00 | 3,611 | coast+rel |
-| 4 | Nakuru | Kenya | 3,979 | 2,896 | 4,213 | 0.84 | 296 | 1 | 0.94 | 11.8 | 0.96 | 3,596 | relief |
-| 5 | Aguascalientes | México | 3,819 | 2,927 | 4,182 | 0.81 | 275 | 1 | 0.93 | 7.1 | 1.00 | 3,547 | relief |
-| 6 | San Luis Potosí | México | 3,798 | 3,103 | 4,006 | 0.81 | 288 | 2 | 0.93 | 6.6 | 1.00 | 3,541 | relief |
-| 7 | Durango | México | 3,805 | 3,052 | 3,976 | 0.80 | 276 | 2 | 0.93 | 5.4 | 1.00 | 3,528 | relief |
-| 8 | Tijuana | México | 4,413 | 4,122 | 4,368 | 0.93 | 282 | 4 | 0.84 | 12.5 | 0.94 | 3,495 | coast+rel |
-| – | Funchal | Portugal | 4,070 | 3,547 | 4,138 | 0.86 | 272 | 2 | 0.84 | 8.9 | 1.00 | 3,430 | <500k ref coast+rel |
-| 9 | Kenitra | Morocco | 3,963 | 3,366 | 4,212 | 0.83 | 273 | 2 | 0.87 | 10.1 | 1.00 | 3,424 | coast |
-| 10 | Querétaro | México | 3,615 | 2,777 | 4,036 | 0.77 | 258 | 2 | 0.92 | 8.6 | 1.00 | 3,308 | relief |
-| 11 | Valparaíso | Chile | 4,268 | 4,284 | 3,954 | 0.90 | 243 | 2 | 0.80 | 11.4 | 0.97 | 3,297 | coast+rel |
-| 12 | Hargeisa | Somalia | 3,755 | 2,934 | 4,287 | 0.80 | 252 | 1 | 0.88 | 8.6 | 1.00 | 3,286 |  |
-| 13 | Polokwane | South Africa | 3,571 | 2,891 | 3,954 | 0.76 | 248 | 1 | 0.91 | 8.2 | 1.00 | 3,259 |  |
-| 14 | Cochabamba | Bolivia | 3,724 | 2,819 | 3,852 | 0.79 | 216 | 1 | 0.87 | 5.9 | 1.00 | 3,248 | relief |
-| 15 | Puebla | México | 3,798 | 2,995 | 3,921 | 0.82 | 269 | 1 | 0.93 | 13.6 | 0.92 | 3,247 | relief |
-| 16 | Morelia | México | 3,585 | 2,613 | 4,029 | 0.76 | 265 | 1 | 0.91 | 10.5 | 0.99 | 3,245 | relief |
-| 17 | Saltillo | México | 3,500 | 2,640 | 3,948 | 0.74 | 263 | 2 | 0.92 | 9.6 | 1.00 | 3,223 | relief |
-| 18 | Perth | Australia | 3,772 | 3,459 | 3,822 | 0.80 | 239 | 2 | 0.85 | 6.2 | 1.00 | 3,214 | coast |
-| 19 | Oaxaca de Juárez | México | 3,465 | 2,447 | 3,995 | 0.75 | 250 | 2 | 0.91 | 7.6 | 1.00 | 3,144 | relief |
-| 20 | Rabat | Morocco | 3,926 | 3,275 | 4,233 | 0.82 | 284 | 2 | 0.87 | 13.8 | 0.92 | 3,128 | coast |
-| 21 | San Francisco | United States | 4,040 | 3,511 | 4,141 | 0.84 | 242 | 3 | 0.81 | 12.2 | 0.95 | 3,121 | coast+rel |
-| 22 | Antananarivo | Madagascar | 3,607 | 3,034 | 3,828 | 0.77 | 229 | 2 | 0.86 | 10.1 | 1.00 | 3,109 |  |
-| 23 | Cordoba | Argentina | 3,468 | 3,011 | 3,668 | 0.73 | 237 | 2 | 0.90 | 4.9 | 1.00 | 3,107 |  |
-| 24 | Gqeberha | South Africa | 3,927 | 3,786 | 3,790 | 0.83 | 241 | 4 | 0.82 | 11.6 | 0.96 | 3,106 | coast |
-| 25 | Tangier | Morocco | 3,732 | 3,295 | 3,882 | 0.78 | 234 | 3 | 0.83 | 9.4 | 1.00 | 3,103 | coast |
-| 26 | Sydney | Australia | 3,581 | 3,159 | 3,744 | 0.75 | 245 | 4 | 0.89 | 11.4 | 0.97 | 3,086 | coast |
-| 27 | Nairobi | Kenya | 3,948 | 3,348 | 4,058 | 0.83 | 260 | 1 | 0.90 | 16.5 | 0.85 | 3,044 | relief |
-| 71 | Valencia | Spain | 3,429 | 2,994 | 3,718 | 0.71 | 178 | 4 | 0.76 | 8.7 | 1.00 | 2,596 | ref coast |
+| 1 | Iquique | Chile | 4,472 | 2,733 | 4,718 | 0.94 | 315 | 0 | 0.92 | – | 1.00 | 4,134 | coast+rel |
+| 2 | Tacna | Peru | 4,408 | 3,193 | 4,560 | 0.94 | 314 | 0 | 0.93 | 7.0 | 1.00 | 4,114 | relief |
+| 3 | Antofagasta | Chile | 4,632 | 3,885 | 4,699 | 0.98 | 331 | 0 | 0.91 | 11.6 | 0.96 | 4,070 | coast+rel |
+| 4 | Dessie | Ethiopia | 4,057 | 3,390 | 4,115 | 0.87 | 300 | 1 | 0.95 | – | 1.00 | 3,836 | relief |
+| 5 | Santa Cruz de Tenerife | Spain | 4,434 | 4,315 | 4,280 | 0.93 | 285 | 3 | 0.87 | 8.5 | 1.00 | 3,836 | ref coast+rel |
+| 6 | Las Palmas de Gran Canaria | Spain | 4,338 | 4,043 | 4,297 | 0.91 | 283 | 2 | 0.88 | 9.4 | 1.00 | 3,810 | ref coast+rel |
+| 7 | Pachuca | México | 3,847 | 3,374 | 3,894 | 0.82 | 281 | 1 | 0.95 | 9.7 | 1.00 | 3,658 | relief |
+| 8 | Lima | Peru | 4,360 | 3,568 | 4,496 | 0.94 | 278 | 0 | 0.89 | 13.0 | 0.93 | 3,642 | coast+rel |
+| 9 | Sana'a | Yemen | 4,087 | 2,957 | 4,350 | 0.86 | 309 | 1 | 0.95 | 13.2 | 0.93 | 3,623 | relief |
+| 10 | Honolulu | United States | 4,124 | 3,278 | 4,434 | 0.88 | 296 | 2 | 0.88 | 7.6 | 1.00 | 3,611 | coast+rel |
+| 11 | Safi | Morocco | 4,242 | 3,773 | 4,308 | 0.89 | 281 | 2 | 0.85 | 8.0 | 1.00 | 3,601 | coast |
+| 12 | Nakuru | Kenya | 3,979 | 2,896 | 4,213 | 0.84 | 296 | 1 | 0.94 | 11.8 | 0.96 | 3,596 | relief |
+| 13 | Dhamar | Yemen | 4,261 | 3,756 | 4,244 | 0.90 | 311 | 1 | 0.92 | 14.0 | 0.91 | 3,587 | relief |
+| 14 | Aguascalientes | México | 3,819 | 2,927 | 4,182 | 0.81 | 275 | 1 | 0.93 | 7.1 | 1.00 | 3,547 | relief |
+| 15 | San Luis Potosí | México | 3,798 | 3,103 | 4,006 | 0.81 | 288 | 2 | 0.93 | 6.6 | 1.00 | 3,541 | relief |
+| 16 | Durango | México | 3,805 | 3,052 | 3,976 | 0.80 | 276 | 2 | 0.93 | 5.4 | 1.00 | 3,528 | relief |
+| 17 | Tijuana | México | 4,413 | 4,122 | 4,368 | 0.93 | 282 | 4 | 0.84 | 12.5 | 0.94 | 3,495 | coast+rel |
+| 18 | Mission Viejo | United States | 4,407 | 3,868 | 4,461 | 0.92 | 289 | 2 | 0.84 | 12.9 | 0.93 | 3,456 | coast+rel |
+| – | Funchal | Portugal | 4,070 | 3,547 | 4,138 | 0.86 | 272 | 2 | 0.84 | 8.9 | 1.00 | 3,430 | <floor ref coast+rel |
+| 19 | Kenitra | Morocco | 3,963 | 3,366 | 4,212 | 0.83 | 273 | 2 | 0.87 | 10.1 | 1.00 | 3,424 | coast |
+| 20 | Jijiga | Ethiopia | 3,774 | 2,854 | 4,261 | 0.81 | 268 | 1 | 0.88 | 8.4 | 1.00 | 3,323 | relief |
+| 21 | Querétaro | México | 3,615 | 2,777 | 4,036 | 0.77 | 258 | 2 | 0.92 | 8.6 | 1.00 | 3,308 | relief |
+| 22 | Valparaíso | Chile | 4,268 | 4,284 | 3,954 | 0.90 | 243 | 2 | 0.80 | 11.4 | 0.97 | 3,297 | coast+rel |
+| 23 | Hargeisa | Somalia | 3,755 | 2,934 | 4,287 | 0.80 | 252 | 1 | 0.88 | 8.6 | 1.00 | 3,286 |  |
+| 24 | Polokwane | South Africa | 3,571 | 2,891 | 3,954 | 0.76 | 248 | 1 | 0.91 | 8.2 | 1.00 | 3,259 |  |
+| 25 | Cochabamba | Bolivia | 3,724 | 2,819 | 3,852 | 0.79 | 216 | 1 | 0.87 | 5.9 | 1.00 | 3,248 | relief |
+| 26 | Puebla | México | 3,798 | 2,995 | 3,921 | 0.82 | 269 | 1 | 0.93 | 13.6 | 0.92 | 3,247 | relief |
+| 27 | Morelia | México | 3,585 | 2,613 | 4,029 | 0.76 | 265 | 1 | 0.91 | 10.5 | 0.99 | 3,245 | relief |
+| 28 | Saltillo | México | 3,500 | 2,640 | 3,948 | 0.74 | 263 | 2 | 0.92 | 9.6 | 1.00 | 3,223 | relief |
+| 29 | Perth | Australia | 3,772 | 3,459 | 3,822 | 0.80 | 239 | 2 | 0.85 | 6.2 | 1.00 | 3,214 | coast |
+| 114 | Valencia | Spain | 3,429 | 2,994 | 3,718 | 0.71 | 178 | 4 | 0.76 | 8.7 | 1.00 | 2,596 | ref coast |
 
 ## Sensitivity
 
@@ -157,22 +157,22 @@ real result, and one that moves is an artefact of the thresholds.
 
 | Variant | Kendall tau | Mean rank change | Max rank change |
 |---|---:|---:|---:|
-| `metric_raw_hours` | 0.561 | 181.6 | 594 |
-| `metric_fraction` | 0.572 | 176.2 | 594 |
-| `metric_worst_month` | 0.632 | 145.0 | 547 |
-| `profile_running` | 0.649 | 142.1 | 700 |
-| `aq_penalty_off` | 0.756 | 103.4 | 412 |
-| `evenness_shannon` | 0.761 | 94.4 | 680 |
-| `band_warm_+2C` | 0.796 | 83.2 | 329 |
-| `exposure_0` | 0.797 | 84.7 | 363 |
-| `band_cool_-2C` | 0.801 | 81.7 | 393 |
-| `exposure_1` | 0.829 | 70.8 | 368 |
-| `profile_sitting` | 0.893 | 45.3 | 368 |
-| `rain_penalty_off` | 0.894 | 43.2 | 528 |
-| `exposure_0.25` | 0.899 | 42.4 | 195 |
-| `exposure_0.75` | 0.907 | 38.4 | 202 |
-| `daylight_sunrise_0deg` | 0.935 | 27.1 | 257 |
-| `elevation_correction_off` | 0.971 | 11.0 | 269 |
+| `metric_raw_hours` | 0.541 | 321.0 | 1070 |
+| `metric_fraction` | 0.553 | 311.7 | 1062 |
+| `metric_worst_month` | 0.625 | 250.9 | 959 |
+| `profile_running` | 0.642 | 247.5 | 1202 |
+| `evenness_shannon` | 0.741 | 175.9 | 1176 |
+| `aq_penalty_off` | 0.759 | 175.2 | 736 |
+| `band_warm_+2C` | 0.791 | 146.8 | 580 |
+| `band_cool_-2C` | 0.796 | 142.8 | 734 |
+| `exposure_0` | 0.797 | 145.9 | 612 |
+| `exposure_1` | 0.832 | 119.4 | 624 |
+| `rain_penalty_off` | 0.888 | 77.7 | 1155 |
+| `profile_sitting` | 0.893 | 77.6 | 694 |
+| `exposure_0.25` | 0.900 | 71.7 | 322 |
+| `exposure_0.75` | 0.909 | 64.6 | 324 |
+| `daylight_sunrise_0deg` | 0.933 | 46.4 | 401 |
+| `elevation_correction_off` | 0.966 | 22.0 | 465 |
 | `baseline` | 1.000 | 0.0 | 0 |
 
 Least stable cities — their position is a statement about the parameters, not
@@ -180,14 +180,14 @@ about the climate:
 
 | City | Rank volatility (sd) | Median rank |
 |---|---:|---:|
-| Oslo | 261.5 | 890 |
-| Stockholm | 244.9 | 1070 |
-| Gothenburg | 235.1 | 934 |
-| Copenhagen | 226.4 | 977 |
-| Ambon | 225.5 | 448 |
-| Newcastle upon Tyne | 222.0 | 775 |
-| Denpasar | 220.7 | 471 |
-| Calgary | 218.8 | 660 |
+| Oslo | 452.1 | 1489 |
+| Stockholm | 430.8 | 1816 |
+| Gothenburg | 407.2 | 1576 |
+| Irkutsk | 400.4 | 1651 |
+| Malmo | 399.9 | 1722 |
+| Kaliningrad | 397.8 | 1411 |
+| Copenhagen | 394.7 | 1662 |
+| Vitsebsk | 391.8 | 1777 |
 
 ## Known limitations
 
@@ -212,7 +212,7 @@ about the climate:
   ERA5's cloud errors, this is a modelling choice worth knowing: for many
   people "grey but mild" and "bright and mild" are not the same offer.
 - **31 km grid: no urban heat island, no coastal microclimate.** The ERA5 cell
-  is the city's surroundings, not the city. 578 of 1118 scored
+  is the city's surroundings, not the city. 953 of 1906 scored
   cities carry `microclimate_risk`. That base rate is high enough to need its
   own caveat — most large cities are coastal, so the flag marks "treat with
   suspicion", not "unusual".

@@ -148,7 +148,7 @@ what the model is told.
 **`caveats` node** (`caveats.py`) is why the graph earns its keep. It reads the
 draft `climate` wrote and appends the caveats a chat answer would otherwise
 strip — grid-cell microclimate risk, ranks that are unstable across scoring
-variants, sub-500k reference cities, metric ambiguity. It uses no LLM — every
+variants, below-floor reference cities, metric ambiguity. It uses no LLM — every
 caveat is a lookup against columns the climate pipeline already computes. It
 finds the cities by matching names against the answer text.
 
@@ -490,7 +490,7 @@ wildcard. See the runbook in `../staging-infra/README.md`.
 - The climate node often mentions a caveat itself (it can read
   `microclimate_risk`), so the sidecar sometimes repeats it. Left as-is: the
   point of the sidecar is that the caveat is guaranteed, not that it is unique.
-- City-name matching is a regex over the 1118 published names, minimum 4
+- City-name matching is a regex over the published names, minimum 4
   characters. It will miss a city referred to obliquely and can in principle
   match a name inside an unrelated word.
 - `query.py` guards the model's SQL with an opening-keyword allowlist plus a
