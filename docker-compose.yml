@@ -3,15 +3,22 @@
 services:
   redis:
     image: redis:7-alpine
+    # Not on :6379 and not passwordless — on purpose. Other projects on this box
+    # (vhv-demo, ...) also run a dev Redis; when both sat on :6379 whichever
+    # came up first won, and the other app silently used its data. The port
+    # keeps them apart; the password makes the wrong Redis fail with
+    # NOAUTH/WRONGPASS instead of quietly working. It is a mismatch detector,
+    # not a secret — this binds loopback only. A second checkout of this repo
+    # still collides with this one: give it its own port here and REDIS_URL.
     ports:
-      - "127.0.0.1:6379:6379"
+      - "127.0.0.1:6382:6379"
     # appendonly gives us durability across a `docker compose down`; the named
     # volume is what makes that survive the container being recreated.
-    command: redis-server --appendonly yes
+    command: redis-server --appendonly yes --requirepass climate-agent-dev
     volumes:
       - redis-data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD", "redis-cli", "-a", "climate-agent-dev", "ping"]
       interval: 5s
       timeout: 3s
       retries: 5

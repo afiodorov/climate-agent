@@ -211,7 +211,9 @@ class RedisStore:
     def __init__(self, url: str | None = None) -> None:
         from redis import asyncio as redis  # imported here so tests need no redis
 
-        self.url = url or os.environ.get("REDIS_URL", "redis://localhost:6379/0")
+        self.url = url or os.environ.get(
+            "REDIS_URL", "redis://:climate-agent-dev@localhost:6382/0"
+        )
         self._redis = redis.from_url(self.url, decode_responses=True)
 
     async def ping(self) -> None:

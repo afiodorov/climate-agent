@@ -16,7 +16,9 @@ from climate_agent import store
 
 # Deliberately not the app's database. Running the suite against a live Redis
 # must not leave `test-*` rows in the conversation rail — db 15 keeps them apart.
-REDIS_URL = os.environ.get("REDIS_TEST_URL", "redis://localhost:6379/15")
+REDIS_URL = os.environ.get(
+    "REDIS_TEST_URL", "redis://:climate-agent-dev@localhost:6382/15"
+)
 
 
 @pytest.fixture(params=["memory", "redis"])
