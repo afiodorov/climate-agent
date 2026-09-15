@@ -1,0 +1,91 @@
+{
+  "export_version": 1,
+  "generated_on": "2026-09-15",
+  "period": {
+    "start_year": 2010,
+    "end_year": 2024
+  },
+  "backend": "cds",
+  "n_cities": 1118,
+  "n_years": 15.00068473815918,
+  "utci_bin_width_c": 1.0,
+  "light": {
+    "day_above_deg": 0.0,
+    "twilight_above_deg": -6.0
+  },
+  "dewpoint": {
+    "class_edges_c": [
+      10.0,
+      16.0,
+      18.0,
+      21.0
+    ],
+    "classes": [
+      "dry",
+      "mild",
+      "humid",
+      "muggy",
+      "oppressive"
+    ],
+    "dry_cutoff_c": 16.0,
+    "muggy_c": 18.0
+  },
+  "exposure": {
+    "sun_fraction": 0.5
+  },
+  "comfort": {
+    "profile": "walking",
+    "band": {
+      "cold_zero": 3.0,
+      "cold_full": 9.0,
+      "warm_full": 26.0,
+      "warm_zero": 32.0
+    },
+    "profiles": {
+      "walking": {
+        "cold_zero": 3.0,
+        "cold_full": 9.0,
+        "warm_full": 26.0,
+        "warm_zero": 32.0
+      },
+      "sitting": {
+        "cold_zero": 5.0,
+        "cold_full": 12.0,
+        "warm_full": 24.0,
+        "warm_zero": 30.0
+      },
+      "running": {
+        "cold_zero": -1.0,
+        "cold_full": 5.0,
+        "warm_full": 22.0,
+        "warm_zero": 28.0
+      }
+    }
+  },
+  "penalties": {
+    "precipitation": {
+      "enabled": true,
+      "light_mm_h": 0.1,
+      "heavy_mm_h": 1.0,
+      "light_factor": 0.3
+    },
+    "air_quality": {
+      "enabled": true,
+      "pm25_low": 10.0,
+      "pm25_high": 55.0,
+      "floor": 0.25
+    }
+  },
+  "metrics": {
+    "evenness": "cv"
+  },
+  "elevation_correction": {
+    "enabled": true
+  },
+  "rows": {
+    "utci_histogram": 2165296,
+    "hourly_profile": 321984,
+    "yearly": 16770,
+    "city_extras": 1118
+  }
+}

@@ -3,7 +3,7 @@
 How many daylight hours a year is it thermally comfortable to be outdoors,
 walking around or going for a casual run?
 
-Generated 2026-08-03 from 1118 scored cities
+Generated 2026-09-15 from 1118 scored cities
 (1114 eligible for the ranking, subset `all`), UTCI over
 2010-2024.
 
@@ -247,7 +247,17 @@ uv run cli.py fetch-aq --validation
 uv run cli.py score --top 30
 uv run cli.py sweep --validation
 uv run cli.py report
+uv run cli.py export-agent
 ```
+
+`export-agent` writes `out/agent/`: the hourly cache re-aggregated into a
+1 degC UTCI histogram per city, month, light (day / twilight / night) and
+dew-point class, a month x hour-of-day profile, per-year totals and a few
+derived per-city columns (night comfort, dry comfort, humidity). It exists so
+the conversational agent can recompute the ranking under a different band,
+at night, or with a humidity filter from a few tens of MB instead of the
+14 GB cache, and the histogram reproduces `comfort_hours_yr` exactly for any
+whole-degree band.
 
 Config: `default.yaml`. Every threshold
 that moves the ranking lives there, not in code. `data/` is a gitignored cache;
