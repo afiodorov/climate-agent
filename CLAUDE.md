@@ -104,7 +104,7 @@ aliases there. Convention: service `<repo>`, container `<repo>-staging`.
 | `.env` | `DEEPSEEK_API_KEY` for dev and the CLI | no |
 | `.env.staging` | `DEEPSEEK_API_KEY` for the staging container | no |
 | `../staging-infra/.env` | GitHub OAuth id/secret, oauth2-proxy cookie secret | no |
-| Railway variables | prod's `DEEPSEEK_API_KEY`; `REDIS_URL` is injected | n/a |
+| Railway variables | prod's `DEEPSEEK_API_KEY`, `GITHUB_CLIENT_ID/SECRET`, `ADMIN_GITHUB_USERS`; `REDIS_URL` is injected | n/a |
 
 Never commit any of these, and never paste a key into a commit message, a
 README, or an issue.
@@ -127,7 +127,12 @@ README, or an issue.
 - **`GET /api/sessions` is unscoped** — every visitor sees everyone's
   conversations, and there is no rate limit. That is why staging is gated at
   all. Adding a second name to `--github-user` in `../staging-infra` gives that
-  person every staging app and a shared conversation rail.
+  person every staging app and a shared conversation rail. Deleting is the
+  one gated action: admins only (`api/auth.py`, `ADMIN_GITHUB_USERS`). Prod
+  signs in with GitHub OAuth (`GITHUB_CLIENT_ID/SECRET` on Railway, callback
+  `/oauth2/callback`, same OAuth app as the staging edge); staging trusts
+  `X-Auth-Request-User` from Caddy. Never set `AUTH_TRUSTED_USER_HEADER`
+  where a client can reach the app directly.
 - **SSE needs an unbuffered path.** Caddy flushes `text/event-stream`
   immediately with no configuration, and `forward_auth` does not touch the
   response body. Do not add `encode gzip` to the staging_app snippet — its

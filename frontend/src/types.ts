@@ -50,3 +50,12 @@ export interface Turn {
   error: string | null
   status: AskStatus
 }
+
+/** GET /auth/me. `login` is null when not signed in; `configured` is false when
+ *  the deployment has no GitHub OAuth app, in which case there is no sign-in
+ *  to offer and nobody can delete. */
+export interface Me {
+  login: string | null
+  admin: boolean
+  configured: boolean
+}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { ConversationSummary } from '../types'
+import type { ConversationSummary, Me } from '../types'
 
 interface Props {
   conversations: ConversationSummary[]
@@ -12,6 +12,8 @@ interface Props {
   onClose: () => void
   onOpen: (id: string) => void
   onDelete: (id: string) => void
+  me: Me
+  onSignOut: () => void
 }
 
 /** "now", "4m", "2h", "3d" — enough to order things at a glance. */
@@ -32,6 +34,8 @@ export function ConversationPanel({
   onClose,
   onOpen,
   onDelete,
+  me,
+  onSignOut,
 }: Props) {
   // Ages are relative, so re-render occasionally or "now" sticks forever.
   const [, tick] = useState(0)
@@ -91,6 +95,26 @@ export function ConversationPanel({
           </button>
         </div>
 
+        {/* The rail is shared by every visitor, so deleting is for admins.
+            A signed-in non-admin sees their name and no delete buttons. */}
+        <div className="rail-auth">
+          {me.login ? (
+            <>
+              <span className="rail-user" title={me.admin ? 'admin' : 'signed in'}>
+                {me.login}
+                {me.admin && <span className="rail-badge">admin</span>}
+              </span>
+              <button type="button" className="rail-link" onClick={onSignOut}>
+                sign out
+              </button>
+            </>
+          ) : me.configured ? (
+            <a className="rail-link" href="/auth/login">
+              Sign in with GitHub
+            </a>
+          ) : null}
+        </div>
+
         {conversations.length === 0 ? (
           <p className="rail-empty">
             Nothing yet — a conversation appears here once its first answer
@@ -118,15 +142,17 @@ export function ConversationPanel({
                     {age(c.updated_at)}
                   </span>
                 </button>
-                <button
-                  type="button"
-                  className="rail-delete"
-                  onClick={() => onDelete(c.id)}
-                  aria-label={`Delete conversation: ${c.title}`}
-                  title="Delete — this cannot be undone"
-                >
-                  ×
-                </button>
+                {me.admin && (
+                  <button
+                    type="button"
+                    className="rail-delete"
+                    onClick={() => onDelete(c.id)}
+                    aria-label={`Delete conversation: ${c.title}`}
+                    title="Delete — this cannot be undone"
+                  >
+                    ×
+                  </button>
+                )}
               </li>
             ))}
           </ul>

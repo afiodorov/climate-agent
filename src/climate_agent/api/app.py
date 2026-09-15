@@ -15,13 +15,13 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Response
+from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.staticfiles import StaticFiles
 from sse_starlette import EventSourceResponse, ServerSentEvent
 
 from .. import climate, gateway, query, store
 from ..main import _load_env
-from . import agents
+from . import agents, auth
 
 log = logging.getLogger(__name__)
 
@@ -160,13 +160,17 @@ async def get_session(session_id: str) -> dict:
 
 
 @app.delete("/api/sessions/{session_id}", status_code=204)
-async def delete_session(session_id: str) -> Response:
+async def delete_session(session_id: str, request: Request) -> Response:
     """Forget a conversation — transcript, model history and all. No undo.
 
-    Idempotent, and deliberately never 404s: the rail is a snapshot, so the row
-    you clicked may already have expired or been deleted from another tab.
-    Reporting that as a failure would leave a row nobody can get rid of.
+    Admins only (`auth.py`): the rail is shared, so anyone could otherwise
+    delete anyone's conversation. Idempotent, and deliberately never 404s: the
+    rail is a snapshot, so the row you clicked may already have expired or been
+    deleted from another tab. Reporting that as a failure would leave a row
+    nobody can get rid of.
     """
+    who = auth.require_admin(request)
+    log.info("%s deleted conversation %s", who, session_id)
     await app.state.gateway.delete_conversation(session_id)
     return Response(status_code=204)
 
@@ -180,6 +184,7 @@ def health() -> dict[str, str]:
 # /llms.txt. Registered before the static mount below, which would otherwise
 # swallow /llms.txt and /mcp as files that do not exist.
 app.include_router(agents.router)
+app.include_router(auth.router)
 app.add_route(agents.MCP_PATH, agents.mcp_app, methods=["GET", "POST", "DELETE"])
 
 

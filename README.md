@@ -347,6 +347,31 @@ make eval            # 33-case guardrail eval; calls DeepSeek, needs a key
 make format lint     # ruff, line length 88
 ```
 
+## Admins
+
+Everything here is public and read-only except deleting a conversation, which
+needs an admin: a GitHub login listed in `ADMIN_GITHUB_USERS` (default
+`afiodorov`). The rail shows delete buttons only to admins, and `DELETE
+/api/sessions/{id}` answers 403 to everyone else.
+
+Two ways to be signed in, in `src/climate_agent/api/auth.py`:
+
+- **Prod (Railway):** the app runs GitHub OAuth itself. `GITHUB_CLIENT_ID` and
+  `GITHUB_CLIENT_SECRET` are the same OAuth app the staging edge uses; its
+  registered callback is `https://auth.staging.fiodorov.es/oauth2/callback`,
+  and GitHub only requires the domain and path prefix to match, so this app's
+  callback is `/oauth2/callback` on its own host. "Sign in with GitHub" in the
+  rail starts it; the login lands in an HMAC-signed, HttpOnly cookie for 30
+  days. No token is kept.
+- **Staging:** nothing to sign in to — Caddy's `forward_auth` already knows
+  who you are and copies `X-Auth-Request-User` from oauth2-proxy, overwriting
+  anything the client sent. `AUTH_TRUSTED_USER_HEADER=X-Auth-Request-User` in
+  `docker-compose.staging.yml` tells the app to believe it. Never set that
+  variable anywhere a client can reach the app directly.
+
+With neither configured, nobody is an admin and deletes are refused rather
+than left open.
+
 ## For other agents
 
 An agent with its own model does not need the chat: it needs the data and the

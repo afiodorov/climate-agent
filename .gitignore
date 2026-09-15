@@ -8,3 +8,6 @@ __pycache__/
 # promptfoo eval output and its npx cache
 evals/output/
 .promptfoo/
+
+# railway link writes the project/service ids here
+.railway/

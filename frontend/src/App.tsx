@@ -1,10 +1,14 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { fetchMe, logout } from './api'
 import { AskBar } from './components/AskBar'
 import { ConversationPanel } from './components/ConversationPanel'
 import { Turn } from './components/Turn'
 import { useChat } from './hooks/useChat'
 import { useRail } from './hooks/useRail'
 import { useTheme } from './hooks/useTheme'
+import type { Me } from './types'
+
+const ANONYMOUS: Me = { login: null, admin: false, configured: false }
 
 export default function App() {
   const {
@@ -20,6 +24,14 @@ export default function App() {
   const { theme, toggle } = useTheme()
   const rail = useRail()
   const transcriptRef = useRef<HTMLDivElement>(null)
+
+  // Who is looking. Only admins get delete buttons; everyone else sees the
+  // same rail read-only, and a sign-in link when the deployment offers one.
+  const [me, setMe] = useState<Me>(ANONYMOUS)
+  useEffect(() => {
+    fetchMe().then(setMe, () => setMe(ANONYMOUS))
+  }, [])
+  const signOut = () => logout().then(() => setMe({ ...me, login: null, admin: false }))
 
   // Follow the conversation as it grows: a new turn, and each step landing in
   // the running one, should keep the newest content in view.
@@ -39,6 +51,8 @@ export default function App() {
         onClose={rail.close}
         onOpen={openConversation}
         onDelete={removeConversation}
+        me={me}
+        onSignOut={signOut}
       />
 
       <div className="layout">

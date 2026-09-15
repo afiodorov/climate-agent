@@ -33,6 +33,13 @@ services:
       REDIS_URL: redis://redis:6379/0
       PORT: "8000"
       LOG_LEVEL: INFO
+      # Who is asking, for the admin-only routes. Caddy's forward_auth copies
+      # this header from oauth2-proxy and overwrites anything the client sent
+      # (see ../staging-infra/Caddyfile), so behind that edge it is the
+      # GitHub login and nothing else. Only safe *because* nothing here
+      # publishes a port: a client that could reach the container directly
+      # could set it. Prod uses GITHUB_CLIENT_ID/SECRET and its own flow.
+      AUTH_TRUSTED_USER_HEADER: X-Auth-Request-User
     depends_on:
       redis:
         condition: service_healthy

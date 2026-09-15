@@ -2,8 +2,20 @@ import type {
   ConversationDetail,
   ConversationSummary,
   Final,
+  Me,
   Step,
 } from './types'
+
+export async function fetchMe(): Promise<Me> {
+  const r = await fetch('/auth/me')
+  if (!r.ok) throw new Error(`me: ${r.status}`)
+  return r.json()
+}
+
+export async function logout(): Promise<void> {
+  const r = await fetch('/auth/logout', { method: 'POST' })
+  if (!r.ok) throw new Error(`logout: ${r.status}`)
+}
 
 export async function fetchConversations(): Promise<ConversationSummary[]> {
   const r = await fetch('/api/sessions')
