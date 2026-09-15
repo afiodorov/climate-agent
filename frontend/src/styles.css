@@ -699,15 +699,43 @@ h1 {
   background: var(--warn-soft);
   border-color: color-mix(in srgb, var(--warn) 30%, transparent);
 }
-.caveats h2 {
-  margin: 0 0 8px;
+.caveats summary {
+  margin: 0;
   font-size: 13px;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--warn);
   display: flex;
   align-items: baseline;
   gap: 8px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.caveats summary::-webkit-details-marker {
+  display: none;
+}
+.caveats:not([open]) {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.caveats[open] summary {
+  margin-bottom: 8px;
+}
+.caveats .chevron {
+  display: inline-block;
+  transition: transform 0.15s ease;
+}
+.caveats[open] .chevron {
+  transform: rotate(90deg);
+}
+.caveats .count {
+  padding: 0 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--warn) 18%, transparent);
+  font-size: 11px;
+  letter-spacing: 0;
 }
 .caveats .by {
   font-family: var(--mono);

@@ -38,18 +38,23 @@ export function Answer({ final, status }: Props) {
           {final.answer}
         </Markdown>
       </div>
+      {/* Collapsed by default: the caveats matter, but a five-item block under
+          every answer pulls the eye away from the answer itself. The summary
+          line still says how many there are, so a reader knows to look. */}
       {final.caveats.length > 0 && (
-        <div className="caveats card">
-          <h2>
+        <details className="caveats card">
+          <summary>
+            <span className="chevron" aria-hidden="true">▸</span>
             Caveats
+            <span className="count">{final.caveats.length}</span>
             <span className="by">added by the caveats node</span>
-          </h2>
+          </summary>
           <ul>
             {final.caveats.map((c, i) => (
               <li key={i}>{c}</li>
             ))}
           </ul>
-        </div>
+        </details>
       )}
     </>
   )
