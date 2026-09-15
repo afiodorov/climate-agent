@@ -100,27 +100,29 @@ def _connection() -> duckdb.DuckDBPyConnection:
         # The derived per-city columns are folded into `rankings` so the model
         # finds night and humidity numbers where it already looks.
         con.execute(
-            "CREATE VIEW rankings AS SELECT r.*, x.* EXCLUDE (city_id) "
+            "CREATE TABLE rankings AS SELECT r.*, x.* EXCLUDE (city_id) "
             f"FROM read_csv_auto('{rankings}') r "
             f"LEFT JOIN read_parquet('{extras}') x USING (city_id)"
         )
     else:
         con.execute(
-            f"CREATE VIEW rankings AS SELECT * FROM read_csv_auto('{rankings}')"
+            f"CREATE TABLE rankings AS SELECT * FROM read_csv_auto('{rankings}')"
         )
     if sensitivity.exists():
         con.execute(
-            f"CREATE VIEW sensitivity AS SELECT * FROM read_csv_auto('{sensitivity}')"
+            f"CREATE TABLE sensitivity AS SELECT * FROM read_csv_auto('{sensitivity}')"
         )
     summary = d / "sensitivity_summary.csv"
     if summary.exists():
         con.execute(
-            f"CREATE VIEW sensitivity_summary AS SELECT * FROM read_csv_auto('{summary}')"
+            f"CREATE TABLE sensitivity_summary AS SELECT * FROM read_csv_auto('{summary}')"
         )
 
-    # The big parquet files become in-memory tables rather than views: a view
-    # over read_parquet re-reads the file on every query, and the model asks
-    # several per turn. Tens of MB in RAM, ~100 ms at boot.
+    # Everything is an in-memory table, loaded once here, not a view over the
+    # file: a view re-reads and re-infers the file on every query, and the
+    # model asks several per turn. The CSVs stay CSV on disk because they are
+    # the pipeline's published, diffable format; the big tables are parquet.
+    # Tens of MB in RAM, well under a second at boot.
     for name in ("utci_histogram", "hourly_profile", "yearly"):
         path = agent / f"{name}.parquet"
         if path.exists():
