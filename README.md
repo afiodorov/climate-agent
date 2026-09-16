@@ -347,6 +347,11 @@ make eval            # 33-case guardrail eval; calls DeepSeek, needs a key
 make format lint     # ruff, line length 88
 ```
 
+A question can be shared as a link: `/?q=Best+city+in+Chile%3F` asks it in a
+fresh conversation on load, and the address bar picks up `?q=` when a new
+conversation's first question is sent. Follow-ups do not change the URL — the
+link replays the opening question, not the conversation.
+
 ## Admins
 
 Everything here is public and read-only except deleting a conversation, which
