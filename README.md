@@ -347,10 +347,11 @@ make eval            # 33-case guardrail eval; calls DeepSeek, needs a key
 make format lint     # ruff, line length 88
 ```
 
-A question can be shared as a link: `/?q=Best+city+in+Chile%3F` asks it in a
-fresh conversation on load, and the address bar picks up `?q=` when a new
-conversation's first question is sent. Follow-ups do not change the URL — the
-link replays the opening question, not the conversation.
+Two kinds of link. The address bar carries whichever conversation is open as
+`/?s=<session-id>`, so copying it shares the conversation as it was answered:
+the link opens it, answers and caveats included, and it can be continued from
+there. `/?q=Best+city+in+Chile%3F` is the other form: it asks that question
+afresh in a new conversation, so the answer may differ.
 
 ## Admins
 

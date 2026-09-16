@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { fetchMe, logout } from './api'
 import { AskBar } from './components/AskBar'
 import { ConversationPanel } from './components/ConversationPanel'
@@ -10,14 +10,23 @@ import type { Me } from './types'
 
 const ANONYMOUS: Me = { login: null, admin: false, configured: false }
 
-/** `?q=` is the shareable form of a conversation's opening question. */
-function questionFromUrl(): string {
-  return new URLSearchParams(location.search).get('q')?.trim() ?? ''
+/** Two link forms. `?s=<id>` is a conversation: opening it shows the answers
+ *  as they were given. `?q=<question>` asks that question afresh, in a new
+ *  conversation, and so may answer differently. */
+function paramsFromUrl(): { conversation: string; question: string } {
+  const params = new URLSearchParams(location.search)
+  return {
+    conversation: params.get('s')?.trim() ?? '',
+    question: params.get('q')?.trim() ?? '',
+  }
 }
 
-function setUrlQuestion(question: string | null) {
-  const url = question ? `?q=${encodeURIComponent(question)}` : location.pathname
-  history.replaceState({}, '', url)
+/** replaceState rather than pushState: Back should leave the page, not step
+ *  through every conversation that was opened here. */
+function setUrlConversation(id: string | null) {
+  const search = id ? `?s=${encodeURIComponent(id)}` : ''
+  if (location.search === search) return
+  history.replaceState({}, '', location.pathname + search)
 }
 
 export default function App() {
@@ -43,38 +52,26 @@ export default function App() {
   }, [])
   const signOut = () => logout().then(() => setMe({ ...me, login: null, admin: false }))
 
-  // The address bar carries the opening question, so the page can be shared
-  // as a link that asks it again. Follow-ups are a conversation, not a query,
-  // so they leave it alone; leaving the conversation clears it. replaceState
-  // rather than pushState: Back should not re-ask a question.
-  const ask = useCallback(
-    (question: string) => {
-      if (turns.length === 0) setUrlQuestion(question)
-      send(question)
-    },
-    [turns.length, send],
-  )
-  const startNew = useCallback(() => {
-    setUrlQuestion(null)
-    reset()
-  }, [reset])
-  const open = useCallback(
-    (id: string) => {
-      setUrlQuestion(null)
-      return openConversation(id)
-    },
-    [openConversation],
-  )
-
-  // Arriving with ?q= asks it once, in a fresh session. The ref survives
-  // StrictMode's double-invoked effect, which would otherwise ask twice.
-  const askedFromUrl = useRef(false)
+  // Arriving with ?s= opens that conversation; with ?q=, asks it once in a
+  // fresh one. The ref survives StrictMode's double-invoked effect, which would
+  // otherwise ask twice. Declared before the effect below, which rewrites the
+  // URL, so this one reads the link the visitor actually arrived with.
+  const arrived = useRef(false)
   useEffect(() => {
-    if (askedFromUrl.current) return
-    askedFromUrl.current = true
-    const q = questionFromUrl()
-    if (q) send(q)
-  }, [send])
+    if (arrived.current) return
+    arrived.current = true
+    const { conversation, question } = paramsFromUrl()
+    if (conversation) openConversation(conversation)
+    else if (question) send(question)
+  }, [openConversation, send])
+
+  // The address bar mirrors whichever conversation is on screen, so the page
+  // can be copied as a link that shows the same answers. A first question makes
+  // a fresh session shareable; New chat empties the transcript and clears it.
+  const shareable = turns.length > 0
+  useEffect(() => {
+    setUrlConversation(shareable ? sessionId : null)
+  }, [shareable, sessionId])
 
   // Follow the conversation as it grows: a new turn, and each step landing in
   // the running one, should keep the newest content in view.
@@ -92,7 +89,7 @@ export default function App() {
         open={rail.open}
         onToggle={rail.toggle}
         onClose={rail.close}
-        onOpen={open}
+        onOpen={openConversation}
         onDelete={removeConversation}
         me={me}
         onSignOut={signOut}
@@ -129,7 +126,7 @@ export default function App() {
               <button
                 type="button"
                 className="new-chat"
-                onClick={startNew}
+                onClick={reset}
                 title="Start a new conversation — this one stays in the list"
               >
                 New chat
@@ -159,7 +156,7 @@ export default function App() {
         </main>
 
         <div className="composer">
-          <AskBar running={running} empty={turns.length === 0} onAsk={ask} />
+          <AskBar running={running} empty={turns.length === 0} onAsk={send} />
           <footer>
             climate node (DeepSeek + DuckDB) → caveats node, on a LangGraph
             graph. Every timing above is a step some node emitted.
