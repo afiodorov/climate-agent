@@ -142,6 +142,18 @@ async def test_query_route_caps_rows(client):
     assert body["truncated"] is True
 
 
+async def test_glossary_route(client):
+    r = await client.get("/api/glossary")
+    assert r.status_code == 200
+    terms = {t["term"]: t for t in r.json()["terms"]}
+    b = query.counts()["band"]
+    assert (
+        f"{b['cold_full']:g} to {b['warm_full']:g}"
+        in terms["comfort hours"]["definition"]
+    )
+    assert "composite" in terms["composite"]["aliases"]
+
+
 async def test_caveats_route(client):
     r = await client.get("/api/caveats", params={"answer": f"{FLAGGED} is the best."})
     assert r.status_code == 200

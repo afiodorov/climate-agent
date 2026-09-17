@@ -2,6 +2,7 @@ import type {
   ConversationDetail,
   ConversationSummary,
   Final,
+  GlossaryEntry,
   Me,
   Step,
 } from './types'
@@ -10,6 +11,12 @@ export async function fetchMe(): Promise<Me> {
   const r = await fetch('/auth/me')
   if (!r.ok) throw new Error(`me: ${r.status}`)
   return r.json()
+}
+
+export async function fetchGlossary(): Promise<GlossaryEntry[]> {
+  const r = await fetch('/api/glossary')
+  if (!r.ok) throw new Error(`glossary: ${r.status}`)
+  return (await r.json()).terms
 }
 
 export async function logout(): Promise<void> {

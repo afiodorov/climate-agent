@@ -59,3 +59,12 @@ export interface Me {
   admin: boolean
   configured: boolean
 }
+
+/** GET /api/glossary. `aliases` are the spellings that count as a mention of
+ *  the term; `column` is the CSV column it maps to, if any. */
+export interface GlossaryEntry {
+  term: string
+  aliases: string[]
+  definition: string
+  column: string | null
+}

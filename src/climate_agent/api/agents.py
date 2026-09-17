@@ -33,7 +33,7 @@ from mcp.server.mcpserver import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
 from mcp.server.transport_security import TransportSecuritySettings
 
-from .. import caveats, gateway, query
+from .. import caveats, gateway, glossary, query
 
 log = logging.getLogger(__name__)
 
@@ -238,6 +238,14 @@ async def notes(answer: str = "") -> dict[str, list[str]]:
     return {"caveats": await asyncio.to_thread(caveats.caveats_for, answer)}
 
 
+@router.get("/api/glossary")
+async def terms() -> dict[str, list[glossary.Entry]]:
+    """Plain-language definitions of the ranking's terms, numbers from the data.
+
+    The UI marks these in every answer; other clients can do the same."""
+    return {"terms": await asyncio.to_thread(glossary.glossary)}
+
+
 def llms_txt(base: str) -> str:
     base = base.rstrip("/")
     return f"""\
@@ -261,6 +269,7 @@ Tools: describe_rankings, query_rankings(sql), caveats_for(answer), read_methodo
 - {base}/api/schema — views, columns, caveats (JSON)
 - {base}/api/query?sql=SELECT+name,+rank+FROM+rankings+ORDER+BY+rank+LIMIT+10 — read-only DuckDB, max {query.MAX_ROWS} rows (JSON)
 - {base}/api/caveats?answer=... — honesty notes for a draft answer (JSON)
+- {base}/api/glossary — plain-language definitions of the terms, with aliases (JSON)
 - {base}/api/methodology?section=limitations — how the index is built and what it misses (text)
 - {base}/api/ask?q=... — the hosted agent, as server-sent events
 - {base}/openapi.json — the OpenAPI description of all of the above

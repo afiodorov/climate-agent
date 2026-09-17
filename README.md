@@ -388,7 +388,7 @@ share one set of functions (`src/climate_agent/api/agents.py`):
 | Surface | What | For |
 |---|---|---|
 | `/mcp` | Streamable HTTP MCP, stateless, JSON responses | Claude Code, claude.ai connectors, the Claude API, OpenAI Responses / Agents SDK, ChatGPT |
-| `/api/schema`, `/api/query?sql=`, `/api/caveats?answer=` | the same tools as GET routes returning JSON | anything that only has a web fetch; `/openapi.json` describes them |
+| `/api/schema`, `/api/query?sql=`, `/api/caveats?answer=`, `/api/glossary` | the same tools as GET routes returning JSON, plus the term definitions the UI shows on hover | anything that only has a web fetch; `/openapi.json` describes them |
 | `/llms.txt` | what this is, the schema, where the above live | the first thing an agent reads |
 
 The MCP tools:
