@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from 'react'
 import { createPortal } from 'react-dom'
+import { ENGLISH } from '../glossary'
 import type { GlossaryEntry } from '../types'
 
 const GUTTER = 12
@@ -14,6 +15,9 @@ const GAP = 6
 
 interface Props {
   entry: GlossaryEntry
+  /** ISO 639-1 code of the language to define the term in; falls back to
+   *  English when the glossary has no such translation. */
+  lang: string
   children: ReactNode
 }
 
@@ -22,7 +26,8 @@ interface Props {
  *  in viewport coordinates, because answers live inside scrollers (the
  *  transcript, the table wrapper) whose overflow would clip anything
  *  positioned inside them. It closes on scroll rather than following. */
-export function Term({ entry, children }: Props) {
+export function Term({ entry, lang, children }: Props) {
+  const text = lang === ENGLISH ? entry : (entry.translations[lang] ?? entry)
   const [open, setOpen] = useState(false)
   const [pos, setPos] = useState<{ left: number; top: number } | null>(null)
   const anchor = useRef<HTMLElement>(null)
@@ -73,7 +78,7 @@ export function Term({ entry, children }: Props) {
       ref={anchor}
       className="term"
       tabIndex={0}
-      aria-label={entry.term}
+      aria-label={text.term}
       onPointerEnter={onEnter}
       onPointerLeave={onLeave}
       onPointerDown={onDown}
@@ -96,7 +101,7 @@ export function Term({ entry, children }: Props) {
             className="tip"
             style={pos ?? { visibility: 'hidden', left: 0, top: 0 }}
           >
-            <b>{entry.term}</b> {entry.definition}
+            <b>{text.term}</b> {text.definition}
             {entry.column && <code>{entry.column}</code>}
           </span>,
           document.body,

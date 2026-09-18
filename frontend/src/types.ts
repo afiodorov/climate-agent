@@ -60,11 +60,18 @@ export interface Me {
   configured: boolean
 }
 
-/** GET /api/glossary. `aliases` are the spellings that count as a mention of
- *  the term; `column` is the CSV column it maps to, if any. */
-export interface GlossaryEntry {
+/** A glossary term in one language: the word, the spellings that count as a
+ *  mention of it, and its definition. */
+export interface Translation {
   term: string
   aliases: string[]
   definition: string
+}
+
+/** GET /api/glossary. The top-level fields are English; `translations` holds
+ *  the same in every other language the glossary knows, by ISO 639-1 code.
+ *  `column` is the CSV column the term maps to, if any. */
+export interface GlossaryEntry extends Translation {
   column: string | null
+  translations: Record<string, Translation>
 }

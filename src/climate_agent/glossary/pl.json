@@ -1,0 +1,291 @@
+{
+  "language": "Polski",
+  "thousands": " ",
+  "terms": {
+    "comfort hours": {
+      "term": "godziny komfortu",
+      "aliases": [
+        "godziny komfortu",
+        "godzin komfortu",
+        "godzina komfortu",
+        "godziny komfortowe",
+        "godzin komfortowych",
+        "komfortowe godziny",
+        "komfortowych godzin",
+        "godziny komfortu cieplnego"
+      ],
+      "definition": "Godziny dzienne w typowym roku, w których na zewnątrz nie jest ani za gorąco, ani za zimno: temperatura odczuwalna od {cold_full:g} do {warm_full:g} °C, przy założeniu, że mniej więcej połowę czasu spędzasz w słońcu, z odjęciem godzin deszczowych. To jest główna liczba."
+    },
+    "daylight hours": {
+      "term": "godziny dzienne",
+      "aliases": [
+        "godziny dzienne",
+        "godzin dziennych",
+        "godziny światła dziennego",
+        "godzin światła dziennego",
+        "światło dzienne",
+        "światła dziennego",
+        "godziny z dziennym światłem",
+        "pora dzienna"
+      ],
+      "definition": "Godziny w roku, w których słońce jest nad horyzontem lub trwa zmierzch cywilny. Tylko te godziny mogą liczyć się jako komfortowe; noc nigdy nie jest oceniana."
+    },
+    "comfort fraction": {
+      "term": "udział komfortu",
+      "aliases": [
+        "udział komfortu",
+        "udziału komfortu",
+        "frakcja komfortu",
+        "frakcji komfortu",
+        "udział godzin komfortowych",
+        "udział komfortowy",
+        "odsetek godzin komfortowych",
+        "udział światła dziennego"
+      ],
+      "definition": "Udział godzin dziennych, które są komfortowe. Faworyzuje miasta dalekiej północy: ich nieprzyjemne godziny to te ciemne, a te nie są godzinami dziennymi, więc nigdy nie działają na niekorzyść miasta."
+    },
+    "comfort band": {
+      "term": "pasmo komfortu",
+      "aliases": [
+        "pasmo komfortu",
+        "pasma komfortu",
+        "przedział komfortu",
+        "przedziału komfortu",
+        "zakres komfortu",
+        "zakresu komfortu",
+        "strefa komfortu",
+        "pasmo bazowe"
+      ],
+      "definition": "Zakres temperatur odczuwalnych, który liczy się jako komfortowy. Pełne zaliczenie od {cold_full:g} do {warm_full:g} °C, malejące do zera przy {cold_zero:g} °C od strony zimnej i {warm_zero:g} °C od strony ciepłej."
+    },
+    "UTCI": {
+      "term": "wskaźnik UTCI",
+      "aliases": [
+        "wskaźnik UTCI",
+        "wskaźnika UTCI",
+        "indeks UTCI",
+        "indeksu UTCI",
+        "temperatura UTCI",
+        "uniwersalny wskaźnik obciążenia cieplnego",
+        "Universal Thermal Climate Index"
+      ],
+      "definition": "Universal Thermal Climate Index: temperatura odczuwalna w °C. Łączy temperaturę powietrza, wilgotność, wiatr i nasłonecznienie w jedną liczbę opisującą, jak człowiek stojący na zewnątrz naprawdę odczuwa pogodę."
+    },
+    "evenness factor": {
+      "term": "współczynnik równomierności",
+      "aliases": [
+        "współczynnik równomierności",
+        "współczynnika równomierności",
+        "równomierność",
+        "równomierności",
+        "czynnik równomierności",
+        "wskaźnik równomierności",
+        "współczynnik wyrównania",
+        "współczynnik regularności"
+      ],
+      "definition": "Jak równomiernie komfortowe godziny rozkładają się na dwanaście miesięcy, od 0 (wszystkie w jednej porze roku) do 1 (tyle samo w każdym miesiącu). To 1 minus miara tego, jak bardzo sumy miesięczne wahają się względem swojej średniej."
+    },
+    "composite": {
+      "term": "wynik złożony",
+      "aliases": [
+        "wynik złożony",
+        "wyniku złożonego",
+        "wskaźnik złożony",
+        "wskaźnika złożonego",
+        "wynik kompozytowy",
+        "kompozyt",
+        "kompozytu",
+        "ocena złożona"
+      ],
+      "definition": "Jedyny wynik, według którego posortowany jest ranking: godziny komfortu × współczynnik równomierności × współczynnik jakości powietrza. Ponieważ to iloczyn, martwa zima albo brudne powietrze ciągną miasto w dół niezależnie od tego, ile ma komfortowych godzin."
+    },
+    "worst month": {
+      "term": "najgorszy miesiąc",
+      "aliases": [
+        "najgorszy miesiąc",
+        "najgorszego miesiąca",
+        "najgorszym miesiącu",
+        "najsłabszy miesiąc",
+        "najsłabszego miesiąca",
+        "najsłabszym miesiącu"
+      ],
+      "definition": "Miesiąc z najmniejszą liczbą komfortowych godzin."
+    },
+    "best month": {
+      "term": "najlepszy miesiąc",
+      "aliases": [
+        "najlepszy miesiąc",
+        "najlepszego miesiąca",
+        "najlepszym miesiącu",
+        "szczytowy miesiąc",
+        "szczytowego miesiąca",
+        "miesiąc szczytowy",
+        "najmocniejszy miesiąc"
+      ],
+      "definition": "Miesiąc z największą liczbą komfortowych godzin."
+    },
+    "longest bad streak": {
+      "term": "najdłuższa zła passa",
+      "aliases": [
+        "najdłuższa zła passa",
+        "najdłuższej złej passy",
+        "zła passa",
+        "złej passy",
+        "najdłuższy zły okres",
+        "najdłuższego złego okresu",
+        "najdłuższa zła seria",
+        "zła seria"
+      ],
+      "definition": "Najdłuższy ciąg kolejnych dni z mniej niż jedną komfortową godziną, gdziekolwiek w zapisie z lat {start_year}–{end_year}. Długa passa to pora roku, którą po prostu trzeba przeczekać."
+    },
+    "air-quality factor": {
+      "term": "współczynnik jakości powietrza",
+      "aliases": [
+        "współczynnik jakości powietrza",
+        "współczynnika jakości powietrza",
+        "czynnik jakości powietrza",
+        "mnożnik jakości powietrza",
+        "kara za jakość powietrza",
+        "kara za zanieczyszczenie powietrza",
+        "wskaźnik jakości powietrza",
+        "współczynnik AQ"
+      ],
+      "definition": "Kara za zanieczyszczone powietrze, od 1 (czyste, bez kary) w dół do dolnej granicy 0,25, obliczona ze średniego poziomu drobnych pyłów w mieście."
+    },
+    "PM2.5": {
+      "term": "PM2,5",
+      "aliases": [
+        "PM2,5",
+        "PM 2,5",
+        "pył zawieszony",
+        "pyłu zawieszonego",
+        "drobne cząstki",
+        "drobnych cząstek",
+        "pył drobny",
+        "pyły drobne"
+      ],
+      "definition": "Drobne cząstki w powietrzu o średnicy poniżej 2,5 mikrometra: około jednej trzydziestej grubości włosa, na tyle małe, że osadzają się głęboko w płucach. Mierzone w mikrogramach na metr sześcienny powietrza; im mniej, tym lepiej."
+    },
+    "dew point": {
+      "term": "punkt rosy",
+      "aliases": [
+        "punkt rosy",
+        "punktu rosy",
+        "punktem rosy",
+        "punkcie rosy",
+        "temperatura punktu rosy",
+        "temperatury punktu rosy"
+      ],
+      "definition": "Temperatura, do której powietrze musiałoby się ochłodzić, żeby powstała rosa. To uczciwa miara wilgotności: poniżej 10 °C jest odczuwalnie sucho, 16 do 18 °C wilgotno, 18 do 21 °C parno, powyżej 21 °C duszno."
+    },
+    "muggy": {
+      "term": "parno",
+      "aliases": [
+        "parno",
+        "parne godziny",
+        "parnych godzin",
+        "parne",
+        "parność",
+        "parności",
+        "parna pogoda"
+      ],
+      "definition": "Godziny, w których punkt rosy wynosi 18 °C lub więcej: powietrze jest lepkie, a pot przestaje chłodzić."
+    },
+    "microclimate risk": {
+      "term": "ryzyko mikroklimatu",
+      "aliases": [
+        "ryzyko mikroklimatu",
+        "ryzyka mikroklimatu",
+        "ryzyko mikroklimatyczne",
+        "mikroklimat",
+        "mikroklimatu",
+        "mikroklimatem",
+        "flaga mikroklimatu",
+        "ostrzeżenie mikroklimatyczne"
+      ],
+      "definition": "Dane pogodowe pochodzą z komórki siatki o szerokości około 31 km. Na wybrzeżu lub w stromym terenie ta komórka może opisywać inne miejsce niż samo miasto, więc liczby dla miasta mogą być nietrafione."
+    },
+    "ERA5": {
+      "term": "reanaliza ERA5",
+      "aliases": [
+        "reanaliza ERA5",
+        "reanalizy ERA5",
+        "dane ERA5",
+        "danych ERA5",
+        "zbiór ERA5",
+        "zbioru ERA5"
+      ],
+      "definition": "Zapis pogody stojący za wszystkim: globalna, godzinowa rekonstrukcja dawnej pogody na siatce o szerokości około 31 km, opracowana przez europejskie centrum prognoz ECMWF."
+    },
+    "reference city": {
+      "term": "miasto referencyjne",
+      "aliases": [
+        "miasto referencyjne",
+        "miasta referencyjne",
+        "miast referencyjnych",
+        "miasta referencyjnego",
+        "miasto porównawcze",
+        "miasta porównawcze",
+        "tylko referencyjne",
+        "tylko do porównania"
+      ],
+      "definition": "Miasto poniżej progu ludności {min_population}. Jest pokazywane tylko dla porównania i nie ma miejsca w rankingu."
+    },
+    "rank volatility": {
+      "term": "zmienność rangi",
+      "aliases": [
+        "zmienność rangi",
+        "zmienności rangi",
+        "zmienność pozycji",
+        "zmienność miejsca w rankingu",
+        "warianty punktacji",
+        "wariantów punktacji",
+        "analiza wrażliwości",
+        "analizy wrażliwości"
+      ],
+      "definition": "Jak daleko przesuwa się pozycja miasta, gdy decyzje punktacji zmienia się po jednej naraz: cieplejsze lub chłodniejsze pasmo, brak kary za powietrze, pełne słońce i tak dalej, łącznie {n_variants} wariantów. Duży skok oznacza, że pozycja jest artefaktem tych decyzji, a nie klimatu."
+    },
+    "Kendall tau": {
+      "term": "tau Kendalla",
+      "aliases": [
+        "tau Kendalla",
+        "τ Kendalla",
+        "współczynnik tau Kendalla",
+        "współczynnik Kendalla",
+        "współczynnika Kendalla",
+        "korelacja Kendalla",
+        "korelacji Kendalla",
+        "Kendall-tau"
+      ],
+      "definition": "Miara zgodności dwóch uporządkowań, od -1 (dokładnie odwrotne) do 1 (identyczne). Tutaj porównuje dwa sposoby uszeregowania tych samych miast."
+    },
+    "sun exposure": {
+      "term": "ekspozycja na słońce",
+      "aliases": [
+        "ekspozycja na słońce",
+        "ekspozycji na słońce",
+        "nasłonecznienie",
+        "nasłonecznienia",
+        "pół słońca",
+        "połowa słońca",
+        "w połowie w słońcu",
+        "półcień"
+      ],
+      "definition": "Opublikowane liczby zakładają, że mniej więcej połowę czasu spędzasz w słońcu. Pełne słońce i pełny cień też są obliczane i mogą mocno zmienić obraz, zwłaszcza w gorących miejscach."
+    },
+    "elevation correction": {
+      "term": "korekta wysokościowa",
+      "aliases": [
+        "korekta wysokościowa",
+        "korekty wysokościowej",
+        "korekta wysokości",
+        "korekty wysokości",
+        "poprawka wysokościowa",
+        "poprawka na wysokość",
+        "gradient temperatury",
+        "gradientu temperatury"
+      ],
+      "definition": "Miasto leżące wyraźnie powyżej średniej wysokości swojej komórki siatki dostaje chłodniejszą temperaturę odczuwalną, w zwykłym tempie, w jakim powietrze ochładza się z wysokością."
+    }
+  }
+}

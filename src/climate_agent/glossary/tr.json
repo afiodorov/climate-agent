@@ -1,0 +1,294 @@
+{
+  "language": "Türkçe",
+  "thousands": ".",
+  "terms": {
+    "comfort hours": {
+      "term": "konfor saatleri",
+      "aliases": [
+        "konfor saatleri",
+        "konfor saati",
+        "konfor saatlerini",
+        "konfor saatlerinin",
+        "konfor saatlerinde",
+        "konforlu saatler",
+        "konforlu saat",
+        "konforlu gündüz saatleri"
+      ],
+      "definition": "Tipik bir yılda dışarıda olmanın ne çok sıcak ne de çok soğuk hissettirdiği gündüz saatleri: zamanın yaklaşık yarısında güneşte olduğunuz varsayılarak, yağmurlu saatler düşülerek, {cold_full:g} ile {warm_full:g} °C arasında bir hissedilen sıcaklık. Ana sayı budur."
+    },
+    "daylight hours": {
+      "term": "gündüz saatleri",
+      "aliases": [
+        "gündüz saatleri",
+        "gündüz saati",
+        "gündüz saatlerinin",
+        "gündüz saatlerinde",
+        "gün ışığı saatleri",
+        "gün ışığı",
+        "gün ışığı saatlerinin",
+        "aydınlık saatler"
+      ],
+      "definition": "Yılda güneşin ufkun üzerinde olduğu ya da sivil alacakaranlığın sürdüğü saatler. Yalnızca bu saatler konforlu sayılabilir; gece hiçbir zaman puanlanmaz."
+    },
+    "comfort fraction": {
+      "term": "konfor oranı",
+      "aliases": [
+        "konfor oranı",
+        "konfor oranının",
+        "konfor payı",
+        "konfor payının",
+        "konforlu oran",
+        "konforlu saat oranı",
+        "gündüz payı",
+        "konfor kesri"
+      ],
+      "definition": "Gündüz saatlerinin konforlu olan payı. Uzak kuzeydeki şehirleri kayırır: onların çekilmez saatleri karanlık olanlardır, bunlar gündüz sayılmaz, dolayısıyla asla şehrin aleyhine işlemez."
+    },
+    "comfort band": {
+      "term": "konfor bandı",
+      "aliases": [
+        "konfor bandı",
+        "konfor bandının",
+        "konfor bandında",
+        "konfor aralığı",
+        "konfor aralığının",
+        "konfor bölgesi",
+        "temel bant",
+        "taban bandı"
+      ],
+      "definition": "Konforlu sayılan hissedilen sıcaklık aralığı. {cold_full:g} ile {warm_full:g} °C arasında tam puan, soğuk tarafta {cold_zero:g} °C ve sıcak tarafta {warm_zero:g} °C noktasında sıfıra inecek şekilde azalır."
+    },
+    "UTCI": {
+      "term": "UTCI indeksi",
+      "aliases": [
+        "UTCI indeksi",
+        "UTCI endeksi",
+        "UTCI değeri",
+        "UTCI sıcaklığı",
+        "UTCI'nin",
+        "UTCI'ye",
+        "Evrensel Termal İklim İndeksi",
+        "Universal Thermal Climate Index"
+      ],
+      "definition": "Universal Thermal Climate Index: °C cinsinden hissedilen sıcaklık. Hava sıcaklığını, nemi, rüzgârı ve güneş ışığını, dışarıda duran bir insanın havayı gerçekte nasıl yaşadığını anlatan tek bir sayıda birleştirir."
+    },
+    "evenness factor": {
+      "term": "düzenlilik faktörü",
+      "aliases": [
+        "düzenlilik faktörü",
+        "düzenlilik faktörünün",
+        "düzenlilik",
+        "düzenlilik katsayısı",
+        "eşitlik faktörü",
+        "dengelilik faktörü",
+        "düzgünlük faktörü",
+        "eşit dağılım faktörü"
+      ],
+      "definition": "Konforlu saatlerin on iki aya ne kadar düzenli dağıldığı, 0'dan (hepsi tek bir mevsimde) 1'e (her ay aynı). Aylık toplamların ortalamalarına göre ne kadar değiştiğinin 1'den çıkarılmasıyla bulunur."
+    },
+    "composite": {
+      "term": "bileşik puan",
+      "aliases": [
+        "bileşik puan",
+        "bileşik puanı",
+        "bileşik puanın",
+        "bileşik skor",
+        "bileşik skoru",
+        "bileşik",
+        "toplam puan",
+        "kompozit puan"
+      ],
+      "definition": "Sıralamanın sıralandığı tek puan: konfor saatleri × düzenlilik faktörü × hava kalitesi faktörü. Çarpım olduğu için ölü bir kış ya da kirli hava, kaç konforlu saati olursa olsun bir şehri aşağı çeker."
+    },
+    "worst month": {
+      "term": "en kötü ay",
+      "aliases": [
+        "en kötü ay",
+        "en kötü ayı",
+        "en kötü ayın",
+        "en kötü ayda",
+        "en zayıf ay",
+        "en zayıf ayı"
+      ],
+      "definition": "En az konforlu saate sahip ay."
+    },
+    "best month": {
+      "term": "en iyi ay",
+      "aliases": [
+        "en iyi ay",
+        "en iyi ayı",
+        "en iyi ayın",
+        "en iyi ayda",
+        "zirve ay",
+        "zirve ayı",
+        "en güçlü ay"
+      ],
+      "definition": "En çok konforlu saate sahip ay."
+    },
+    "longest bad streak": {
+      "term": "en uzun kötü seri",
+      "aliases": [
+        "en uzun kötü seri",
+        "en uzun kötü serisi",
+        "kötü seri",
+        "kötü serisi",
+        "en uzun kötü dönem",
+        "en uzun kötü dönemi",
+        "en uzun kötü süre",
+        "kötü dizi"
+      ],
+      "definition": "{start_year}–{end_year} kaydının herhangi bir yerinde, birden az konforlu saati olan ardışık günlerin en uzun dizisi. Uzun bir seri, sadece geçmesini beklediğiniz bir mevsimdir."
+    },
+    "air-quality factor": {
+      "term": "hava kalitesi faktörü",
+      "aliases": [
+        "hava kalitesi faktörü",
+        "hava kalitesi faktörünün",
+        "hava kalitesi faktörüyle",
+        "hava kalitesi çarpanı",
+        "hava kalitesi cezası",
+        "hava kalitesi katsayısı",
+        "hava kirliliği cezası",
+        "AQ faktörü"
+      ],
+      "definition": "Kirli hava için bir ceza; 1'den (temiz, ceza yok) 0,25 tabanına kadar iner ve şehrin ortalama ince partikül düzeyinden hesaplanır."
+    },
+    "PM2.5": {
+      "term": "PM2,5",
+      "aliases": [
+        "PM2,5",
+        "PM 2,5",
+        "PM2,5 değeri",
+        "ince partiküller",
+        "ince partikül",
+        "ince parçacıklar",
+        "ince parçacık",
+        "partikül madde"
+      ],
+      "definition": "Havadaki çapı 2,5 mikrometrenin altındaki ince partiküller: bir saç telinin kalınlığının yaklaşık otuzda biri, akciğerlerin derinine yerleşecek kadar küçük. Metreküp hava başına mikrogram olarak ölçülür; düşük olması daha iyidir."
+    },
+    "dew point": {
+      "term": "çiy noktası",
+      "aliases": [
+        "çiy noktası",
+        "çiy noktasının",
+        "çiy noktasında",
+        "çiy noktasını",
+        "çiy noktası sıcaklığı",
+        "çiğ noktası",
+        "çiğ noktasının"
+      ],
+      "definition": "Çiy oluşmadan önce havanın soğuması gereken sıcaklık. Nemin dürüst ölçüsüdür: 10 °C altı kuru hissettirir, 16 ile 18 °C nemli, 18 ile 21 °C bunaltıcı, 21 °C üstü boğucu."
+    },
+    "muggy": {
+      "term": "bunaltıcı",
+      "aliases": [
+        "bunaltıcı",
+        "bunaltıcı saatler",
+        "bunaltıcı saat",
+        "bunaltıcı saatlerin",
+        "bunaltıcı nem",
+        "boğucu nemli"
+      ],
+      "definition": "Çiy noktasının 18 °C veya daha yüksek olduğu saatler: hava yapış yapış hissettirir ve ter artık sizi serinletmez."
+    },
+    "microclimate risk": {
+      "term": "mikroiklim riski",
+      "aliases": [
+        "mikroiklim riski",
+        "mikroiklim riskinin",
+        "mikroiklim",
+        "mikroiklimi",
+        "mikroiklimin",
+        "mikroiklim uyarısı",
+        "mikroiklim bayrağı",
+        "mikro iklim riski"
+      ],
+      "definition": "Hava verisi yaklaşık 31 km genişliğinde bir ızgara hücresinden gelir. Bir kıyıda ya da dik arazide bu hücre şehrin kendisinden farklı bir yeri anlatıyor olabilir, dolayısıyla şehrin sayıları yanlış olabilir."
+    },
+    "ERA5": {
+      "term": "ERA5 yeniden analizi",
+      "aliases": [
+        "ERA5 yeniden analizi",
+        "ERA5 reanalizi",
+        "ERA5 verisi",
+        "ERA5 verileri",
+        "ERA5 veri seti",
+        "ERA5 kaydı",
+        "ERA5'in",
+        "ERA5'ten"
+      ],
+      "definition": "Her şeyin arkasındaki hava kaydı: Avrupa hava merkezi ECMWF tarafından üretilen, yaklaşık 31 km genişliğinde bir ızgara üzerinde geçmiş havanın küresel, saatlik bir yeniden kurgusu."
+    },
+    "reference city": {
+      "term": "referans şehir",
+      "aliases": [
+        "referans şehir",
+        "referans şehri",
+        "referans şehirler",
+        "referans şehirleri",
+        "referans şehirlerin",
+        "karşılaştırma şehri",
+        "yalnızca referans",
+        "sadece referans"
+      ],
+      "definition": "{min_population} nüfus tabanının altındaki bir şehir. Yalnızca karşılaştırma için gösterilir ve sıralamada yeri yoktur."
+    },
+    "rank volatility": {
+      "term": "sıra oynaklığı",
+      "aliases": [
+        "sıra oynaklığı",
+        "sıra oynaklığının",
+        "sıralama oynaklığı",
+        "sıra değişkenliği",
+        "sıralama değişkenliği",
+        "puanlama varyantları",
+        "duyarlılık analizi",
+        "duyarlılık taraması"
+      ],
+      "definition": "Puanlama tercihleri teker teker değiştirildiğinde bir şehrin sırasının ne kadar kaydığı: daha sıcak ya da daha serin bir bant, hava cezası yok, tam güneş ve benzeri, toplam {n_variants} varyant. Büyük bir sapma, sıranın iklimin değil bu tercihlerin bir ürünü olduğu anlamına gelir."
+    },
+    "Kendall tau": {
+      "term": "Kendall tau katsayısı",
+      "aliases": [
+        "Kendall tau katsayısı",
+        "Kendall tau'su",
+        "Kendall tau'sunun",
+        "Kendall'ın tau'su",
+        "Kendall'ın tau katsayısı",
+        "Kendall τ katsayısı",
+        "Kendall korelasyonu",
+        "Kendall sıra korelasyonu"
+      ],
+      "definition": "İki sıralamanın ne ölçüde uyuştuğunu gösteren bir puan, -1'den (tam tersi) 1'e (birebir aynı). Burada aynı şehirleri sıralamanın iki yolunu karşılaştırır."
+    },
+    "sun exposure": {
+      "term": "güneşe maruziyet",
+      "aliases": [
+        "güneşe maruziyet",
+        "güneşe maruz kalma",
+        "güneş maruziyeti",
+        "güneşlenme durumu",
+        "yarı güneş",
+        "yarım güneş",
+        "yarı güneşli",
+        "yarı gölge"
+      ],
+      "definition": "Yayımlanan rakamlar zamanın yaklaşık yarısında güneşte olduğunuzu varsayar. Tam güneş ve tam gölge de hesaplanır ve özellikle sıcak yerlerde tabloyu epey değiştirebilir."
+    },
+    "elevation correction": {
+      "term": "yükseklik düzeltmesi",
+      "aliases": [
+        "yükseklik düzeltmesi",
+        "yükseklik düzeltmesinin",
+        "rakım düzeltmesi",
+        "rakım düzeltmesinin",
+        "yükselti düzeltmesi",
+        "sıcaklık gradyanı",
+        "düşey sıcaklık gradyanı",
+        "lapse rate düzeltmesi"
+      ],
+      "definition": "Izgara hücresinin ortalama yüksekliğinin epey üzerinde duran bir şehir, havanın yükseklikle soğuduğu olağan hızda daha serin bir hissedilen sıcaklık alır."
+    }
+  }
+}

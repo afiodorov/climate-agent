@@ -152,6 +152,13 @@ async def test_glossary_route(client):
         in terms["comfort hours"]["definition"]
     )
     assert "composite" in terms["composite"]["aliases"]
+    pt = terms["composite"]["translations"]["pt"]
+    assert pt["term"] and pt["aliases"] and pt["definition"]
+    # Compressed for clients that take it, plain for the rest.
+    assert r.headers["content-encoding"] == "gzip"
+    plain = await client.get("/api/glossary", headers={"accept-encoding": "identity"})
+    assert "content-encoding" not in plain.headers
+    assert plain.json() == r.json()
 
 
 async def test_caveats_route(client):

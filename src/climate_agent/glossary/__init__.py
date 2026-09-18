@@ -9,14 +9,32 @@ leave a stale figure in a tooltip.
 `aliases` are the spellings that count as a mention, matched whole-word and
 case-insensitively by the client. `column` names the CSV column the term
 maps to, when there is one, so a reader can go from the tooltip to the data.
+
+The model answers in whatever language the question came in, so each entry
+also carries `translations`: the term, its aliases and its definition in every
+language that has a `<code>.json` next to this file, keyed by ISO 639-1 code.
+English is the source of truth and lives here; a translation file maps each
+English term to its own term/aliases/definition and keeps the same format
+placeholders. The client matches every language's aliases at once and shows
+the definition in whichever language the answer's mentions point to.
 """
 
 from __future__ import annotations
 
+import json
 from functools import lru_cache
+from pathlib import Path
 from typing import TypedDict
 
-from . import query
+from .. import query
+
+_HERE = Path(__file__).parent
+
+
+class Translation(TypedDict):
+    term: str
+    aliases: list[str]
+    definition: str
 
 
 class Entry(TypedDict):
@@ -24,6 +42,17 @@ class Entry(TypedDict):
     aliases: list[str]
     definition: str
     column: str | None
+    translations: dict[str, Translation]
+
+
+class Language(TypedDict):
+    """One `<code>.json`: the language's own name, its thousands separator
+    (300000 is "300,000" in English and "300.000" in Portuguese), and a
+    translation for every English term."""
+
+    language: str
+    thousands: str
+    terms: dict[str, Translation]
 
 
 def _e(term: str, aliases: list[str], definition: str, column: str | None) -> Entry:
@@ -32,6 +61,7 @@ def _e(term: str, aliases: list[str], definition: str, column: str | None) -> En
         "aliases": aliases,
         "definition": definition,
         "column": column,
+        "translations": {},
     }
 
 
@@ -170,7 +200,7 @@ _ENTRIES: list[Entry] = [
     _e(
         "reference city",
         ["reference city", "reference cities", "reference-only"],
-        "A city below the {min_population:,} population floor. It is shown for "
+        "A city below the {min_population} population floor. It is shown for "
         "comparison only and carries no rank.",
         "is_reference",
     ),
@@ -214,8 +244,42 @@ _ENTRIES: list[Entry] = [
 
 
 @lru_cache(maxsize=1)
-def glossary() -> list[Entry]:
-    """Every term with its numbers filled in from the vendored run."""
+def languages() -> dict[str, Language]:
+    """The translation files next to this module, by language code."""
+    return {
+        p.stem: json.loads(p.read_text(encoding="utf-8"))
+        for p in sorted(_HERE.glob("*.json"))
+    }
+
+
+def _values(thousands: str) -> dict[str, object]:
     c = query.counts()
-    values = {**c, **c["band"]}
-    return [{**e, "definition": e["definition"].format(**values)} for e in _ENTRIES]
+    floor = f"{c['min_population']:,}".replace(",", thousands)
+    return {**c, **c["band"], "min_population": floor}
+
+
+@lru_cache(maxsize=1)
+def glossary() -> list[Entry]:
+    """Every term with its numbers filled in from the vendored run, in English
+    and in every translated language."""
+    en = _values(",")
+    per_language = {
+        code: _values(lang["thousands"]) for code, lang in languages().items()
+    }
+    out: list[Entry] = []
+    for e in _ENTRIES:
+        translations: dict[str, Translation] = {}
+        for code, lang in languages().items():
+            t = lang["terms"][e["term"]]
+            translations[code] = {
+                **t,
+                "definition": t["definition"].format(**per_language[code]),
+            }
+        out.append(
+            {
+                **e,
+                "definition": e["definition"].format(**en),
+                "translations": translations,
+            }
+        )
+    return out

@@ -1,0 +1,292 @@
+{
+  "language": "Français",
+  "thousands": " ",
+  "terms": {
+    "comfort hours": {
+      "term": "heures de confort",
+      "aliases": [
+        "heures de confort",
+        "heures confort",
+        "heures confortables",
+        "heures de confort par an",
+        "heures de confort annuelles",
+        "heures brutes de confort",
+        "heures diurnes de confort",
+        "heures agréables"
+      ],
+      "definition": "Heures de jour d'une année typique où être dehors ne paraît ni trop chaud ni trop froid : une température ressentie de {cold_full:g} à {warm_full:g} °C, en supposant que l'on est au soleil environ la moitié du temps, les heures de pluie étant décomptées. C'est le chiffre principal."
+    },
+    "daylight hours": {
+      "term": "heures de jour",
+      "aliases": [
+        "heures de jour",
+        "heures de lumière du jour",
+        "heures de lumière",
+        "heures diurnes",
+        "lumière du jour",
+        "heures de clarté",
+        "heures éclairées"
+      ],
+      "definition": "Heures d'une année où le soleil est levé ou bien où règne le crépuscule civil. Seules ces heures peuvent compter comme confortables ; la nuit n'est jamais notée."
+    },
+    "comfort fraction": {
+      "term": "fraction de confort",
+      "aliases": [
+        "fraction de confort",
+        "fraction confort",
+        "fraction confortable",
+        "proportion de confort",
+        "part de confort",
+        "pourcentage de confort",
+        "part des heures de jour",
+        "fraction des heures de jour"
+      ],
+      "definition": "La part des heures de jour qui sont confortables. Elle avantage les villes très au nord : leurs heures pénibles sont les heures d'obscurité, qui ne sont pas des heures de jour, et ne comptent donc jamais contre la ville."
+    },
+    "comfort band": {
+      "term": "bande de confort",
+      "aliases": [
+        "bande de confort",
+        "bande confort",
+        "bande de référence",
+        "bande de base",
+        "plage de confort",
+        "intervalle de confort",
+        "fourchette de confort",
+        "bande thermique"
+      ],
+      "definition": "La plage de températures ressenties qui compte comme confortable. Crédit complet de {cold_full:g} à {warm_full:g} °C, décroissant jusqu'à zéro à {cold_zero:g} °C du côté froid et à {warm_zero:g} °C du côté chaud."
+    },
+    "UTCI": {
+      "term": "indice UTCI",
+      "aliases": [
+        "indice UTCI",
+        "température UTCI",
+        "indice universel de climat thermique",
+        "indice climatique thermique universel",
+        "indice thermique universel",
+        "valeur UTCI",
+        "UTCI moyen"
+      ],
+      "definition": "Indice universel de climat thermique : une température ressentie en °C. Il combine température de l'air, humidité, vent et ensoleillement en un seul nombre qui traduit ce qu'une personne debout dehors ressent réellement du temps qu'il fait."
+    },
+    "evenness factor": {
+      "term": "facteur de régularité",
+      "aliases": [
+        "facteur de régularité",
+        "facteur régularité",
+        "régularité",
+        "facteur d'uniformité",
+        "facteur uniformité",
+        "uniformité",
+        "facteur d'équilibre saisonnier",
+        "facteur d'homogénéité"
+      ],
+      "definition": "À quel point les heures confortables sont réparties uniformément sur les douze mois, de 0 (toutes dans une seule saison) à 1 (autant chaque mois). C'est 1 moins la variation des totaux mensuels rapportée à leur moyenne."
+    },
+    "composite": {
+      "term": "score composite",
+      "aliases": [
+        "score composite",
+        "indice composite",
+        "note composite",
+        "score composé",
+        "indice composé",
+        "valeur composite",
+        "score global"
+      ],
+      "definition": "Le score unique selon lequel le classement est trié : heures de confort × facteur de régularité × facteur de qualité de l'air. Comme il s'agit d'un produit, un hiver mort ou un air pollué tirent une ville vers le bas, quel que soit son nombre d'heures confortables."
+    },
+    "worst month": {
+      "term": "pire mois",
+      "aliases": [
+        "pire mois",
+        "mois le pire",
+        "plus mauvais mois",
+        "mois le plus mauvais",
+        "mois le plus faible",
+        "mois le plus pauvre",
+        "mois le plus creux",
+        "mois creux"
+      ],
+      "definition": "Le mois qui compte le moins d'heures confortables."
+    },
+    "best month": {
+      "term": "meilleur mois",
+      "aliases": [
+        "meilleur mois",
+        "mois le meilleur",
+        "mois de pointe",
+        "mois pic",
+        "mois maximal",
+        "mois le plus favorable",
+        "mois le plus confortable",
+        "mois optimal"
+      ],
+      "definition": "Le mois qui compte le plus d'heures confortables."
+    },
+    "longest bad streak": {
+      "term": "plus longue mauvaise série",
+      "aliases": [
+        "plus longue mauvaise série",
+        "mauvaise série",
+        "plus longue série de mauvais jours",
+        "série de mauvais jours",
+        "pire série",
+        "mauvaise passe",
+        "plus longue mauvaise passe",
+        "plus longue période défavorable"
+      ],
+      "definition": "La plus longue suite de jours consécutifs avec moins d'une heure confortable, n'importe où dans l'archive {start_year}–{end_year}. Une longue série est une saison que l'on se contente d'attendre."
+    },
+    "air-quality factor": {
+      "term": "facteur de qualité de l'air",
+      "aliases": [
+        "facteur de qualité de l'air",
+        "facteur qualité de l'air",
+        "facteur de qualité d'air",
+        "facteur qualité air",
+        "facteur pollution",
+        "pénalité de qualité de l'air",
+        "pénalité pour la qualité de l'air",
+        "multiplicateur de qualité de l'air"
+      ],
+      "definition": "Une pénalité pour air pollué, de 1 (air propre, aucune pénalité) jusqu'à un plancher de 0,25, calculée à partir du niveau moyen de particules fines de la ville."
+    },
+    "PM2.5": {
+      "term": "PM2,5",
+      "aliases": [
+        "PM2,5",
+        "particules fines",
+        "particules PM2,5",
+        "particules fines PM2,5",
+        "microparticules",
+        "particules en suspension fines",
+        "poussières fines"
+      ],
+      "definition": "Particules fines dans l'air, de moins de 2,5 micromètres de diamètre : environ un trentième de l'épaisseur d'un cheveu, assez petites pour se loger au fond des poumons. Mesurées en microgrammes par mètre cube d'air ; plus c'est bas, mieux c'est."
+    },
+    "dew point": {
+      "term": "point de rosée",
+      "aliases": [
+        "point de rosée",
+        "point de rosee",
+        "température de rosée",
+        "température du point de rosée",
+        "point de condensation",
+        "point de rosée moyen"
+      ],
+      "definition": "La température à laquelle l'air devrait se refroidir pour que la rosée se forme. C'est la mesure honnête de l'humidité : sous 10 °C l'air paraît sec, de 16 à 18 °C humide, de 18 à 21 °C lourd, au-dessus de 21 °C étouffant."
+    },
+    "muggy": {
+      "term": "moite",
+      "aliases": [
+        "moite",
+        "heures moites",
+        "moiteur",
+        "heures lourdes",
+        "temps lourd",
+        "heures humides",
+        "air lourd",
+        "lourd et humide"
+      ],
+      "definition": "Heures où le point de rosée atteint 18 °C ou plus : l'air paraît collant et la sueur ne rafraîchit plus."
+    },
+    "microclimate risk": {
+      "term": "risque de microclimat",
+      "aliases": [
+        "risque de microclimat",
+        "risque microclimatique",
+        "microclimat",
+        "alerte microclimat",
+        "signal de microclimat",
+        "indicateur de microclimat",
+        "drapeau microclimat",
+        "effet microclimatique"
+      ],
+      "definition": "Les données météo proviennent d'une maille d'environ 31 km de côté. Sur une côte ou en relief escarpé, cette maille peut décrire un lieu différent de la ville elle-même, et les chiffres de la ville peuvent donc être faussés."
+    },
+    "ERA5": {
+      "term": "réanalyse ERA5",
+      "aliases": [
+        "réanalyse ERA5",
+        "données ERA5",
+        "données d'ERA5",
+        "grille ERA5",
+        "grille d'ERA5",
+        "maille ERA5",
+        "maille d'ERA5",
+        "cellule ERA5"
+      ],
+      "definition": "L'archive météo derrière tout le reste : une reconstruction mondiale, heure par heure, du temps passé sur une grille d'environ 31 km, produite par le centre météorologique européen ECMWF."
+    },
+    "reference city": {
+      "term": "ville de référence",
+      "aliases": [
+        "ville de référence",
+        "villes de référence",
+        "référence seulement",
+        "référence uniquement",
+        "à titre de référence",
+        "pour référence seulement",
+        "ville non classée",
+        "simple référence"
+      ],
+      "definition": "Une ville sous le seuil de population de {min_population} habitants. Elle est affichée à titre de comparaison seulement et n'a pas de rang."
+    },
+    "rank volatility": {
+      "term": "volatilité du rang",
+      "aliases": [
+        "volatilité du rang",
+        "volatilité de rang",
+        "volatilité du classement",
+        "volatilité de la position",
+        "variantes de notation",
+        "variantes de score",
+        "analyse de sensibilité",
+        "balayage de sensibilité"
+      ],
+      "definition": "De combien le rang d'une ville bouge quand on modifie les choix de notation un à un : une bande plus chaude ou plus froide, pas de pénalité air, plein soleil, etc., soit {n_variants} variantes au total. Un grand écart signifie que le rang est un artefact de ces choix plutôt que du climat."
+    },
+    "Kendall tau": {
+      "term": "tau de Kendall",
+      "aliases": [
+        "tau de Kendall",
+        "τ de Kendall",
+        "coefficient de Kendall",
+        "corrélation de Kendall",
+        "coefficient tau de Kendall",
+        "tau Kendall"
+      ],
+      "definition": "Un score mesurant l'accord entre deux ordres, de -1 (exactement inversés) à 1 (identiques). Ici, il compare deux façons de classer les mêmes villes."
+    },
+    "sun exposure": {
+      "term": "exposition au soleil",
+      "aliases": [
+        "exposition au soleil",
+        "exposition solaire",
+        "mi-soleil",
+        "demi-soleil",
+        "mi-ombre",
+        "moitié au soleil",
+        "plein soleil",
+        "ombre totale"
+      ],
+      "definition": "Les chiffres publiés supposent que l'on est au soleil environ la moitié du temps. Le plein soleil et l'ombre totale sont aussi calculés et peuvent beaucoup changer le tableau, surtout dans les lieux chauds."
+    },
+    "elevation correction": {
+      "term": "correction d'altitude",
+      "aliases": [
+        "correction d'altitude",
+        "correction altitude",
+        "correction d'élévation",
+        "correction de l'altitude",
+        "gradient thermique",
+        "gradient vertical",
+        "gradient adiabatique",
+        "correction du gradient thermique"
+      ],
+      "definition": "Une ville située bien au-dessus de l'altitude moyenne de sa maille reçoit une température ressentie plus fraîche, au taux habituel auquel l'air se refroidit avec l'altitude."
+    }
+  }
+}

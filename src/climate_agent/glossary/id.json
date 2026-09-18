@@ -1,0 +1,287 @@
+{
+  "language": "Bahasa Indonesia",
+  "thousands": ".",
+  "terms": {
+    "comfort hours": {
+      "term": "jam nyaman",
+      "aliases": [
+        "jam nyaman",
+        "jam-jam nyaman",
+        "jam kenyamanan",
+        "jam yang nyaman",
+        "jam nyaman siang hari",
+        "jumlah jam nyaman"
+      ],
+      "definition": "Jam-jam siang hari dalam setahun yang tipikal ketika berada di luar ruangan terasa tidak terlalu panas maupun terlalu dingin: suhu yang dirasakan {cold_full:g} sampai {warm_full:g} °C, dengan asumsi Anda berada di bawah sinar matahari sekitar separuh waktu, dan jam-jam hujan didiskon. Inilah angka utamanya."
+    },
+    "daylight hours": {
+      "term": "jam siang hari",
+      "aliases": [
+        "jam siang hari",
+        "jam siang",
+        "jam terang",
+        "jam-jam siang",
+        "jam terang hari",
+        "jam cahaya siang",
+        "waktu siang hari"
+      ],
+      "definition": "Jam dalam setahun ketika matahari berada di atas cakrawala atau sedang senja sipil. Hanya jam-jam ini yang bisa dihitung sebagai nyaman; malam hari tidak pernah dinilai."
+    },
+    "comfort fraction": {
+      "term": "fraksi nyaman",
+      "aliases": [
+        "fraksi nyaman",
+        "fraksi kenyamanan",
+        "proporsi nyaman",
+        "proporsi jam nyaman",
+        "porsi nyaman",
+        "persentase jam nyaman",
+        "pangsa siang hari",
+        "bagian siang hari yang nyaman",
+        "rasio nyaman"
+      ],
+      "definition": "Bagian dari jam siang hari yang nyaman. Ukuran ini menguntungkan kota-kota di ujung utara: jam-jam menyengsarakan mereka adalah jam-jam gelap, dan itu bukan siang hari, sehingga tidak pernah dihitung merugikan kota tersebut."
+    },
+    "comfort band": {
+      "term": "rentang nyaman",
+      "aliases": [
+        "rentang nyaman",
+        "rentang kenyamanan",
+        "rentang suhu nyaman",
+        "pita nyaman",
+        "pita kenyamanan",
+        "kisaran nyaman",
+        "kisaran kenyamanan",
+        "rentang dasar",
+        "pita dasar"
+      ],
+      "definition": "Rentang suhu yang dirasakan yang dihitung sebagai nyaman. Nilai penuh dari {cold_full:g} sampai {warm_full:g} °C, menurun bertahap hingga nol pada {cold_zero:g} °C di sisi dingin dan {warm_zero:g} °C di sisi hangat."
+    },
+    "UTCI": {
+      "term": "indeks iklim termal universal",
+      "aliases": [
+        "indeks iklim termal universal",
+        "indeks termal universal",
+        "indeks iklim termal",
+        "indeks UTCI",
+        "nilai UTCI",
+        "suhu UTCI"
+      ],
+      "definition": "Universal Thermal Climate Index: suhu yang dirasakan dalam °C. Indeks ini menggabungkan suhu udara, kelembapan, angin, dan sinar matahari menjadi satu angka tentang bagaimana seseorang yang berdiri di luar ruangan benar-benar merasakan cuaca."
+    },
+    "evenness factor": {
+      "term": "faktor kemerataan",
+      "aliases": [
+        "faktor kemerataan",
+        "kemerataan",
+        "faktor pemerataan",
+        "faktor keseragaman",
+        "keseragaman",
+        "faktor keteraturan",
+        "faktor merata",
+        "tingkat kemerataan"
+      ],
+      "definition": "Seberapa merata jam-jam nyaman tersebar di dua belas bulan, dari 0 (semuanya dalam satu musim) sampai 1 (sama setiap bulan). Nilainya adalah 1 dikurangi seberapa besar total bulanan bervariasi relatif terhadap rata-ratanya."
+    },
+    "composite": {
+      "term": "skor komposit",
+      "aliases": [
+        "skor komposit",
+        "komposit",
+        "nilai komposit",
+        "indeks komposit",
+        "skor gabungan",
+        "nilai gabungan",
+        "skor composite"
+      ],
+      "definition": "Satu-satunya skor yang menjadi dasar pengurutan peringkat: jam nyaman × faktor kemerataan × faktor kualitas udara. Karena berupa perkalian, musim dingin yang mati atau udara yang kotor akan menyeret kota ke bawah, berapa pun jam nyaman yang dimilikinya."
+    },
+    "worst month": {
+      "term": "bulan terburuk",
+      "aliases": [
+        "bulan terburuk",
+        "bulan paling buruk",
+        "bulan terjelek",
+        "bulan terparah",
+        "bulan paling tidak nyaman"
+      ],
+      "definition": "Bulan dengan jam nyaman paling sedikit."
+    },
+    "best month": {
+      "term": "bulan terbaik",
+      "aliases": [
+        "bulan terbaik",
+        "bulan paling baik",
+        "bulan puncak",
+        "bulan paling nyaman",
+        "bulan ternyaman"
+      ],
+      "definition": "Bulan dengan jam nyaman paling banyak."
+    },
+    "longest bad streak": {
+      "term": "rentetan buruk terpanjang",
+      "aliases": [
+        "rentetan buruk terpanjang",
+        "rentetan buruk",
+        "rentetan hari buruk terpanjang",
+        "periode buruk terpanjang",
+        "rangkaian buruk terpanjang",
+        "deretan hari buruk terpanjang",
+        "rentetan terpanjang hari buruk",
+        "masa buruk terpanjang"
+      ],
+      "definition": "Rentetan terpanjang hari-hari berturut-turut dengan kurang dari satu jam nyaman, di mana pun dalam catatan {start_year}–{end_year}. Rentetan yang panjang adalah musim yang hanya bisa Anda tunggu sampai berlalu."
+    },
+    "air-quality factor": {
+      "term": "faktor kualitas udara",
+      "aliases": [
+        "faktor kualitas udara",
+        "faktor KU",
+        "pengali kualitas udara",
+        "penalti kualitas udara",
+        "faktor polusi udara",
+        "penalti polusi udara",
+        "faktor udara"
+      ],
+      "definition": "Penalti untuk udara yang tercemar, dari 1 (bersih, tanpa penalti) turun hingga batas bawah 0,25, dihitung dari tingkat rata-rata partikel halus di kota tersebut."
+    },
+    "PM2.5": {
+      "term": "PM2,5",
+      "aliases": [
+        "PM2,5",
+        "partikel halus",
+        "partikulat halus",
+        "materi partikulat halus",
+        "partikel PM2,5",
+        "konsentrasi PM2,5",
+        "debu halus"
+      ],
+      "definition": "Partikel halus di udara, berukuran di bawah 2,5 mikrometer: sekitar sepertiga puluh lebar sehelai rambut, cukup kecil untuk bersarang jauh di dalam paru-paru. Diukur dalam mikrogram per meter kubik udara; makin rendah makin baik."
+    },
+    "dew point": {
+      "term": "titik embun",
+      "aliases": [
+        "titik embun",
+        "suhu titik embun",
+        "temperatur titik embun",
+        "titik pengembunan",
+        "titik embun udara"
+      ],
+      "definition": "Suhu yang harus dicapai udara saat mendingin sebelum embun terbentuk. Ini adalah ukuran kelembapan yang jujur: di bawah 10 °C terasa kering, 16 sampai 18 °C lembap, 18 sampai 21 °C gerah, di atas 21 °C menyesakkan."
+    },
+    "muggy": {
+      "term": "gerah",
+      "aliases": [
+        "gerah",
+        "jam gerah",
+        "jam-jam gerah",
+        "lembap gerah",
+        "panas gerah",
+        "jam lembap gerah",
+        "kegerahan"
+      ],
+      "definition": "Jam-jam ketika titik embun 18 °C atau lebih tinggi: udara terasa lengket dan keringat tidak lagi mendinginkan tubuh Anda."
+    },
+    "microclimate risk": {
+      "term": "risiko iklim mikro",
+      "aliases": [
+        "risiko iklim mikro",
+        "risiko mikroiklim",
+        "iklim mikro",
+        "mikroiklim",
+        "penanda iklim mikro",
+        "bendera iklim mikro",
+        "peringatan iklim mikro",
+        "tanda mikroiklim"
+      ],
+      "definition": "Data cuaca berasal dari sel grid selebar sekitar 31 km. Di pesisir atau di medan yang curam, sel itu bisa menggambarkan tempat yang berbeda dari kotanya sendiri, sehingga angka-angka kota tersebut bisa meleset."
+    },
+    "ERA5": {
+      "term": "data ERA5",
+      "aliases": [
+        "data ERA5",
+        "reanalisis ERA5",
+        "dataset ERA5",
+        "data reanalisis ERA5",
+        "catatan cuaca ERA5",
+        "set data ERA5"
+      ],
+      "definition": "Catatan cuaca di balik semuanya: rekonstruksi global per jam atas cuaca masa lalu pada grid selebar sekitar 31 km, dibuat oleh pusat cuaca Eropa ECMWF."
+    },
+    "reference city": {
+      "term": "kota referensi",
+      "aliases": [
+        "kota referensi",
+        "kota-kota referensi",
+        "kota rujukan",
+        "kota acuan",
+        "kota pembanding",
+        "kota hanya referensi",
+        "status referensi"
+      ],
+      "definition": "Kota yang berada di bawah ambang populasi {min_population}. Kota ini ditampilkan hanya untuk perbandingan dan tidak memiliki peringkat."
+    },
+    "rank volatility": {
+      "term": "volatilitas peringkat",
+      "aliases": [
+        "volatilitas peringkat",
+        "volatilitas ranking",
+        "kegoyahan peringkat",
+        "ketidakstabilan peringkat",
+        "sensitivitas peringkat",
+        "varian penilaian",
+        "varian skor",
+        "variasi penilaian",
+        "analisis sensitivitas",
+        "sapuan sensitivitas",
+        "uji sensitivitas"
+      ],
+      "definition": "Seberapa jauh peringkat sebuah kota bergeser ketika pilihan penilaian diubah satu per satu: rentang yang lebih hangat atau lebih dingin, tanpa penalti udara, sinar matahari penuh, dan seterusnya, total {n_variants} varian. Ayunan yang besar berarti peringkat itu adalah artefak dari pilihan-pilihan tersebut, bukan dari iklimnya."
+    },
+    "Kendall tau": {
+      "term": "tau Kendall",
+      "aliases": [
+        "tau Kendall",
+        "τ Kendall",
+        "koefisien Kendall",
+        "koefisien tau Kendall",
+        "koefisien Kendall tau",
+        "korelasi Kendall",
+        "korelasi peringkat Kendall",
+        "Kendall tau-b",
+        "Kendall τ"
+      ],
+      "definition": "Skor untuk seberapa besar dua urutan saling sepakat, dari -1 (tepat terbalik) sampai 1 (identik). Di sini skor ini membandingkan dua cara memeringkat kota-kota yang sama."
+    },
+    "sun exposure": {
+      "term": "paparan matahari",
+      "aliases": [
+        "paparan matahari",
+        "paparan sinar matahari",
+        "paparan surya",
+        "pajanan matahari",
+        "setengah matahari",
+        "separuh matahari",
+        "setengah sinar matahari",
+        "paparan setengah matahari",
+        "asumsi matahari"
+      ],
+      "definition": "Angka-angka yang dipublikasikan mengasumsikan Anda berada di bawah sinar matahari sekitar separuh waktu. Matahari penuh dan naungan penuh juga dihitung dan dapat mengubah gambaran secara signifikan, terutama di tempat-tempat panas."
+    },
+    "elevation correction": {
+      "term": "koreksi elevasi",
+      "aliases": [
+        "koreksi elevasi",
+        "koreksi ketinggian",
+        "koreksi altitud",
+        "penyesuaian elevasi",
+        "penyesuaian ketinggian",
+        "laju selang suhu",
+        "lapse rate suhu",
+        "koreksi laju selang",
+        "koreksi lapse rate"
+      ],
+      "definition": "Kota yang terletak jauh di atas ketinggian rata-rata sel gridnya mendapat suhu yang dirasakan lebih sejuk, sesuai laju biasa udara mendingin seiring bertambahnya ketinggian."
+    }
+  }
+}

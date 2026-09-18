@@ -1,7 +1,13 @@
 import { useMemo } from 'react'
 import Markdown, { type Components } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { rehypeTerms, segments, useGlossary, type Glossary } from '../glossary'
+import {
+  ENGLISH,
+  rehypeTerms,
+  segments,
+  useGlossary,
+  type Glossary,
+} from '../glossary'
 import type { AskStatus, Final } from '../types'
 import { Term } from './Term'
 
@@ -12,9 +18,10 @@ import { Term } from './Term'
  *  the table moves.
  *
  *  `abbr` is what the glossary plugin wraps a term mention in; the Term
- *  component hangs the tooltip on it. Built per glossary so react-markdown is
- *  not handed a new object on every render. */
-function components(glossary: Glossary): Components {
+ *  component hangs the tooltip on it, in the answer's language. Built per
+ *  glossary and language so react-markdown is not handed a new object on
+ *  every render. */
+function components(glossary: Glossary, lang: string): Components {
   return {
     table: ({ node: _node, ...props }) => (
       <div className="table-scroll">
@@ -26,20 +33,25 @@ function components(glossary: Glossary): Components {
       const entry =
         typeof mention === 'string' ? glossary.lookup(mention) : undefined
       if (!entry) return <abbr {...props}>{children}</abbr>
-      return <Term entry={entry}>{children}</Term>
+      return (
+        <Term entry={entry} lang={lang}>
+          {children}
+        </Term>
+      )
     },
   }
 }
 
 /** A caveat is a plain string, not markdown, so it gets the same marking by
- *  hand. */
+ *  hand. Caveats are written by the caveats node, in English, whatever the
+ *  answer's language. */
 function Marked({ text, glossary }: { text: string; glossary: Glossary }) {
   return (
     <>
       {segments(text, glossary).map((s, i) => {
         const entry = s.term ? glossary.lookup(s.text) : undefined
         return entry ? (
-          <Term key={i} entry={entry}>
+          <Term key={i} entry={entry} lang={ENGLISH}>
             {s.text}
           </Term>
         ) : (
@@ -58,7 +70,9 @@ interface Props {
 export function Answer({ final, status }: Props) {
   const glossary = useGlossary()
   const rehype = useMemo(() => [rehypeTerms(glossary)], [glossary])
-  const comps = useMemo(() => components(glossary), [glossary])
+  const answer = final?.answer ?? ''
+  const lang = useMemo(() => glossary.language(answer), [glossary, answer])
+  const comps = useMemo(() => components(glossary, lang), [glossary, lang])
 
   if (!final) {
     if (status !== 'running') return null

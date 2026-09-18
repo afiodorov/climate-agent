@@ -1,0 +1,292 @@
+{
+  "language": "Português",
+  "thousands": ".",
+  "terms": {
+    "comfort hours": {
+      "term": "horas de conforto",
+      "aliases": [
+        "horas de conforto",
+        "horas conforto",
+        "horas confortáveis",
+        "horas de conforto por ano",
+        "horas de conforto anuais",
+        "horas brutas de conforto",
+        "horas de conforto brutas",
+        "horas diurnas de conforto"
+      ],
+      "definition": "Horas de luz do dia num ano típico em que estar ao ar livre não parece nem quente demais nem frio demais: uma temperatura de sensação de {cold_full:g} a {warm_full:g} °C, assumindo que se está ao sol cerca de metade do tempo, com as horas de chuva descontadas. É o número principal."
+    },
+    "daylight hours": {
+      "term": "horas de luz",
+      "aliases": [
+        "horas de luz",
+        "horas de luz do dia",
+        "horas de luz diurna",
+        "horas diurnas",
+        "horas de dia",
+        "luz do dia",
+        "luz diurna",
+        "horas com luz"
+      ],
+      "definition": "Horas de um ano em que o sol está acima do horizonte ou há crepúsculo civil. Só estas horas podem contar como confortáveis; a noite nunca é pontuada."
+    },
+    "comfort fraction": {
+      "term": "fração de conforto",
+      "aliases": [
+        "fração de conforto",
+        "fracção de conforto",
+        "fração conforto",
+        "fração confortável",
+        "proporção de conforto",
+        "percentagem de conforto",
+        "porcentagem de conforto",
+        "fração de horas de luz"
+      ],
+      "definition": "A proporção das horas de luz que são confortáveis. Favorece as cidades muito a norte: as suas horas mais duras são as de escuridão, que não são horas de luz, por isso nunca contam contra a cidade."
+    },
+    "comfort band": {
+      "term": "banda de conforto",
+      "aliases": [
+        "banda de conforto",
+        "banda conforto",
+        "banda de referência",
+        "banda base",
+        "faixa de conforto",
+        "faixa de referência",
+        "intervalo de conforto",
+        "banda térmica"
+      ],
+      "definition": "O intervalo de temperaturas de sensação que conta como confortável. Crédito total de {cold_full:g} a {warm_full:g} °C, diminuindo até zero a {cold_zero:g} °C do lado frio e a {warm_zero:g} °C do lado quente."
+    },
+    "UTCI": {
+      "term": "índice UTCI",
+      "aliases": [
+        "índice UTCI",
+        "temperatura UTCI",
+        "índice climático térmico universal",
+        "índice térmico climático universal",
+        "índice universal de clima térmico",
+        "valor UTCI",
+        "UTCI médio"
+      ],
+      "definition": "Índice Climático Térmico Universal: uma temperatura de sensação em °C. Junta temperatura do ar, humidade, vento e sol num só número que traduz como uma pessoa de pé ao ar livre sente realmente o tempo."
+    },
+    "evenness factor": {
+      "term": "fator de uniformidade",
+      "aliases": [
+        "fator de uniformidade",
+        "factor de uniformidade",
+        "fator uniformidade",
+        "uniformidade",
+        "fator de regularidade",
+        "regularidade sazonal",
+        "fator de equilíbrio sazonal",
+        "fator de homogeneidade"
+      ],
+      "definition": "Quão uniformemente as horas confortáveis se distribuem pelos doze meses, de 0 (todas numa só estação) a 1 (as mesmas todos os meses). É 1 menos o quanto os totais mensais variam em relação à sua média."
+    },
+    "composite": {
+      "term": "pontuação composta",
+      "aliases": [
+        "pontuação composta",
+        "índice composto",
+        "composto",
+        "compósito",
+        "pontuação composite",
+        "score composto",
+        "valor composto",
+        "nota composta"
+      ],
+      "definition": "A pontuação única pela qual o ranking é ordenado: horas de conforto × fator de uniformidade × fator de qualidade do ar. Como multiplica, um inverno morto ou um ar sujo arrastam uma cidade para baixo por muitas horas confortáveis que ela tenha."
+    },
+    "worst month": {
+      "term": "pior mês",
+      "aliases": [
+        "pior mês",
+        "mês pior",
+        "mês mais fraco",
+        "mês mais pobre",
+        "mês com menos horas",
+        "mês mais duro",
+        "o pior dos meses"
+      ],
+      "definition": "O mês com menos horas confortáveis."
+    },
+    "best month": {
+      "term": "melhor mês",
+      "aliases": [
+        "melhor mês",
+        "mês melhor",
+        "mês de pico",
+        "mês pico",
+        "mês máximo",
+        "mês com mais horas",
+        "mês mais confortável",
+        "mês ideal"
+      ],
+      "definition": "O mês com mais horas confortáveis."
+    },
+    "longest bad streak": {
+      "term": "pior sequência",
+      "aliases": [
+        "pior sequência",
+        "sequência má mais longa",
+        "sequência ruim mais longa",
+        "sequência de dias maus",
+        "sequência de dias ruins",
+        "má sequência",
+        "maior sequência de dias maus",
+        "maior sequência de dias ruins"
+      ],
+      "definition": "A maior série de dias consecutivos com menos de uma hora confortável, em qualquer ponto do registo {start_year}–{end_year}. Uma sequência longa é uma estação que simplesmente se deixa passar."
+    },
+    "air-quality factor": {
+      "term": "fator de qualidade do ar",
+      "aliases": [
+        "fator de qualidade do ar",
+        "factor de qualidade do ar",
+        "fator qualidade do ar",
+        "fator de qualidade de ar",
+        "fator do ar",
+        "penalização por qualidade do ar",
+        "penalidade de qualidade do ar",
+        "multiplicador de qualidade do ar"
+      ],
+      "definition": "Uma penalização por ar poluído, de 1 (limpo, sem penalização) até um mínimo de 0,25, calculada a partir do nível médio de partículas finas da cidade."
+    },
+    "PM2.5": {
+      "term": "PM2,5",
+      "aliases": [
+        "PM2,5",
+        "partículas finas",
+        "partículas PM2,5",
+        "material particulado fino",
+        "partículas em suspensão finas",
+        "micropartículas",
+        "partículas inaláveis finas"
+      ],
+      "definition": "Partículas finas no ar, com menos de 2,5 micrómetros de diâmetro: cerca de um trigésimo da espessura de um cabelo, pequenas o suficiente para se alojarem no fundo dos pulmões. Medem-se em microgramas por metro cúbico de ar; quanto mais baixo, melhor."
+    },
+    "dew point": {
+      "term": "ponto de orvalho",
+      "aliases": [
+        "ponto de orvalho",
+        "temperatura do ponto de orvalho",
+        "temperatura de orvalho",
+        "ponto de condensação",
+        "ponto de orvalho médio"
+      ],
+      "definition": "A temperatura a que o ar teria de arrefecer para que se formasse orvalho. É a medida honesta da humidade: abaixo de 10 °C sente-se seco, de 16 a 18 °C húmido, de 18 a 21 °C abafado, acima de 21 °C opressivo."
+    },
+    "muggy": {
+      "term": "abafado",
+      "aliases": [
+        "abafado",
+        "abafada",
+        "abafamento",
+        "horas abafadas",
+        "horas de abafamento",
+        "horas húmidas",
+        "horas úmidas",
+        "mormaço"
+      ],
+      "definition": "Horas em que o ponto de orvalho é de 18 °C ou mais: o ar parece pegajoso e o suor deixa de arrefecer."
+    },
+    "microclimate risk": {
+      "term": "risco de microclima",
+      "aliases": [
+        "risco de microclima",
+        "risco microclimático",
+        "microclima",
+        "aviso de microclima",
+        "alerta de microclima",
+        "sinal de microclima",
+        "indicador de microclima",
+        "efeito microclimático"
+      ],
+      "definition": "Os dados meteorológicos vêm de uma célula com cerca de 31 km de lado. Na costa ou em terreno acidentado essa célula pode descrever um lugar diferente da própria cidade, por isso os números da cidade podem estar desviados."
+    },
+    "ERA5": {
+      "term": "reanálise ERA5",
+      "aliases": [
+        "reanálise ERA5",
+        "dados ERA5",
+        "dados do ERA5",
+        "grelha ERA5",
+        "grade ERA5",
+        "célula ERA5",
+        "célula do ERA5",
+        "malha ERA5"
+      ],
+      "definition": "O registo meteorológico por trás de tudo: uma reconstrução global e horária do tempo passado numa malha de cerca de 31 km, produzida pelo centro meteorológico europeu ECMWF."
+    },
+    "reference city": {
+      "term": "cidade de referência",
+      "aliases": [
+        "cidade de referência",
+        "cidades de referência",
+        "apenas referência",
+        "só referência",
+        "apenas de referência",
+        "apenas para referência",
+        "cidade sem classificação",
+        "somente referência"
+      ],
+      "definition": "Uma cidade abaixo do limiar de população de {min_population} habitantes. É mostrada apenas para comparação e não tem posição no ranking."
+    },
+    "rank volatility": {
+      "term": "volatilidade da posição",
+      "aliases": [
+        "volatilidade da posição",
+        "volatilidade de posição",
+        "volatilidade do ranking",
+        "volatilidade da classificação",
+        "volatilidade do lugar",
+        "variantes de pontuação",
+        "análise de sensibilidade",
+        "varrimento de sensibilidade"
+      ],
+      "definition": "Quanto a posição de uma cidade se move quando as escolhas de pontuação são alteradas uma de cada vez: uma banda mais quente ou mais fria, sem penalização do ar, sol pleno, etc., {n_variants} variantes ao todo. Uma oscilação grande significa que a posição é um resultado dessas escolhas e não do clima."
+    },
+    "Kendall tau": {
+      "term": "tau de Kendall",
+      "aliases": [
+        "tau de Kendall",
+        "τ de Kendall",
+        "coeficiente de Kendall",
+        "correlação de Kendall",
+        "coeficiente tau de Kendall",
+        "tau Kendall"
+      ],
+      "definition": "Uma medida de quanto duas ordenações concordam, de -1 (exatamente invertidas) a 1 (idênticas). Aqui compara duas formas de ordenar as mesmas cidades."
+    },
+    "sun exposure": {
+      "term": "exposição ao sol",
+      "aliases": [
+        "exposição ao sol",
+        "exposição solar",
+        "meio sol",
+        "meia sombra",
+        "metade ao sol",
+        "sol pleno",
+        "pleno sol",
+        "sombra total"
+      ],
+      "definition": "Os números publicados assumem que se está ao sol cerca de metade do tempo. Sol pleno e sombra total também são calculados e podem mudar muito o quadro, sobretudo em lugares quentes."
+    },
+    "elevation correction": {
+      "term": "correção de altitude",
+      "aliases": [
+        "correção de altitude",
+        "correcção de altitude",
+        "correção por altitude",
+        "correção de elevação",
+        "correção por elevação",
+        "gradiente térmico",
+        "gradiente vertical",
+        "gradiente adiabático"
+      ],
+      "definition": "Uma cidade bem acima da altura média da sua célula recebe uma temperatura de sensação mais fresca, à taxa habitual a que o ar arrefece com a altitude."
+    }
+  }
+}

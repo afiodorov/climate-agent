@@ -24,11 +24,14 @@ already open, so this widens no door; it only adds better-shaped ones.
 from __future__ import annotations
 
 import asyncio
+import gzip
+import json
 import logging
+from functools import lru_cache
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import PlainTextResponse, Response
 from mcp.server.mcpserver import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
 from mcp.server.transport_security import TransportSecuritySettings
@@ -238,12 +241,29 @@ async def notes(answer: str = "") -> dict[str, list[str]]:
     return {"caveats": await asyncio.to_thread(caveats.caveats_for, answer)}
 
 
+@lru_cache(maxsize=1)
+def _glossary_body() -> tuple[bytes, bytes]:
+    """The glossary as JSON, plain and gzipped. Sixteen languages of aliases
+    and definitions come to a couple of hundred kilobytes, fetched on every
+    page load; gzip takes that down by about five to one. Built once: the
+    glossary is fixed for the life of the process."""
+    raw = json.dumps({"terms": glossary.glossary()}, ensure_ascii=False).encode()
+    return raw, gzip.compress(raw, compresslevel=6)
+
+
 @router.get("/api/glossary")
-async def terms() -> dict[str, list[glossary.Entry]]:
+async def terms(request: Request) -> Response:
     """Plain-language definitions of the ranking's terms, numbers from the data.
 
+    `{"terms": [{term, aliases, definition, column, translations}]}`: English
+    at the top level, other languages under `translations` by ISO 639-1 code.
     The UI marks these in every answer; other clients can do the same."""
-    return {"terms": await asyncio.to_thread(glossary.glossary)}
+    raw, packed = await asyncio.to_thread(_glossary_body)
+    headers = {"Cache-Control": "public, max-age=3600", "Vary": "Accept-Encoding"}
+    if "gzip" in request.headers.get("accept-encoding", ""):
+        headers["Content-Encoding"] = "gzip"
+        return Response(packed, media_type="application/json", headers=headers)
+    return Response(raw, media_type="application/json", headers=headers)
 
 
 def llms_txt(base: str) -> str:
@@ -269,7 +289,7 @@ Tools: describe_rankings, query_rankings(sql), caveats_for(answer), read_methodo
 - {base}/api/schema — views, columns, caveats (JSON)
 - {base}/api/query?sql=SELECT+name,+rank+FROM+rankings+ORDER+BY+rank+LIMIT+10 — read-only DuckDB, max {query.MAX_ROWS} rows (JSON)
 - {base}/api/caveats?answer=... — honesty notes for a draft answer (JSON)
-- {base}/api/glossary — plain-language definitions of the terms, with aliases (JSON)
+- {base}/api/glossary — plain-language definitions of the terms, with aliases, English plus translations (JSON)
 - {base}/api/methodology?section=limitations — how the index is built and what it misses (text)
 - {base}/api/ask?q=... — the hosted agent, as server-sent events
 - {base}/openapi.json — the OpenAPI description of all of the above

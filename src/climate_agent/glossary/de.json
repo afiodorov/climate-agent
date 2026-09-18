@@ -1,0 +1,277 @@
+{
+  "language": "Deutsch",
+  "thousands": ".",
+  "terms": {
+    "comfort hours": {
+      "term": "Komfortstunden",
+      "aliases": [
+        "Komfortstunden",
+        "Komfortstunde",
+        "Komfort-Stunden",
+        "komfortable Stunden",
+        "angenehme Stunden",
+        "komfortable Tagesstunden",
+        "Wohlfühlstunden"
+      ],
+      "definition": "Tageslichtstunden in einem typischen Jahr, in denen es sich draußen weder zu heiß noch zu kalt anfühlt: eine gefühlte Temperatur von {cold_full:g} bis {warm_full:g} °C, unter der Annahme, dass man etwa die Hälfte der Zeit in der Sonne ist, wobei Regenstunden abgezogen werden. Das ist die Hauptkennzahl."
+    },
+    "daylight hours": {
+      "term": "Tageslichtstunden",
+      "aliases": [
+        "Tageslichtstunden",
+        "Tageslichtstunde",
+        "Tageslicht",
+        "Stunden mit Tageslicht",
+        "Tagstunden",
+        "helle Stunden"
+      ],
+      "definition": "Stunden im Jahr, in denen die Sonne über dem Horizont steht oder bürgerliche Dämmerung herrscht. Nur diese Stunden können als komfortabel zählen; die Nacht wird nie bewertet."
+    },
+    "comfort fraction": {
+      "term": "Komfortanteil",
+      "aliases": [
+        "Komfortanteil",
+        "Komfort-Anteil",
+        "Anteil komfortabler Stunden",
+        "komfortabler Anteil",
+        "Anteil des Tageslichts",
+        "Komfortquote",
+        "Anteil am Tageslicht"
+      ],
+      "definition": "Der Anteil der Tageslichtstunden, die komfortabel sind. Er schmeichelt Städten im hohen Norden: ihre unangenehmen Stunden sind die dunklen, und die sind kein Tageslicht, also zählen sie nie gegen die Stadt."
+    },
+    "comfort band": {
+      "term": "Komfortband",
+      "aliases": [
+        "Komfortband",
+        "Komfort-Band",
+        "Komfortbereich",
+        "Komfortzone",
+        "Komfortspanne",
+        "Komfortfenster",
+        "Basisband"
+      ],
+      "definition": "Der Bereich gefühlter Temperaturen, der als komfortabel gilt. Volle Anrechnung von {cold_full:g} bis {warm_full:g} °C, abnehmend bis auf null bei {cold_zero:g} °C auf der kalten und {warm_zero:g} °C auf der warmen Seite."
+    },
+    "UTCI": {
+      "term": "UTCI-Index",
+      "aliases": [
+        "UTCI-Index",
+        "UTCI-Wert",
+        "UTCI-Temperatur",
+        "Universeller Thermischer Klimaindex",
+        "Universal Thermal Climate Index"
+      ],
+      "definition": "Universal Thermal Climate Index: eine gefühlte Temperatur in °C. Er fasst Lufttemperatur, Luftfeuchtigkeit, Wind und Sonnenschein zu einer Zahl dafür zusammen, wie ein Mensch, der draußen steht, das Wetter tatsächlich empfindet."
+    },
+    "evenness factor": {
+      "term": "Gleichmäßigkeitsfaktor",
+      "aliases": [
+        "Gleichmäßigkeitsfaktor",
+        "Gleichmäßigkeits-Faktor",
+        "Gleichmäßigkeit",
+        "Ausgeglichenheitsfaktor",
+        "Ausgeglichenheit",
+        "Verteilungsfaktor",
+        "Evenness-Faktor"
+      ],
+      "definition": "Wie gleichmäßig die komfortablen Stunden über die zwölf Monate verteilt sind, von 0 (alle in einer Jahreszeit) bis 1 (in jedem Monat gleich viele). Er ist 1 minus dem Maß, wie stark die Monatssummen im Verhältnis zu ihrem Durchschnitt schwanken."
+    },
+    "composite": {
+      "term": "Gesamtwert",
+      "aliases": [
+        "Gesamtwert",
+        "Gesamtpunktzahl",
+        "Gesamtscore",
+        "Kompositwert",
+        "Komposit-Score",
+        "zusammengesetzter Wert",
+        "Composite-Score",
+        "Composite-Wert"
+      ],
+      "definition": "Die eine Punktzahl, nach der die Rangliste sortiert ist: Komfortstunden × Gleichmäßigkeitsfaktor × Luftqualitätsfaktor. Weil multipliziert wird, zieht ein toter Winter oder schmutzige Luft eine Stadt nach unten, egal wie viele komfortable Stunden sie hat."
+    },
+    "worst month": {
+      "term": "schlechtester Monat",
+      "aliases": [
+        "schlechtester Monat",
+        "schlechteste Monat",
+        "schlechtesten Monat",
+        "schwächster Monat",
+        "schwächste Monat",
+        "schwächsten Monat"
+      ],
+      "definition": "Der Monat mit den wenigsten komfortablen Stunden."
+    },
+    "best month": {
+      "term": "bester Monat",
+      "aliases": [
+        "bester Monat",
+        "beste Monat",
+        "besten Monat",
+        "Spitzenmonat",
+        "stärkster Monat",
+        "stärkste Monat",
+        "stärksten Monat"
+      ],
+      "definition": "Der Monat mit den meisten komfortablen Stunden."
+    },
+    "longest bad streak": {
+      "term": "längste Durststrecke",
+      "aliases": [
+        "längste Durststrecke",
+        "Durststrecke",
+        "längste schlechte Phase",
+        "schlechte Phase",
+        "längste schlechte Serie",
+        "schlechte Serie",
+        "längste Schlechtwetterphase",
+        "Schlechtwetterphase"
+      ],
+      "definition": "Die längste Folge aufeinanderfolgender Tage mit weniger als einer komfortablen Stunde, irgendwo in den Aufzeichnungen von {start_year}–{end_year}. Eine lange Durststrecke ist eine Jahreszeit, die man einfach aussitzt."
+    },
+    "air-quality factor": {
+      "term": "Luftqualitätsfaktor",
+      "aliases": [
+        "Luftqualitätsfaktor",
+        "Luftqualitäts-Faktor",
+        "Luftqualitätsmultiplikator",
+        "Luftqualitätsabschlag",
+        "Luftqualitätsstrafe",
+        "Luftgütefaktor",
+        "AQ-Faktor"
+      ],
+      "definition": "Ein Abschlag für verschmutzte Luft, von 1 (sauber, kein Abschlag) hinunter bis zu einer Untergrenze von 0,25, berechnet aus der durchschnittlichen Feinstaubbelastung der Stadt."
+    },
+    "PM2.5": {
+      "term": "PM2,5",
+      "aliases": [
+        "PM2,5",
+        "PM 2,5",
+        "Feinstaub",
+        "Feinstaubpartikel",
+        "feine Partikel",
+        "Feinstaubbelastung",
+        "PM2,5-Wert"
+      ],
+      "definition": "Feine Partikel in der Luft mit weniger als 2,5 Mikrometern Durchmesser: etwa ein Dreißigstel einer Haarbreite, klein genug, um sich tief in der Lunge festzusetzen. Gemessen in Mikrogramm pro Kubikmeter Luft; niedriger ist besser."
+    },
+    "dew point": {
+      "term": "Taupunkt",
+      "aliases": [
+        "Taupunkt",
+        "Taupunkte",
+        "Taupunkts",
+        "Taupunktes",
+        "Taupunkttemperatur",
+        "Taupunkt-Temperatur"
+      ],
+      "definition": "Die Temperatur, auf die sich die Luft abkühlen müsste, bevor sich Tau bildet. Er ist das ehrliche Maß für Luftfeuchtigkeit: unter 10 °C fühlt es sich trocken an, 16 bis 18 °C feucht, 18 bis 21 °C schwül, über 21 °C drückend."
+    },
+    "muggy": {
+      "term": "schwül",
+      "aliases": [
+        "schwül",
+        "schwüle Stunden",
+        "schwülen Stunden",
+        "Schwüle",
+        "Schwülstunden",
+        "schwül-feucht"
+      ],
+      "definition": "Stunden, in denen der Taupunkt 18 °C oder höher liegt: die Luft fühlt sich klebrig an, und Schweiß kühlt nicht mehr."
+    },
+    "microclimate risk": {
+      "term": "Mikroklima-Risiko",
+      "aliases": [
+        "Mikroklima-Risiko",
+        "Mikroklimarisiko",
+        "Mikroklima",
+        "Mikroklimas",
+        "Mikroklima-Hinweis",
+        "Mikroklima-Warnung",
+        "Mikroklima-Flag"
+      ],
+      "definition": "Die Wetterdaten stammen aus einer Gitterzelle von etwa 31 km Breite. An einer Küste oder in steilem Gelände kann diese Zelle einen anderen Ort beschreiben als die Stadt selbst, sodass die Zahlen der Stadt danebenliegen können."
+    },
+    "ERA5": {
+      "term": "ERA5-Reanalyse",
+      "aliases": [
+        "ERA5-Reanalyse",
+        "ERA5-Daten",
+        "ERA5-Datensatz",
+        "ERA5-Wetterdaten",
+        "ERA5-Archiv"
+      ],
+      "definition": "Die Wetteraufzeichnung hinter allem: eine globale, stündliche Rekonstruktion vergangenen Wetters auf einem Gitter von etwa 31 km Breite, erstellt vom Europäischen Wetterzentrum ECMWF."
+    },
+    "reference city": {
+      "term": "Referenzstadt",
+      "aliases": [
+        "Referenzstadt",
+        "Referenzstädte",
+        "Referenzstädten",
+        "Referenz-Stadt",
+        "Vergleichsstadt",
+        "Vergleichsstädte",
+        "nur als Referenz",
+        "nur Referenz"
+      ],
+      "definition": "Eine Stadt unterhalb der Bevölkerungsgrenze von {min_population} Einwohnern. Sie wird nur zum Vergleich gezeigt und hat keinen Rang."
+    },
+    "rank volatility": {
+      "term": "Rangvolatilität",
+      "aliases": [
+        "Rangvolatilität",
+        "Rang-Volatilität",
+        "Rangschwankung",
+        "Rangstabilität",
+        "Bewertungsvarianten",
+        "Sensitivitätsanalyse",
+        "Sensitivitäts-Analyse",
+        "Empfindlichkeitsanalyse"
+      ],
+      "definition": "Wie weit sich der Rang einer Stadt verschiebt, wenn die Bewertungsentscheidungen einzeln geändert werden: ein wärmeres oder kühleres Band, kein Luftabschlag, volle Sonne und so weiter, insgesamt {n_variants} Varianten. Ein großer Ausschlag bedeutet, dass der Rang ein Artefakt dieser Entscheidungen ist und nicht des Klimas."
+    },
+    "Kendall tau": {
+      "term": "Kendall-Tau",
+      "aliases": [
+        "Kendall-Tau",
+        "Kendalls Tau",
+        "Kendall-τ",
+        "Kendalls τ",
+        "Kendall-Korrelation",
+        "Kendall-Rangkorrelation",
+        "Tau von Kendall"
+      ],
+      "definition": "Ein Maß dafür, wie stark zwei Reihenfolgen übereinstimmen, von -1 (genau umgekehrt) bis 1 (identisch). Hier vergleicht es zwei Arten, dieselben Städte zu ordnen."
+    },
+    "sun exposure": {
+      "term": "Sonnenexposition",
+      "aliases": [
+        "Sonnenexposition",
+        "Sonneneinstrahlung",
+        "Sonnenanteil",
+        "halbe Sonne",
+        "Halbsonne",
+        "halb Sonne",
+        "halb in der Sonne",
+        "Halbschatten"
+      ],
+      "definition": "Die veröffentlichten Zahlen gehen davon aus, dass man etwa die Hälfte der Zeit in der Sonne ist. Volle Sonne und voller Schatten werden ebenfalls berechnet und können das Bild stark verändern, besonders an heißen Orten."
+    },
+    "elevation correction": {
+      "term": "Höhenkorrektur",
+      "aliases": [
+        "Höhenkorrektur",
+        "Höhen-Korrektur",
+        "Höhenkorrekturen",
+        "Höhenanpassung",
+        "Temperaturgradient",
+        "vertikaler Temperaturgradient",
+        "Höhengradient",
+        "Höhenlage-Korrektur"
+      ],
+      "definition": "Eine Stadt, die deutlich über der mittleren Höhe ihrer Gitterzelle liegt, bekommt eine kühlere gefühlte Temperatur, im üblichen Maß, in dem sich Luft mit der Höhe abkühlt."
+    }
+  }
+}

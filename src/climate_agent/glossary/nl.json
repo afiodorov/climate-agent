@@ -1,0 +1,273 @@
+{
+  "language": "Nederlands",
+  "thousands": ".",
+  "terms": {
+    "comfort hours": {
+      "term": "comforturen",
+      "aliases": [
+        "comforturen",
+        "comfortuur",
+        "comfort-uren",
+        "comfortabele uren",
+        "aangename uren",
+        "comfortabele daglichturen",
+        "uren comfort"
+      ],
+      "definition": "Daglichturen in een typisch jaar waarin het buiten noch te warm noch te koud aanvoelt: een gevoelstemperatuur van {cold_full:g} tot {warm_full:g} °C, ervan uitgaand dat je ongeveer de helft van de tijd in de zon bent, met regenuren afgetrokken. Dit is het kerngetal."
+    },
+    "daylight hours": {
+      "term": "daglichturen",
+      "aliases": [
+        "daglichturen",
+        "daglichtuur",
+        "daglicht",
+        "uren daglicht",
+        "daguren",
+        "lichte uren"
+      ],
+      "definition": "Uren in een jaar waarin de zon op is of het burgerlijke schemering is. Alleen deze uren kunnen als comfortabel meetellen; de nacht wordt nooit beoordeeld."
+    },
+    "comfort fraction": {
+      "term": "comfortfractie",
+      "aliases": [
+        "comfortfractie",
+        "comfort-fractie",
+        "comfortaandeel",
+        "aandeel comfortabele uren",
+        "comfortabele fractie",
+        "aandeel van het daglicht",
+        "comfortpercentage"
+      ],
+      "definition": "Het aandeel van de daglichturen dat comfortabel is. Het vleit steden in het hoge noorden: hun ellendige uren zijn de donkere, en die zijn geen daglicht, dus tellen ze nooit tegen de stad."
+    },
+    "comfort band": {
+      "term": "comfortband",
+      "aliases": [
+        "comfortband",
+        "comfort-band",
+        "comfortbereik",
+        "comfortzone",
+        "comfortvenster",
+        "comfortmarge",
+        "basisband"
+      ],
+      "definition": "Het bereik van gevoelstemperaturen dat als comfortabel geldt. Volle score van {cold_full:g} tot {warm_full:g} °C, aflopend tot nul bij {cold_zero:g} °C aan de koude kant en {warm_zero:g} °C aan de warme kant."
+    },
+    "UTCI": {
+      "term": "UTCI-index",
+      "aliases": [
+        "UTCI-index",
+        "UTCI-waarde",
+        "UTCI-temperatuur",
+        "universele thermische klimaatindex",
+        "Universal Thermal Climate Index"
+      ],
+      "definition": "Universal Thermal Climate Index: een gevoelstemperatuur in °C. Hij vouwt luchttemperatuur, luchtvochtigheid, wind en zonneschijn samen tot één getal voor hoe iemand die buiten staat het weer werkelijk ervaart."
+    },
+    "evenness factor": {
+      "term": "gelijkmatigheidsfactor",
+      "aliases": [
+        "gelijkmatigheidsfactor",
+        "gelijkmatigheids-factor",
+        "gelijkmatigheid",
+        "spreidingsfactor",
+        "evenwichtigheidsfactor",
+        "evenwichtigheid",
+        "evenness-factor"
+      ],
+      "definition": "Hoe gelijkmatig de comfortabele uren over de twaalf maanden verdeeld zijn, van 0 (alles in één seizoen) tot 1 (elke maand hetzelfde). Het is 1 min de mate waarin de maandtotalen ten opzichte van hun gemiddelde variëren."
+    },
+    "composite": {
+      "term": "samengestelde score",
+      "aliases": [
+        "samengestelde score",
+        "composietscore",
+        "composiet-score",
+        "composiet",
+        "totaalscore",
+        "gecombineerde score",
+        "composite-score"
+      ],
+      "definition": "De ene score waarop de ranglijst is gesorteerd: comforturen × gelijkmatigheidsfactor × luchtkwaliteitsfactor. Omdat het vermenigvuldigt, trekt een dode winter of vuile lucht een stad omlaag, hoeveel comfortabele uren ze ook heeft."
+    },
+    "worst month": {
+      "term": "slechtste maand",
+      "aliases": [
+        "slechtste maand",
+        "slechtste maanden",
+        "zwakste maand",
+        "zwakste maanden",
+        "dieptemaand"
+      ],
+      "definition": "De maand met de minste comfortabele uren."
+    },
+    "best month": {
+      "term": "beste maand",
+      "aliases": [
+        "beste maand",
+        "beste maanden",
+        "piekmaand",
+        "piekmaanden",
+        "topmaand",
+        "topmaanden",
+        "sterkste maand"
+      ],
+      "definition": "De maand met de meeste comfortabele uren."
+    },
+    "longest bad streak": {
+      "term": "langste slechte reeks",
+      "aliases": [
+        "langste slechte reeks",
+        "slechte reeks",
+        "langste slechte periode",
+        "langste dip",
+        "slechte streak",
+        "langste slechte run",
+        "langste slechte stretch"
+      ],
+      "definition": "De langste reeks opeenvolgende dagen met minder dan één comfortabel uur, ergens in de gegevens van {start_year}–{end_year}. Een lange reeks is een seizoen dat je gewoon uitzit."
+    },
+    "air-quality factor": {
+      "term": "luchtkwaliteitsfactor",
+      "aliases": [
+        "luchtkwaliteitsfactor",
+        "luchtkwaliteits-factor",
+        "luchtkwaliteitfactor",
+        "luchtkwaliteitsmultiplicator",
+        "luchtkwaliteitsboete",
+        "luchtkwaliteitsstraf",
+        "luchtkwaliteitscorrectie",
+        "AQ-factor"
+      ],
+      "definition": "Een straf voor vervuilde lucht, van 1 (schoon, geen straf) omlaag tot een ondergrens van 0,25, berekend uit het gemiddelde fijnstofniveau van de stad."
+    },
+    "PM2.5": {
+      "term": "PM2,5",
+      "aliases": [
+        "PM2,5",
+        "PM 2,5",
+        "fijnstof",
+        "fijn stof",
+        "fijne deeltjes",
+        "fijnstofdeeltjes",
+        "PM2,5-waarde"
+      ],
+      "definition": "Fijne deeltjes in de lucht, kleiner dan 2,5 micrometer in doorsnee: ongeveer een dertigste van een haarbreedte, klein genoeg om zich diep in de longen te nestelen. Gemeten in microgram per kubieke meter lucht; lager is beter."
+    },
+    "dew point": {
+      "term": "dauwpunt",
+      "aliases": [
+        "dauwpunt",
+        "dauwpunten",
+        "dauwpunttemperatuur",
+        "dauwpunt-temperatuur",
+        "dauwpunttemperaturen"
+      ],
+      "definition": "De temperatuur waartoe de lucht zou moeten afkoelen voordat er dauw ontstaat. Het is de eerlijke maat voor vochtigheid: onder 10 °C voelt droog, 16 tot 18 °C vochtig, 18 tot 21 °C benauwd, boven 21 °C drukkend."
+    },
+    "muggy": {
+      "term": "benauwd",
+      "aliases": [
+        "benauwd",
+        "benauwde uren",
+        "benauwdheid",
+        "broeierig",
+        "broeierige uren",
+        "drukkend vochtig"
+      ],
+      "definition": "Uren waarin het dauwpunt 18 °C of hoger is: de lucht voelt plakkerig en zweet koelt je niet meer af."
+    },
+    "microclimate risk": {
+      "term": "microklimaatrisico",
+      "aliases": [
+        "microklimaatrisico",
+        "microklimaat-risico",
+        "microklimaat",
+        "microklimaten",
+        "microklimaatvlag",
+        "microklimaatwaarschuwing",
+        "microklimaat-flag"
+      ],
+      "definition": "De weergegevens komen uit een rastercel van ongeveer 31 km breed. Aan een kust of in steil terrein kan die cel een andere plek beschrijven dan de stad zelf, zodat de cijfers van de stad ernaast kunnen zitten."
+    },
+    "ERA5": {
+      "term": "ERA5-reanalyse",
+      "aliases": [
+        "ERA5-reanalyse",
+        "ERA5-data",
+        "ERA5-dataset",
+        "ERA5-gegevens",
+        "ERA5-weerdata"
+      ],
+      "definition": "Het weerarchief achter alles: een wereldwijde reconstructie van het weer uit het verleden, per uur, op een raster van ongeveer 31 km breed, gemaakt door het Europese weercentrum ECMWF."
+    },
+    "reference city": {
+      "term": "referentiestad",
+      "aliases": [
+        "referentiestad",
+        "referentiesteden",
+        "referentie-stad",
+        "vergelijkingsstad",
+        "vergelijkingssteden",
+        "alleen ter referentie",
+        "alleen referentie"
+      ],
+      "definition": "Een stad onder de bevolkingsgrens van {min_population} inwoners. Ze wordt alleen ter vergelijking getoond en heeft geen rang."
+    },
+    "rank volatility": {
+      "term": "rangvolatiliteit",
+      "aliases": [
+        "rangvolatiliteit",
+        "rang-volatiliteit",
+        "rangschommeling",
+        "rangstabiliteit",
+        "scorevarianten",
+        "gevoeligheidsanalyse",
+        "gevoeligheids-analyse",
+        "sensitiviteitsanalyse"
+      ],
+      "definition": "Hoe ver de rang van een stad verschuift wanneer de scorekeuzes één voor één worden veranderd: een warmere of koelere band, geen luchtstraf, volle zon, enzovoort, in totaal {n_variants} varianten. Een grote uitslag betekent dat de rang een artefact is van die keuzes en niet van het klimaat."
+    },
+    "Kendall tau": {
+      "term": "Kendall-tau",
+      "aliases": [
+        "Kendall-tau",
+        "Kendalls tau",
+        "tau van Kendall",
+        "Kendall-τ",
+        "Kendalls τ",
+        "Kendall-correlatie",
+        "Kendall-rangcorrelatie"
+      ],
+      "definition": "Een score voor hoezeer twee volgordes overeenkomen, van -1 (precies omgekeerd) tot 1 (identiek). Hier vergelijkt hij twee manieren om dezelfde steden te rangschikken."
+    },
+    "sun exposure": {
+      "term": "zonblootstelling",
+      "aliases": [
+        "zonblootstelling",
+        "zonneblootstelling",
+        "blootstelling aan de zon",
+        "zonaandeel",
+        "halve zon",
+        "half zon",
+        "halfzon",
+        "half in de zon"
+      ],
+      "definition": "De gepubliceerde cijfers gaan ervan uit dat je ongeveer de helft van de tijd in de zon bent. Volle zon en volle schaduw worden ook berekend en kunnen het beeld flink veranderen, vooral op hete plekken."
+    },
+    "elevation correction": {
+      "term": "hoogtecorrectie",
+      "aliases": [
+        "hoogtecorrectie",
+        "hoogte-correctie",
+        "hoogtecorrecties",
+        "hoogteaanpassing",
+        "temperatuurgradiënt",
+        "hoogtegradiënt",
+        "verticale temperatuurgradiënt",
+        "lapse-rate-correctie"
+      ],
+      "definition": "Een stad die duidelijk boven de gemiddelde hoogte van haar rastercel ligt, krijgt een koelere gevoelstemperatuur, in het gebruikelijke tempo waarin lucht met de hoogte afkoelt."
+    }
+  }
+}
