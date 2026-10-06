@@ -273,18 +273,19 @@ by SQL, with the arithmetic checked by `tests/test_query.py`. `query.py`
 defines the `comfort_weight` and `baseline_weight` macros; the schema text the
 model reads carries worked recipes for each of those questions.
 
-Everything in `data/` must come from **one** pipeline run. To refresh it:
+Everything in `data/` must come from **one** pipeline run. After any change to
+the pipeline's config or code, re-run it and vendor the result with
 
 ```sh
-cd ../climate
-uv run cli.py fetch-utci      # ~2-3 h from CDS; resumable
-uv run cli.py score && uv run cli.py sweep && uv run cli.py report
-uv run cli.py export-agent    # writes out/agent/
-cd ../climate-agent && make data
-make test
+make refresh          # ../climate: fetch what is missing, score, sweep, report, export; then data + test
 ```
 
-`make data` refuses to copy when `rankings.csv` is newer than the export.
+From a warm cache that is about **18 minutes** on 12 cores (score ~3, sweep
+~11, export ~4; each fans out over cities in a process pool). Only cities with
+nothing cached touch the network: ERA5 from CDS takes ~35 s a city, so a cold
+start of all ~1,900 is ~2-3 h, resumable. `make data` alone copies
+`../climate/out` without re-running anything, and refuses when `rankings.csv`
+is newer than the export.
 
 ### Adding a city below the population floor
 
@@ -299,10 +300,17 @@ make refresh          # fetch the new city, re-score everything from cache, vend
 make staging          # look at it before merging
 ```
 
-Only the new city touches the network (about a minute). `refresh` passes
-`--no-retry-failed` to `fetch-aq`, so PM2.5 gaps left by the published run stay
-gaps; filling them is a separate, deliberate `uv run cli.py fetch-aq`, because
-it changes the ranking.
+Only the new city touches the network (about a minute); the whole refresh is
+the ~18 minutes above. A typo or an ambiguous name ("Valencia" — Spain or
+Venezuela?) fails in seconds, at `fetch-cities`.
+
+`refresh` passes `--no-retry-failed` to `fetch-aq`, so PM2.5 gaps left by the
+published run stay gaps: cities ranked with no air-quality penalty (`SELECT
+count(*) FROM rankings WHERE pm25_ugm3 IS NULL`). Filling them is a separate, deliberate
+`uv run cli.py fetch-aq` in `../climate`, because it changes the ranking.
+
+Pushing to `main` deploys production, as always; `make refresh staging` stops
+short of that.
 
 ## Running it
 
