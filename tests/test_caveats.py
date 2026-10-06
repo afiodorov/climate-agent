@@ -82,6 +82,24 @@ def test_recomputed_note_follows_the_sql_when_given():
     assert any("recomputed" in n for n in caveats.caveats_for("Here.", sql=rebuilt))
 
 
+def test_trend_note_follows_reading_individual_years():
+    if not query.counts()["has_agent_tables"]:
+        pytest.skip("agent tables not vendored")
+
+    def trend(sql):
+        return any(
+            "short for a trend" in n for n in caveats.caveats_for("Here.", sql=sql)
+        )
+
+    assert trend(["SELECT year, comfort_hours FROM monthly"])
+    assert trend(["SELECT * FROM yearly"])
+    assert not trend(["SELECT SUM(hours) FROM utci_histogram"])
+    assert not any(
+        "recomputed" in n
+        for n in caveats.caveats_for("Here.", sql=["SELECT * FROM yearly"])
+    )
+
+
 def _metric_note(text):
     return any('"Best" depends' in n for n in caveats.caveats_for(text))
 

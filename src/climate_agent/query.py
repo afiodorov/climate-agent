@@ -46,18 +46,26 @@ _FORBIDDEN = re.compile(
 
 MAX_ROWS = 60
 
-AGENT_TABLES = ("utci_histogram", "hourly_profile", "yearly", "city_extras")
+AGENT_TABLES = ("utci_histogram", "hourly_profile", "yearly", "monthly", "city_extras")
 
 # The relations whose numbers are recomputed rather than published.
 _RECOMPUTED_RELATIONS = re.compile(
-    r"\b(utci_histogram|hourly_profile|yearly|comfort_weight|baseline_weight)\b",
+    r"\b(utci_histogram|hourly_profile|comfort_weight|baseline_weight)\b",
     re.IGNORECASE,
 )
+
+# The per-year relations: what a "has it changed" answer is built from.
+_TREND_RELATIONS = re.compile(r"\b(yearly|monthly)\b", re.IGNORECASE)
 
 
 def recomputes(sql: str) -> bool:
     """True when a statement rebuilds numbers from the aggregated hourly record."""
     return bool(_RECOMPUTED_RELATIONS.search(sql))
+
+
+def reads_years(sql: str) -> bool:
+    """True when a statement reads individual years rather than the climatology."""
+    return bool(_TREND_RELATIONS.search(sql))
 
 
 class QueryError(Exception):
@@ -123,7 +131,7 @@ def _connection() -> duckdb.DuckDBPyConnection:
     # model asks several per turn. The CSVs stay CSV on disk because they are
     # the pipeline's published, diffable format; the big tables are parquet.
     # Tens of MB in RAM, well under a second at boot.
-    for name in ("utci_histogram", "hourly_profile", "yearly"):
+    for name in ("utci_histogram", "hourly_profile", "yearly", "monthly"):
         path = agent / f"{name}.parquet"
         if path.exists():
             con.execute(f"CREATE TABLE {name} AS SELECT * FROM read_parquet('{path}')")
@@ -422,7 +430,15 @@ NOTES: dict[str, dict[str, str]] = {
         "hours": "hours in the record that year",
         "comfort_hours": "daylight comfort hours that year; comfort_hours_all includes the night",
         "utci_mean_daylight_c": "mean daylight UTCI that year",
+        "dewpoint_mean_daylight_c": "mean daylight dew point that year, degrees C",
         "muggy_daylight_hours": "daylight hours with dew point >= 18 C that year",
+    },
+    "monthly": {
+        "year": "calendar year, local time; month 1-12",
+        "comfort_hours": "daylight comfort hours in that month of that year; comfort_hours_all includes the night. Summed over months it equals yearly",
+        "utci_mean_daylight_c": "mean daylight UTCI that month; dewpoint_mean_daylight_c likewise",
+        "cold_daylight_hours": "daylight hours below the band's cold_full knot (too cold for full comfort)",
+        "hot_daylight_hours": "daylight hours above the band's warm_full knot (too hot for full comfort)",
     },
     "comfort_profiles": {
         "profile": "'walking' (the baseline), 'sitting', 'running'; the four knots of each trapezoid",
@@ -438,7 +454,8 @@ _TABLE_INTRO = {
     "sensitivity_summary": "one row per variant: how much the whole ranking moved.",
     "utci_histogram": "the hourly record, aggregated: one row per city x month x light x dewpoint_class x 1 C UTCI bin, hours per year. Rebuilds the ranking under ANY whole-degree comfort band, by day or by night, with or without a humidity filter.",
     "hourly_profile": "one row per city x month x local hour: what a typical hour of that month is like. Answers 'best time of day', 'are evenings pleasant', diurnal shape.",
-    "yearly": "one row per city x year: year-to-year variability of the record ({start_year}-{end_year}). A handful of points, not a trend analysis.",
+    "yearly": "one row per city x year ({start_year}-{end_year}): year-to-year variability, and the only way to ask whether a city has changed. Fifteen points: test any trend against the year-to-year spread (recipe e).",
+    "monthly": "one row per city x year x month: the yearly table split by month, so a change can be placed in a season. Milder winters and hotter summers can cancel in the annual total.",
     "comfort_profiles": "the trapezoid knots of the named activity profiles.",
     "scoring_config": "name/value pairs describing the run that produced all of the above.",
 }
@@ -533,8 +550,32 @@ SELECT r.name, r.country, round(SUM(f.dry_comfort)) AS dry_comfort_hours_yr,
        round(r.muggy_daylight_hours_yr) AS muggy_hours
 FROM filled f JOIN rankings r USING (city_id) GROUP BY ALL ORDER BY worst_month DESC LIMIT 15;
 
+-- (e) Has a city changed? Trend per decade by season, with a t-statistic.
+--     |t| below ~2.2 (p ~ 0.05 at 15 years) is indistinguishable from year-to-year noise.
+--     Seasons are meteorological (DJF = Dec-Feb); flip the labels south of the equator.
+WITH s AS (
+  SELECT m.year,
+         CASE WHEN m.month IN (12, 1, 2) THEN 'DJF' WHEN m.month IN (3, 4, 5) THEN 'MAM'
+              WHEN m.month IN (6, 7, 8) THEN 'JJA' ELSE 'SON' END AS season,
+         SUM(m.comfort_hours) AS comfort, SUM(m.cold_daylight_hours) AS cold,
+         SUM(m.hot_daylight_hours) AS hot, AVG(m.utci_mean_daylight_c) AS utci
+  FROM monthly m JOIN rankings r USING (city_id) WHERE r.name = 'Madrid' GROUP BY ALL)
+SELECT season, round(avg(comfort)) AS comfort_hours, round(stddev(comfort)) AS year_to_year_sd,
+       round(10 * regr_slope(comfort, year)) AS comfort_per_decade,
+       round(sign(regr_slope(comfort, year)) * sqrt(regr_r2(comfort, year) * (count(*) - 2)
+             / (1 - regr_r2(comfort, year))), 1) AS t_comfort,
+       round(10 * regr_slope(cold, year)) AS cold_per_decade,
+       round(10 * regr_slope(hot, year)) AS hot_per_decade,
+       round(10 * regr_slope(utci, year), 2) AS utci_c_per_decade,
+       round(sign(regr_slope(utci, year)) * sqrt(regr_r2(utci, year) * (count(*) - 2)
+             / (1 - regr_r2(utci, year))), 1) AS t_utci
+FROM s GROUP BY 1 ORDER BY 1;
+-- The whole year: the same over `yearly` without the season column. Alias both sides:
+-- rankings also has utci_mean_daylight_c and dewpoint_mean_daylight_c.
+
 What this data cannot answer: individual hours or dates (only climatological aggregates
-{start_year}-{end_year}), anything after {end_year}, forecasts, a custom band restricted to one hour of the day
+{start_year}-{end_year}), anything after {end_year}, anything before {start_year} (no older baseline to
+compare against), forecasts, a custom band restricted to one hour of the day
 (the histogram has no hour; the profile has no bin), custom bands at full sun or full shade
 (the histogram is at half-sun exposure; use sensitivity.exposure_* or the profile's sun/shade
 columns), streaks other than the published longest_bad_streak_days, cities not in the list.
@@ -566,6 +607,7 @@ def schema() -> str:
             "utci_histogram",
             "hourly_profile",
             "yearly",
+            "monthly",
             "comfort_profiles",
             "scoring_config",
         )

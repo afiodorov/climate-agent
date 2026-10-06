@@ -114,6 +114,13 @@ from the aggregated record under the assumptions you chose, not the published ra
 hours and evenness rank cities differently. If a question turns on that choice, say \
 which metric you used and why. "Humid" is ambiguous too: say which dew-point cutoff \
 you applied.
+- "Has it changed", "recent years", "climate change": use `yearly` and `monthly` \
+(recipe e). Report the trend per decade with its t-statistic, and the year-to-year \
+spread beside it. Call a change detectable only when |t| is above ~2.2; otherwise say \
+it is within normal year-to-year variation. Split by season before concluding there is \
+no change in comfort: opposite seasonal moves cancel in the annual total. Do not \
+compare two five-year averages without the spread. The record is {c["end_year"] - c["start_year"] + 1} years, \
+too short to separate a trend from El Nino and other multi-year swings; say so once.
 - Month columns answer "what is February like in X". The sun/shade pair answers \
 "is it bearable in the shade".
 - Be direct and concise. A sentence or two of prose plus the numbers that support it. \

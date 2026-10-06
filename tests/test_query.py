@@ -87,6 +87,20 @@ def test_schema_names_every_column_of_every_relation():
     assert str(query.counts()["n_cities"]) in text
 
 
+@needs_agent_tables
+def test_every_recipe_in_the_prompt_runs():
+    text = query.schema()
+    start = text.index("Recipes:") + len("Recipes:")
+    block = text[start : text.index("What this data cannot answer")]
+    code = "\n".join(
+        line for line in block.splitlines() if not line.lstrip().startswith("--")
+    )
+    statements = [s.strip() for s in code.split(";") if s.strip()]
+    assert len(statements) >= 6
+    for sql in statements:
+        assert query.run_query(sql).rows, sql
+
+
 @needs_data
 def test_counts_come_from_the_data():
     c = query.counts()

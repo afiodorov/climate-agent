@@ -41,6 +41,12 @@ _RECOMPUTED = re.compile(
     re.IGNORECASE,
 )
 
+# An answer about change over the record rather than the climatology.
+_TREND = re.compile(
+    r"\b(trends?|per decade|warm(?:ed|ing)|year-to-year|recent years|climate change)\b",
+    re.IGNORECASE,
+)
+
 # Humidity claims rest on ERA5's dew point over a ~31 km cell. Explicit terms
 # only: an answer that calls a climate "humid" in passing is not making one.
 _HUMIDITY = re.compile(
@@ -193,6 +199,20 @@ def caveats_for(answer: str, sql: list[str] | None = None) -> list[str]:
             f"{counts['start_year']}-{counts['end_year']} climatology) under the "
             "assumptions stated in the answer. They are not the published ranking, and "
             "the published sensitivity analysis does not cover them."
+        )
+
+    by_year = (
+        any(query.reads_years(s) for s in sql)
+        if sql is not None
+        else bool(_TREND.search(answer))
+    )
+    if counts["has_agent_tables"] and by_year:
+        n = counts["end_year"] - counts["start_year"] + 1
+        notes.append(
+            f"Changes over time come from {n} years ({counts['start_year']}-"
+            f"{counts['end_year']}) of one reanalysis grid cell. That is short for a "
+            "trend: El Nino and other multi-year swings move single years by as much as "
+            "a decade of warming, and the record ends on the warm 2023-24 El Nino peak."
         )
 
     if _HUMIDITY.search(answer):
