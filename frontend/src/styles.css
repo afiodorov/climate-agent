@@ -371,6 +371,36 @@ body {
   border-width: 1.5px;
 }
 
+.turn-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.turn-head .turn-question {
+  flex: 1 1 auto;
+}
+.turn-delete {
+  flex: 0 0 auto;
+  border: none;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  padding: 0 4px;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--text-muted);
+  opacity: 0;
+}
+.turn:hover .turn-delete,
+.turn-delete:focus-visible {
+  opacity: 1;
+}
+@media (hover: none) {
+  .turn-delete {
+    opacity: 1;
+  }
+}
+
 .turn-question {
   margin: 0 0 10px;
   padding-left: 12px;
@@ -898,6 +928,7 @@ footer {
   .rail,
   .rail-backdrop,
   .rail-menu,
+  .turn-delete,
   .header-actions,
   .composer,
   .progress,

@@ -175,6 +175,22 @@ async def delete_session(session_id: str, request: Request) -> Response:
     return Response(status_code=204)
 
 
+@app.delete("/api/sessions/{session_id}/exchanges/last", status_code=204)
+async def drop_last_exchange(session_id: str, request: Request) -> Response:
+    """Remove a conversation's last question and answer, so it can be re-asked.
+
+    Admins only, like deleting the whole conversation. 409 while a turn is
+    still being answered; otherwise idempotent in the same way.
+    """
+    who = auth.require_admin(request)
+    if not await app.state.gateway.drop_last_exchange(session_id):
+        raise HTTPException(
+            status_code=409, detail="A question is still being answered."
+        )
+    log.info("%s dropped the last exchange of %s", who, session_id)
+    return Response(status_code=204)
+
+
 @app.get("/api/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}

@@ -26,6 +26,7 @@ from collections import OrderedDict
 from collections.abc import AsyncIterator
 from typing import Literal
 
+from langchain_core.messages import HumanMessage
 from langgraph.graph.state import CompiledStateGraph
 
 from . import climate, store
@@ -186,6 +187,37 @@ class Gateway:
             if sid == session_id:
                 del self._inflight[subject]
         await self._store.delete_session(session_id)
+
+    async def drop_last_exchange(self, session_id: str) -> bool:
+        """Undo a conversation's most recent turn, so it can be asked again.
+
+        Only the last: a later answer may lean on an earlier one, and the
+        model's memory is one linear history, so cutting from the middle would
+        leave the transcript and the context disagreeing. The history is cut
+        back to before the dropped question only when that question is where it
+        ends — a turn that failed never reached the history, and cutting anyway
+        would take the turn before it too. Dropping the only turn deletes the
+        conversation. Refuses (False) while a turn is in flight, since its
+        answer would land on top of the cut.
+        """
+        if self.pending(session_id):
+            return False
+        conversation = await self._store.conversation(session_id)
+        if conversation is None or not conversation.exchanges:
+            return True
+        dropped = conversation.exchanges.pop()
+        if not conversation.exchanges:
+            await self._store.delete_session(session_id)
+            return True
+        await self._store.save_conversation(conversation)
+
+        history = await self._store.history(session_id, climate.MODEL)
+        asked = [i for i, m in enumerate(history) if isinstance(m, HumanMessage)]
+        if asked and history[asked[-1]].content == dropped.question:
+            await self._store.save_history(
+                session_id, history[: asked[-1]], climate.MODEL
+            )
+        return True
 
     async def ask(
         self,

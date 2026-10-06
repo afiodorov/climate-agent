@@ -39,6 +39,7 @@ export default function App() {
     sessionId,
     openConversation,
     removeConversation,
+    removeLastTurn,
   } = useChat()
   const { theme, toggle } = useTheme()
   const rail = useRail()
@@ -178,8 +179,16 @@ export default function App() {
           className={turns.length ? 'transcript' : 'transcript is-empty'}
           ref={transcriptRef}
         >
-          {turns.map((turn) => (
-            <Turn key={turn.id} turn={turn} />
+          {turns.map((turn, i) => (
+            <Turn
+              key={turn.id}
+              turn={turn}
+              onDelete={
+                me.admin && i === turns.length - 1 && turn.status !== 'running'
+                  ? removeLastTurn
+                  : undefined
+              }
+            />
           ))}
         </main>
 

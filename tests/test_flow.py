@@ -478,3 +478,63 @@ async def test_pending_sessions_groups_by_session_and_keeps_the_earliest_start()
 
         release.set()
         await asyncio.gather(first, second, other)
+
+
+async def test_dropping_the_last_exchange_undoes_one_turn():
+    seen = []
+
+    async def ask(question, history):
+        seen.append(_texts(history))
+        return f"answer to {question}", [*history, *_turn(question)]
+
+    async with Bus(ask) as bus:
+        await bus.gateway.ask("first", "s1", timeout=10)
+        await bus.gateway.ask("second", "s1", timeout=10)
+
+        assert await bus.gateway.drop_last_exchange("s1")
+        convo = await bus.gateway.conversation("s1")
+        assert [e.question for e in convo.exchanges] == ["first"]
+
+        # The model's memory lost the dropped turn too, and only that turn.
+        await bus.gateway.ask("again", "s1", timeout=10)
+        assert seen[-1] == ["first", "answer to first"]
+
+        # Dropping the only turn left deletes the conversation.
+        await bus.gateway.drop_last_exchange("s2")  # absent: a no-op
+        await bus.gateway.ask("only", "s3", timeout=10)
+        assert await bus.gateway.drop_last_exchange("s3")
+        assert await bus.gateway.conversation("s3") is None
+
+
+async def test_dropping_a_failed_turn_keeps_the_history_before_it():
+    """A failed turn is in the transcript but never reached the history, so
+    cutting the history at its last question would take the good turn with it."""
+
+    async def ask(question, history):
+        if question == "boom":
+            raise RuntimeError("model fell over")
+        return f"answer to {question}", [*history, *_turn(question)]
+
+    async with Bus(ask) as bus:
+        await bus.gateway.ask("good", "s1", timeout=10)
+        await bus.gateway.ask("boom", "s1", timeout=10)
+        assert await bus.gateway.drop_last_exchange("s1")
+        history = await bus.store.history("s1", climate.MODEL)
+        assert _texts(history) == ["good", "answer to good"]
+
+
+async def test_dropping_the_last_exchange_waits_for_a_running_turn():
+    release = asyncio.Event()
+
+    async def ask(question, history):
+        if question == "slow":
+            await release.wait()
+        return f"answer to {question}", [*history, *_turn(question)]
+
+    async with Bus(ask) as bus:
+        await bus.gateway.ask("done", "s1", timeout=10)
+        asking = asyncio.create_task(bus.gateway.ask("slow", "s1", timeout=10))
+        assert await _eventually(lambda: bus.gateway.pending("s1") == ["slow"])
+        assert not await bus.gateway.drop_last_exchange("s1")
+        release.set()
+        await asking

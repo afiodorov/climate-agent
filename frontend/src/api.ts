@@ -47,6 +47,15 @@ export async function deleteConversation(id: string): Promise<void> {
   if (!r.ok) throw new Error(`delete ${id}: ${r.status}`)
 }
 
+/** Remove a conversation's last question and answer, so it can be re-asked.
+ *  Admins only; 409 while a turn is still running. */
+export async function deleteLastExchange(id: string): Promise<void> {
+  const r = await fetch(`/api/sessions/${encodeURIComponent(id)}/exchanges/last`, {
+    method: 'DELETE',
+  })
+  if (!r.ok) throw new Error(`delete last exchange of ${id}: ${r.status}`)
+}
+
 export interface AskHandlers {
   onStep: (step: Step) => void
   onFinal: (final: Final) => void

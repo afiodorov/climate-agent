@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   deleteConversation,
+  deleteLastExchange,
   fetchConversation,
   fetchConversations,
   streamAsk,
@@ -210,6 +211,21 @@ export function useChat() {
     [useSession, refresh, load, stopPolling],
   )
 
+  /** Drop the conversation on screen back by one turn, then reload it from the
+   *  server so the transcript shows exactly what the next question builds on.
+   *  The last turn was the only one: the server deleted the conversation, and
+   *  so does the screen. */
+  const removeLastTurn = useCallback(async () => {
+    const id = sessionRef.current
+    await deleteLastExchange(id)
+    try {
+      await load(id)
+    } catch {
+      reset()
+    }
+    refresh()
+  }, [refresh, reset, load])
+
   return {
     turns,
     send,
@@ -219,5 +235,6 @@ export function useChat() {
     sessionId,
     openConversation,
     removeConversation,
+    removeLastTurn,
   }
 }

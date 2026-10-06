@@ -151,6 +151,16 @@ async def test_delete_needs_an_admin(client, github):
     assert r.status_code == 204
 
 
+async def test_dropping_the_last_exchange_needs_an_admin(client, github):
+    path = "/api/sessions/s1/exchanges/last"
+    r = await client.delete(path)
+    assert r.status_code == 403
+    r = await client.delete(path, cookies={auth.USER_COOKIE: _cookie("someone-else")})
+    assert r.status_code == 403
+    r = await client.delete(path, cookies={auth.USER_COOKIE: _cookie("afiodorov")})
+    assert r.status_code == 204
+
+
 async def test_me_ignores_a_cookie_once_the_secret_changes(client, github, monkeypatch):
     good = _cookie("afiodorov")
     monkeypatch.setenv("GITHUB_CLIENT_SECRET", "rotated")
