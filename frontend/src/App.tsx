@@ -75,6 +75,19 @@ export default function App() {
 
   // Follow the conversation as it grows: a new turn, and each step landing in
   // the running one, should keep the newest content in view.
+  // Export is the browser's own print-to-PDF over a print stylesheet that
+  // keeps only the questions and answers (styles.css, @media print). The
+  // document title becomes the PDF's suggested file name, so it is the
+  // conversation's for the length of the dialog.
+  const exportPdf = () => {
+    const title =
+      conversations.find((c) => c.id === sessionId)?.title ?? turns[0]?.question
+    const previous = document.title
+    if (title) document.title = `${title} — Climate Agent`
+    window.print()
+    document.title = previous
+  }
+
   useEffect(() => {
     const el = transcriptRef.current
     if (el) el.scrollTop = el.scrollHeight
@@ -122,6 +135,21 @@ export default function App() {
             </div>
           </div>
           <div className="header-actions">
+            {turns.length > 0 && (
+              <button
+                type="button"
+                className="new-chat"
+                onClick={exportPdf}
+                disabled={running}
+                title={
+                  running
+                    ? 'Wait for the answer to finish'
+                    : 'Save this conversation as a PDF, without the caveats'
+                }
+              >
+                Export PDF
+              </button>
+            )}
             {turns.length > 0 && (
               <button
                 type="button"

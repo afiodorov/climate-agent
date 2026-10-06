@@ -451,9 +451,13 @@ h1 {
 }
 .rail-menu:hover,
 .theme-toggle:hover,
-.new-chat:hover {
+.new-chat:hover:not(:disabled) {
   color: var(--accent);
   border-color: var(--accent);
+}
+.new-chat:disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 
 .card {
@@ -852,4 +856,78 @@ footer {
     margin-top: 10px;
     font-size: 11.5px;
   }
+}
+
+/* ---- Print / Export PDF ----
+   The export is the questions and the answers, nothing else: no rail, no
+   buttons, no ask bar, no step log, and no caveats. The app's fixed-height
+   flex column becomes ordinary document flow so the transcript runs across
+   pages instead of being clipped to one screen, and it always prints light. */
+@media print {
+  :root,
+  :root[data-theme='dark'] {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --border: #d5d9d7;
+    --text: #000000;
+    --text-muted: #555c63;
+    --code-bg: #f1f3f2;
+    --accent: #0d8f80;
+    --shadow: none;
+    color-scheme: light;
+  }
+
+  body,
+  #root,
+  .layout,
+  .transcript {
+    display: block;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+  body {
+    border-top: 0;
+    font-size: 12pt;
+  }
+  .layout {
+    max-width: none;
+    padding: 0;
+  }
+
+  .rail,
+  .rail-backdrop,
+  .rail-menu,
+  .header-actions,
+  .composer,
+  .progress,
+  .caveats,
+  .tip {
+    display: none !important;
+  }
+
+  .header {
+    padding-top: 0;
+  }
+  .card {
+    box-shadow: none;
+  }
+  /* Tables print whole: the on-screen horizontal scroller would cut them. */
+  .table-scroll {
+    overflow: visible;
+  }
+  .turn-question,
+  tr {
+    break-inside: avoid;
+  }
+  .turn-question {
+    break-after: avoid;
+  }
+  .term {
+    text-decoration: none;
+  }
+}
+
+@page {
+  margin: 16mm 14mm;
 }
