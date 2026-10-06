@@ -286,6 +286,24 @@ make test
 
 `make data` refuses to copy when `rankings.csv` is newer than the export.
 
+### Adding a city below the population floor
+
+The pipeline's `cities.validation.reference` list in
+`../climate/config/default.yaml` is the exception list: cities there are
+fetched and scored whatever their size, shown with `rank_if_eligible` and an
+empty `rank`, so they never move a ranked city. Add a line (`"Name, Country"`,
+spelled as in GHS-UCDB; accents optional) and run
+
+```sh
+make refresh          # fetch the new city, re-score everything from cache, vendor, test
+make staging          # look at it before merging
+```
+
+Only the new city touches the network (about a minute). `refresh` passes
+`--no-retry-failed` to `fetch-aq`, so PM2.5 gaps left by the published run stay
+gaps; filling them is a separate, deliberate `uv run cli.py fetch-aq`, because
+it changes the ranking.
+
 ## Running it
 
 Needs `DEEPSEEK_API_KEY` in `.env` (or the environment). The ranking data ships

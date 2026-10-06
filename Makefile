@@ -1,5 +1,5 @@
 .PHONY: dev api ui build test eval eval-view format lint fmt imports clean redis redis-down \
-        staging staging-down staging-logs staging-prune data
+        staging staging-down staging-logs staging-prune data refresh
 
 NODE_MODULES := frontend/node_modules
 
@@ -57,6 +57,25 @@ data:
 	cp $(CLIMATE_OUT)/README.md data/methodology.md
 	cp $(CLIMATE_OUT)/agent/*.parquet $(CLIMATE_OUT)/agent/manifest.json data/agent/
 	@du -sh data
+
+# Re-run the pipeline in ../climate and vendor it, after changing its config —
+# typically a city added to `cities.validation.reference` in
+# ../climate/config/default.yaml, the way to include one below the population
+# floor ("Gijón, Spain"). Only cities with nothing cached touch the network;
+# score, sweep and export re-run over every city from the local cache, so
+# data/ is still one run. fetch-cities resolves the names first and fails in
+# seconds on a typo or an ambiguous name. Then `make staging` to look at it.
+CLIMATE := ../climate
+
+refresh:
+	cd $(CLIMATE) && uv run cli.py fetch-cities
+	cd $(CLIMATE) && uv run cli.py fetch-utci
+	cd $(CLIMATE) && uv run cli.py fetch-aq --no-retry-failed
+	cd $(CLIMATE) && uv run cli.py score
+	cd $(CLIMATE) && uv run cli.py sweep
+	cd $(CLIMATE) && uv run cli.py report
+	cd $(CLIMATE) && uv run cli.py export-agent
+	$(MAKE) data test
 
 test:
 	uv run pytest -q

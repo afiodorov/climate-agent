@@ -3,7 +3,7 @@
 How many daylight hours a year is it thermally comfortable to be outdoors,
 walking around or going for a casual run?
 
-Generated 2026-09-15 from 1906 scored cities
+Generated 2026-10-06 from 1908 scored cities
 (1904 eligible for the ranking, subset `all`), UTCI over
 2010-2024.
 
@@ -148,6 +148,8 @@ who disagrees with the weighting can rebuild the ranking without rerunning.
 | 28 | Saltillo | México | 3,500 | 2,640 | 3,948 | 0.74 | 263 | 2 | 0.92 | 9.6 | 1.00 | 3,223 | relief |
 | 29 | Perth | Australia | 3,772 | 3,459 | 3,822 | 0.80 | 239 | 2 | 0.85 | 6.2 | 1.00 | 3,214 | coast |
 | 114 | Valencia | Spain | 3,429 | 2,994 | 3,718 | 0.71 | 178 | 4 | 0.76 | 8.7 | 1.00 | 2,596 | ref coast |
+| – | Oviedo / Uviéu | Spain | 3,254 | 3,052 | 3,159 | 0.67 | 155 | 9 | 0.70 | 6.4 | 1.00 | 2,264 | <floor ref relief |
+| – | Gijón | Spain | 3,407 | 3,302 | 3,274 | 0.70 | 153 | 12 | 0.67 | 10.4 | 0.99 | 2,259 | <floor ref coast+rel |
 
 ## Sensitivity
 
@@ -157,22 +159,22 @@ real result, and one that moves is an artefact of the thresholds.
 
 | Variant | Kendall tau | Mean rank change | Max rank change |
 |---|---:|---:|---:|
-| `metric_raw_hours` | 0.541 | 321.0 | 1070 |
-| `metric_fraction` | 0.553 | 311.7 | 1062 |
-| `metric_worst_month` | 0.625 | 250.9 | 959 |
+| `metric_raw_hours` | 0.542 | 320.8 | 1070 |
+| `metric_fraction` | 0.554 | 311.5 | 1062 |
+| `metric_worst_month` | 0.625 | 250.8 | 959 |
 | `profile_running` | 0.642 | 247.5 | 1202 |
-| `evenness_shannon` | 0.741 | 175.9 | 1176 |
-| `aq_penalty_off` | 0.759 | 175.2 | 736 |
-| `band_warm_+2C` | 0.791 | 146.8 | 580 |
+| `evenness_shannon` | 0.741 | 175.8 | 1176 |
+| `aq_penalty_off` | 0.759 | 175.1 | 736 |
+| `band_warm_+2C` | 0.792 | 146.9 | 580 |
 | `band_cool_-2C` | 0.796 | 142.8 | 734 |
-| `exposure_0` | 0.797 | 145.9 | 612 |
-| `exposure_1` | 0.832 | 119.4 | 624 |
-| `rain_penalty_off` | 0.888 | 77.7 | 1155 |
+| `exposure_0` | 0.797 | 146.0 | 612 |
+| `exposure_1` | 0.832 | 119.5 | 624 |
+| `rain_penalty_off` | 0.888 | 77.7 | 1157 |
 | `profile_sitting` | 0.893 | 77.6 | 694 |
-| `exposure_0.25` | 0.900 | 71.7 | 322 |
-| `exposure_0.75` | 0.909 | 64.6 | 324 |
+| `exposure_0.25` | 0.900 | 71.8 | 322 |
+| `exposure_0.75` | 0.909 | 64.7 | 324 |
 | `daylight_sunrise_0deg` | 0.933 | 46.4 | 401 |
-| `elevation_correction_off` | 0.966 | 22.0 | 465 |
+| `elevation_correction_off` | 0.966 | 22.1 | 465 |
 | `baseline` | 1.000 | 0.0 | 0 |
 
 Least stable cities — their position is a statement about the parameters, not
@@ -180,14 +182,14 @@ about the climate:
 
 | City | Rank volatility (sd) | Median rank |
 |---|---:|---:|
-| Oslo | 452.1 | 1489 |
-| Stockholm | 430.8 | 1816 |
-| Gothenburg | 407.2 | 1576 |
-| Irkutsk | 400.4 | 1651 |
-| Malmo | 399.9 | 1722 |
-| Kaliningrad | 397.8 | 1411 |
-| Copenhagen | 394.7 | 1662 |
-| Vitsebsk | 391.8 | 1777 |
+| Oslo | 452.1 | 1491 |
+| Stockholm | 430.8 | 1818 |
+| Gothenburg | 407.2 | 1578 |
+| Irkutsk | 400.4 | 1653 |
+| Malmo | 399.9 | 1724 |
+| Kaliningrad | 397.8 | 1413 |
+| Copenhagen | 394.7 | 1664 |
+| Vitsebsk | 391.8 | 1779 |
 
 ## Known limitations
 
@@ -212,7 +214,7 @@ about the climate:
   ERA5's cloud errors, this is a modelling choice worth knowing: for many
   people "grey but mild" and "bright and mild" are not the same offer.
 - **31 km grid: no urban heat island, no coastal microclimate.** The ERA5 cell
-  is the city's surroundings, not the city. 953 of 1906 scored
+  is the city's surroundings, not the city. 955 of 1908 scored
   cities carry `microclimate_risk`. That base rate is high enough to need its
   own caveat — most large cities are coastal, so the flag marks "treat with
   suspicion", not "unusual".

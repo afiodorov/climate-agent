@@ -50,10 +50,28 @@ _HUMIDITY = re.compile(
 
 
 @lru_cache(maxsize=1)
+def _aliases() -> dict[str, str]:
+    """Spelling in prose -> name in `rankings`.
+
+    UCDB names some cities in two languages ("Oviedo / Uviéu"), and an answer
+    will name one half, so each half maps back to the full name.
+    """
+    index = query.city_index()
+    aliases: dict[str, str] = {}
+    for name in index:
+        if not isinstance(name, str):
+            continue
+        aliases[name] = name
+        if " / " in name:
+            for part in name.split(" / "):
+                if part not in index:
+                    aliases.setdefault(part.strip(), name)
+    return {k: v for k, v in aliases.items() if len(k) >= _MIN_NAME}
+
+
+@lru_cache(maxsize=1)
 def _matcher() -> re.Pattern[str] | None:
-    names = [
-        n for n in query.city_index() if isinstance(n, str) and len(n) >= _MIN_NAME
-    ]
+    names = list(_aliases())
     if not names:
         return None
     # Longest first so "San Luis Potosí" wins over a hypothetical "San Luis".
@@ -85,8 +103,9 @@ def cities_mentioned(text: str) -> list[str]:
     if matcher is None:
         return []
     seen: dict[str, None] = {}
+    aliases = _aliases()
     for match in matcher.finditer(text):
-        seen.setdefault(match.group(1), None)
+        seen.setdefault(aliases[match.group(1)], None)
     return list(seen)
 
 

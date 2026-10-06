@@ -359,6 +359,7 @@ def volatility_index() -> dict[str, dict]:
 # is maintained by hand.
 NOTES: dict[str, dict[str, str]] = {
     "rankings": {
+        "name": "UCDB's local spelling, accents kept, a few bilingual ('Gijón', 'Oviedo / Uviéu', 'Medellín'). Find a city with strip_accents(name) ILIKE '%oviedo%', not name = '...'",
         "rank": "1 = most comfortable. NULL for reference cities.",
         "rank_if_eligible": "rank the city would hold if the population floor were dropped",
         "microclimate_risk": "BOOLEAN. True when the ERA5 grid cell probably does not represent the city (coast or steep relief).",

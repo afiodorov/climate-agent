@@ -14,6 +14,15 @@ def test_finds_city_names_in_prose():
     assert found == [a, b]  # deduplicated, in order of first appearance
 
 
+def test_finds_one_half_of_a_bilingual_name():
+    bilingual = [n for n in query.city_index() if " / " in n]
+    if not bilingual:
+        pytest.skip("no bilingual city names in this run")
+    name = bilingual[0]
+    first = name.split(" / ")[0]
+    assert caveats.cities_mentioned(f"{first} is mild all year.") == [name]
+
+
 def test_ignores_ordinary_words():
     assert caveats.cities_mentioned("It is comfortable most of the year.") == []
 

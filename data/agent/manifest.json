@@ -1,12 +1,12 @@
 {
   "export_version": 1,
-  "generated_on": "2026-09-15",
+  "generated_on": "2026-10-06",
   "period": {
     "start_year": 2010,
     "end_year": 2024
   },
   "backend": "cds",
-  "n_cities": 1906,
+  "n_cities": 1908,
   "min_population": 300000,
   "n_years": 15.00068473815918,
   "utci_bin_width_c": 1.0,
@@ -84,9 +84,9 @@
     "enabled": true
   },
   "rows": {
-    "utci_histogram": 3672769,
-    "hourly_profile": 548928,
-    "yearly": 28590,
-    "city_extras": 1906
+    "utci_histogram": 3676375,
+    "hourly_profile": 549504,
+    "yearly": 28620,
+    "city_extras": 1908
   }
 }

@@ -57,6 +57,7 @@ make staging-logs             # follow the staging app
 make staging-down
 make test                     # ~120 tests, no API key — the model is stubbed
 make data                     # vendor a fresh ../climate/out (all files, one run)
+make refresh                  # re-run ../climate from cache after a config change, then data + test
 make eval                     # 33-case guardrail eval; calls DeepSeek for real, costs money
 make format lint              # ruff, line length 88
 ```
