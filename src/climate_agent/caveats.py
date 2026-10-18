@@ -63,6 +63,11 @@ _RAIN = re.compile(
 )
 
 
+_SUN = re.compile(
+    r"\b(sunshine|sunny days?|clear days?|overcast days?|hours of sun)\b", re.IGNORECASE
+)
+
+
 @lru_cache(maxsize=1)
 def _aliases() -> dict[str, str]:
     """Spelling in prose -> name in `rankings`.
@@ -244,6 +249,21 @@ def caveats_for(answer: str, sql: list[str] | None = None) -> list[str]:
             "steep tropical relief (the Colombian Andes) totals can be several times "
             "too high. Compare cities with each other, not with station climatologies; two "
             "nearby cities can share most of a cell."
+        )
+
+    sunny = (
+        any(query.reads_sunshine(s) for s in sql)
+        if sql is not None
+        else bool(_SUN.search(answer))
+    )
+    if counts["has_agent_tables"] and sunny:
+        notes.append(
+            "Sunshine is estimated from ERA5's direct solar radiation against a "
+            "clear-sky model, not measured by a sunshine recorder. Against station "
+            "normals it is typically within ~10% (often low in dry, sunny climates), so "
+            "a smaller gap between two cities is a tie. ERA5 misses coastal low cloud "
+            "and fog: foggy coasts (Lima, the Cantabrian coast of Spain) come out much "
+            "sunnier than they are."
         )
 
     return notes

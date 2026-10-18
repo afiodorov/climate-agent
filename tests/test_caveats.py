@@ -169,3 +169,21 @@ def test_rain_note_follows_the_rain_columns():
     assert not rain("Here.", sql=["SELECT SUM(hours_rain_adj) FROM utci_histogram"])
     assert rain("Oviedo gets 190 wet days a year.")
     assert not rain("Comfort hours are rain-adjusted.")
+
+
+def test_sunshine_note_follows_the_sunshine_columns():
+    if not query.counts()["has_agent_tables"]:
+        pytest.skip("agent tables not vendored")
+
+    def sun(answer, sql=None):
+        return any(
+            "sunshine recorder" in n for n in caveats.caveats_for(answer, sql=sql)
+        )
+
+    assert sun("Here.", sql=["SELECT clear_days_yr FROM rankings"])
+    assert sun(
+        "Here.", sql=["SELECT month, avg(sunshine_hours) FROM monthly GROUP BY 1"]
+    )
+    assert not sun("Here.", sql=["SELECT comfort_hours_sun FROM rankings"])
+    assert sun("Madrid gets 2,800 hours of sunshine.")
+    assert not sun("Comfort at full sun exposure.")

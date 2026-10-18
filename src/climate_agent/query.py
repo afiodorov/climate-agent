@@ -56,6 +56,9 @@ _RECOMPUTED_RELATIONS = re.compile(
 
 # The per-year relations: what a "has it changed" answer is built from.
 _TREND_RELATIONS = re.compile(r"\b(yearly|monthly)\b", re.IGNORECASE)
+_SUN_COLUMNS = re.compile(
+    r"\b(\w*sunshine_\w+|(clear|sunny|overcast)_days\w*)\b", re.IGNORECASE
+)
 _YEAR_READ = re.compile(r"\byear\b|\bselect\s+(\w+\.)?\*", re.IGNORECASE)
 
 # The raw precipitation columns (not the comfort penalty, `hours_rain_adj`).
@@ -72,6 +75,11 @@ def recomputes(sql: str) -> bool:
 def reads_rain(sql: str) -> bool:
     """True when a statement reads the raw precipitation columns."""
     return bool(_RAIN_COLUMNS.search(sql))
+
+
+def reads_sunshine(sql: str) -> bool:
+    """True when a statement reads the sunshine columns."""
+    return bool(_SUN_COLUMNS.search(sql))
 
 
 def reads_years(sql: str) -> bool:
@@ -294,6 +302,7 @@ def counts() -> dict:
     m = manifest()
     period = m.get("period", {})
     rain = m.get("penalties", {}).get("precipitation", {})
+    sun = m.get("sunshine", {})
     return {
         "n_cities": _scalar("SELECT count(*) FROM rankings", 1118),
         # Exports before min_population was written were all at the 500k floor.
@@ -319,6 +328,9 @@ def counts() -> dict:
         "wet_day_mm": m.get("rain", {}).get("wet_day_mm", 1.0),
         "light_mm_h": rain.get("light_mm_h", 0.1),
         "heavy_mm_h": rain.get("heavy_mm_h", 1.0),
+        "clear_day": sun.get("clear_day", 0.8),
+        "sunny_day": sun.get("sunny_day", 0.5),
+        "overcast_day": sun.get("overcast_day", 0.2),
     }
 
 
@@ -417,6 +429,9 @@ NOTES: dict[str, dict[str, str]] = {
         "precip_mm_yr": "THE RAIN COLUMNS: precipitation per year, mm, raw ERA5 (not the comfort penalty)",
         "wet_days_yr": "local days per year with >= {wet_day_mm:g} mm, the climatological 'rain day'",
         "rain_hours_yr": "hours per year with >= {light_mm_h:g} mm/h; heavy_rain_hours_yr >= {heavy_mm_h:g} mm/h; rain_daylight_hours_yr only in daylight",
+        "sunshine_hours_yr": "THE SUNSHINE COLUMNS: hours of direct sun per year, estimated from ERA5 direct radiation (not measured)",
+        "sunshine_fraction": "sunshine_hours_yr / the hours the sun could have shone, 0-1",
+        "clear_days_yr": "days per year with >= {clear_day:.0%} of possible sunshine (ясные/despejados); sunny_days_yr >= {sunny_day:.0%}; overcast_days_yr < {overcast_day:.0%}",
     },
     "sensitivity": {
         "baseline": "the city's rank under the published scoring. Each other variant column is its rank under that one change.",
@@ -457,6 +472,7 @@ NOTES: dict[str, dict[str, str]] = {
         "dewpoint_mean_daylight_c": "mean daylight dew point that year, degrees C",
         "muggy_daylight_hours": "daylight hours with dew point >= 18 C that year",
         "precip_mm": "precipitation that year, mm; wet_days, rain_hours, heavy_rain_hours and rain_daylight_hours as in rankings' *_yr columns",
+        "sunshine_hours": "hours of direct sun that year; possible_sunshine_hours, clear_days, sunny_days, overcast_days as in rankings",
     },
     "monthly": {
         "year": "calendar year, local time; month 1-12",
@@ -465,6 +481,7 @@ NOTES: dict[str, dict[str, str]] = {
         "cold_daylight_hours": "daylight hours below the band's cold_full knot (too cold for full comfort)",
         "hot_daylight_hours": "daylight hours above the band's warm_full knot (too hot for full comfort)",
         "precip_mm": "precipitation that month, mm; wet_days (days >= {wet_day_mm:g} mm), rain_hours, heavy_rain_hours, rain_daylight_hours likewise. AVG over years for a typical month",
+        "sunshine_hours": "hours of direct sun that month, out of possible_sunshine_hours; clear_days, sunny_days, overcast_days as in rankings. AVG over years for a typical month",
     },
     "comfort_profiles": {
         "profile": "'walking' (the baseline), 'sitting', 'running'; the four knots of each trapezoid",
@@ -481,7 +498,7 @@ _TABLE_INTRO = {
     "utci_histogram": "the hourly record, aggregated: one row per city x month x light x dewpoint_class x 1 C UTCI bin, hours per year. Rebuilds the ranking under ANY whole-degree comfort band, by day or by night, with or without a humidity filter.",
     "hourly_profile": "one row per city x month x local hour: what a typical hour of that month is like. Answers 'best time of day', 'are evenings pleasant', diurnal shape.",
     "yearly": "one row per city x year ({start_year}-{end_year}): year-to-year variability, and the only way to ask whether a city has changed. Fifteen points: test any trend against the year-to-year spread (recipe e).",
-    "monthly": "one row per city x year x month: the yearly table split by month, so a change can be placed in a season. Milder winters and hotter summers can cancel in the annual total. Also the place for rain by month (recipe f).",
+    "monthly": "one row per city x year x month: the yearly table split by month, so a change can be placed in a season. Milder winters and hotter summers can cancel in the annual total. Also the place for rain and sunshine by month (recipe f).",
     "comfort_profiles": "the trapezoid knots of the named activity profiles.",
     "scoring_config": "name/value pairs describing the run that produced all of the above.",
 }
@@ -599,13 +616,16 @@ FROM s GROUP BY 1 ORDER BY 1;
 -- The whole year: the same over `yearly` without the season column. Alias both sides:
 -- rankings also has utci_mean_daylight_c and dewpoint_mean_daylight_c.
 
--- (f) Which of two cities is rainier? The annual figures are in rankings; by month, average
---     monthly over the years. Put the year-to-year spread beside any difference.
+-- (f) Which of two cities is rainier, or sunnier? The annual figures are in rankings; by month,
+--     average monthly over the years. Put the year-to-year spread beside any difference.
 SELECT r.name, round(r.precip_mm_yr) AS mm_yr, round(r.wet_days_yr) AS wet_days_yr,
-       round(r.rain_daylight_hours_yr) AS rainy_daylight_hours_yr
+       round(r.rain_daylight_hours_yr) AS rainy_daylight_hours_yr,
+       round(r.sunshine_hours_yr) AS sunshine_hours_yr, round(r.clear_days_yr) AS clear_days_yr,
+       round(r.overcast_days_yr) AS overcast_days_yr
 FROM rankings r WHERE (strip_accents(r.name) ILIKE '%oviedo%' OR strip_accents(r.name) ILIKE '%gijon%');
 SELECT r.name, m.month, round(avg(m.precip_mm)) AS mm, round(avg(m.wet_days), 1) AS wet_days,
-       round(stddev(m.wet_days), 1) AS wet_days_sd
+       round(stddev(m.wet_days), 1) AS wet_days_sd, round(avg(m.sunshine_hours)) AS sunshine_hours,
+       round(avg(m.clear_days), 1) AS clear_days
 FROM monthly m JOIN rankings r USING (city_id)
 WHERE (strip_accents(r.name) ILIKE '%oviedo%' OR strip_accents(r.name) ILIKE '%gijon%') GROUP BY ALL ORDER BY 2, 1;
 
@@ -618,7 +638,10 @@ columns), streaks other than the published longest_bad_streak_days, cities not i
 Night-time 'shade' is not meaningful and is not offered. Humidity is ERA5's 2 m dew point over a
 ~31 km cell, so coastal and lakeside cities can be more humid than their cell. Rain is ERA5's
 total precipitation over the same cell: it drizzles too often, so wet-day counts run above
-station figures; compare cities with each other, not with a weather station."""
+station figures; compare cities with each other, not with a weather station. Sunshine is
+estimated from ERA5's direct beam against a clear-sky model: typically within ~10% of station
+normals, so a smaller gap between two cities is a tie; ERA5 misses coastal low cloud, so foggy
+coasts (Lima, the Cantabrian coast) come out much too sunny."""
 
 
 @lru_cache(maxsize=1)

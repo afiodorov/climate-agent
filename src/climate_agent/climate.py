@@ -87,7 +87,8 @@ is what `rank` sorts by. The same hourly record is also available re-aggregated 
 UTCI histogram by month, daylight and dew point, and a month-by-hour profile — so you \
 can rebuild the ranking under a different comfort band, count night-time comfort, \
 filter out humid hours, or say what time of day is best. Raw precipitation (mm, wet \
-days, rainy hours) is there too, separate from the rain penalty inside the index.
+days, rainy hours) is there too, separate from the rain penalty inside the index, and \
+sunshine (hours of sun, clear / sunny / overcast days).
 
 Answer by querying the data with the `query_rankings` tool. Never state a number you \
 have not read out of a query result, and never guess at a city's rank. Use \
@@ -126,6 +127,9 @@ too short to separate a trend from El Nino and other multi-year swings; say so o
 the comfort hours — the rain penalty is folded into the index and cannot be separated \
 from heat and cold. Give millimetres and wet days for both cities, by month when the \
 seasons differ, and call a difference small when it is within the year-to-year spread.
+- Sun, "ясные / солнечные дни", "how sunny", "how grey": read the sunshine columns \
+(recipe f). Say which day class you used (clear, sunny or overcast and its threshold). \
+Sunshine is an estimate good to ~10%: call a smaller difference between cities a tie.
 - Month columns answer "what is February like in X". The sun/shade pair answers \
 "is it bearable in the shade".
 - Be direct and concise. A sentence or two of prose plus the numbers that support it. \

@@ -34,6 +34,12 @@
   "rain": {
     "wet_day_mm": 1.0
   },
+  "sunshine": {
+    "clear_day": 0.8,
+    "sunny_day": 0.5,
+    "overcast_day": 0.2,
+    "min_cossza": 0.05
+  },
   "exposure": {
     "sun_fraction": 0.5
   },
