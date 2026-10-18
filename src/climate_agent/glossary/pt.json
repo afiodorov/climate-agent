@@ -287,6 +287,88 @@
         "gradiente adiabático"
       ],
       "definition": "Uma cidade bem acima da altura média da sua célula recebe uma temperatura de sensação mais fresca, à taxa habitual a que o ar arrefece com a altitude."
+    },
+    "precipitation": {
+      "term": "precipitação",
+      "aliases": [
+        "precipitação",
+        "precipitações",
+        "chuva acumulada",
+        "mm de chuva",
+        "pluviosidade"
+      ],
+      "definition": "Chuva, neve e garoa juntas, em milímetros de água: 1 mm é um litro em cada metro quadrado. Vem da célula do ERA5, que indica garoa fraca com frequência demais e espalha pancadas locais."
+    },
+    "wet day": {
+      "term": "dia de chuva",
+      "aliases": [
+        "dia de chuva",
+        "dias de chuva",
+        "dias chuvosos",
+        "dia chuvoso"
+      ],
+      "definition": "Um dia com pelo menos {wet_day_mm:g} mm de chuva ou neve, a definição climatológica habitual de dia de chuva."
+    },
+    "rainy hours": {
+      "term": "horas de chuva",
+      "aliases": [
+        "horas de chuva",
+        "hora de chuva",
+        "horas chuvosas",
+        "horas de chuva forte"
+      ],
+      "definition": "Horas com pelo menos {light_mm_h:g} mm de chuva ou neve; as de chuva forte têm pelo menos {heavy_mm_h:g} mm. Chuva fraca reduz o conforto de uma hora, chuva forte o anula."
+    },
+    "sunshine hours": {
+      "term": "horas de sol",
+      "aliases": [
+        "horas de sol",
+        "insolação",
+        "horas de insolação",
+        "horas de brilho solar"
+      ],
+      "definition": "Horas em que o sol brilha diretamente, sem nuvens a cobri-lo. Estimadas a partir da radiação solar do ERA5, não medidas por heliógrafo; precisas em cerca de 10%, e costas com nevoeiro saem ensolaradas demais."
+    },
+    "possible sunshine": {
+      "term": "fração de sol possível",
+      "aliases": [
+        "fração de sol possível",
+        "sol possível",
+        "insolação relativa"
+      ],
+      "definition": "As horas de sol como fração das horas com o sol acima do horizonte. 1 seria um céu sem nuvens todos os dias."
+    },
+    "clear day": {
+      "term": "dia limpo",
+      "aliases": [
+        "dia limpo",
+        "dias limpos",
+        "dias de céu limpo",
+        "dia de céu limpo"
+      ],
+      "definition": "Um dia que recebeu pelo menos {clear_day:.0%} do seu sol possível: quase sem nuvens."
+    },
+    "sunny day": {
+      "term": "dia ensolarado",
+      "aliases": [
+        "dia ensolarado",
+        "dias ensolarados",
+        "dias de sol",
+        "dia soalheiro",
+        "dias soalheiros"
+      ],
+      "definition": "Um dia que recebeu pelo menos {sunny_day:.0%} do seu sol possível: mais sol do que nuvens."
+    },
+    "overcast day": {
+      "term": "dia encoberto",
+      "aliases": [
+        "dia encoberto",
+        "dias encobertos",
+        "dias nublados",
+        "dia nublado",
+        "dias cinzentos"
+      ],
+      "definition": "Um dia que recebeu menos de {overcast_day:.0%} do seu sol possível: o sol mal aparece."
     }
   }
 }

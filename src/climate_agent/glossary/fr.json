@@ -287,6 +287,87 @@
         "correction du gradient thermique"
       ],
       "definition": "Une ville située bien au-dessus de l'altitude moyenne de sa maille reçoit une température ressentie plus fraîche, au taux habituel auquel l'air se refroidit avec l'altitude."
+    },
+    "precipitation": {
+      "term": "précipitations",
+      "aliases": [
+        "précipitations",
+        "précipitation",
+        "cumul de pluie",
+        "mm de pluie",
+        "pluviométrie"
+      ],
+      "definition": "Pluie, neige et bruine ensemble, en millimètres d'eau : 1 mm, c'est un litre sur chaque mètre carré. Issues de la maille ERA5, qui signale trop souvent une faible bruine et étale les averses locales."
+    },
+    "wet day": {
+      "term": "jour de pluie",
+      "aliases": [
+        "jour de pluie",
+        "jours de pluie",
+        "jours pluvieux",
+        "jour pluvieux"
+      ],
+      "definition": "Un jour avec au moins {wet_day_mm:g} mm de pluie ou de neige, la définition climatologique habituelle d'un jour de pluie."
+    },
+    "rainy hours": {
+      "term": "heures de pluie",
+      "aliases": [
+        "heures de pluie",
+        "heure de pluie",
+        "heures pluvieuses",
+        "heures de forte pluie"
+      ],
+      "definition": "Heures avec au moins {light_mm_h:g} mm de pluie ou de neige ; les heures de forte pluie en ont au moins {heavy_mm_h:g} mm. Une pluie faible réduit le confort d'une heure, une forte pluie l'annule."
+    },
+    "sunshine hours": {
+      "term": "heures d'ensoleillement",
+      "aliases": [
+        "heures d'ensoleillement",
+        "heures de soleil",
+        "ensoleillement",
+        "durée d'ensoleillement"
+      ],
+      "definition": "Heures où le soleil brille directement, sans être caché par les nuages. Estimées à partir du rayonnement solaire d'ERA5, et non mesurées par un héliographe ; précises à environ 10 %, les côtes brumeuses ressortent trop ensoleillées."
+    },
+    "possible sunshine": {
+      "term": "fraction d'ensoleillement",
+      "aliases": [
+        "fraction d'ensoleillement",
+        "ensoleillement possible",
+        "insolation relative"
+      ],
+      "definition": "Les heures d'ensoleillement rapportées aux heures où le soleil était au-dessus de l'horizon. 1 serait un ciel sans nuages tous les jours."
+    },
+    "clear day": {
+      "term": "jour clair",
+      "aliases": [
+        "jour clair",
+        "jours clairs",
+        "jours dégagés",
+        "jour dégagé"
+      ],
+      "definition": "Un jour qui a reçu au moins {clear_day:.0%} de son ensoleillement possible : presque sans nuages."
+    },
+    "sunny day": {
+      "term": "jour ensoleillé",
+      "aliases": [
+        "jour ensoleillé",
+        "jours ensoleillés",
+        "journées ensoleillées",
+        "journée ensoleillée"
+      ],
+      "definition": "Un jour qui a reçu au moins {sunny_day:.0%} de son ensoleillement possible : plus de soleil que de nuages."
+    },
+    "overcast day": {
+      "term": "jour couvert",
+      "aliases": [
+        "jour couvert",
+        "jours couverts",
+        "jours gris",
+        "journées grises",
+        "journées couvertes"
+      ],
+      "definition": "Un jour qui a reçu moins de {overcast_day:.0%} de son ensoleillement possible : le soleil se montre à peine."
     }
   }
 }

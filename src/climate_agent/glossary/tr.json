@@ -289,6 +289,86 @@
         "lapse rate düzeltmesi"
       ],
       "definition": "Izgara hücresinin ortalama yüksekliğinin epey üzerinde duran bir şehir, havanın yükseklikle soğuduğu olağan hızda daha serin bir hissedilen sıcaklık alır."
+    },
+    "precipitation": {
+      "term": "yağış",
+      "aliases": [
+        "yağış",
+        "yağış miktarı",
+        "toplam yağış",
+        "mm yağış"
+      ],
+      "definition": "Yağmur, kar ve çiseleme birlikte, milimetre su olarak: 1 mm, her metrekareye bir litre demektir. ERA5 ızgara hücresinden gelir; bu hücre hafif çiselemeyi fazla sık gösterir ve yerel sağanakları yayar."
+    },
+    "wet day": {
+      "term": "yağışlı gün",
+      "aliases": [
+        "yağışlı gün",
+        "yağışlı günler",
+        "yağışlı gün sayısı",
+        "yağmurlu gün",
+        "yağmurlu günler"
+      ],
+      "definition": "En az {wet_day_mm:g} mm yağmur ya da kar düşen gün; yağışlı günün olağan klimatolojik tanımı."
+    },
+    "rainy hours": {
+      "term": "yağışlı saatler",
+      "aliases": [
+        "yağışlı saatler",
+        "yağışlı saat",
+        "yağmurlu saatler",
+        "kuvvetli yağışlı saatler"
+      ],
+      "definition": "En az {light_mm_h:g} mm yağmur ya da kar düşen saatler; kuvvetli yağışlı saatlerde en az {heavy_mm_h:g} mm. Hafif yağmur bir saatin konforunu düşürür, kuvvetli yağmur sıfırlar."
+    },
+    "sunshine hours": {
+      "term": "güneşlenme süresi",
+      "aliases": [
+        "güneşlenme süresi",
+        "güneşli saatler",
+        "güneşli saat",
+        "güneş saati",
+        "güneşlenme"
+      ],
+      "definition": "Güneşin bulutlara gizlenmeden doğrudan parladığı saatler. Güneşlenme kaydedicisiyle ölçülmez, ERA5'teki güneş ışınımından tahmin edilir; yaklaşık %10 doğrudur, sisli kıyılar olduğundan güneşli çıkar."
+    },
+    "possible sunshine": {
+      "term": "olası güneşlenme oranı",
+      "aliases": [
+        "olası güneşlenme oranı",
+        "olası güneşlenme",
+        "bağıl güneşlenme"
+      ],
+      "definition": "Güneşli saatlerin, güneşin ufkun üzerinde olduğu saatlere oranı. 1, her gün bulutsuz bir gökyüzü demek olurdu."
+    },
+    "clear day": {
+      "term": "açık gün",
+      "aliases": [
+        "açık gün",
+        "açık günler",
+        "bulutsuz gün",
+        "bulutsuz günler"
+      ],
+      "definition": "Olası güneşlenmesinin en az {clear_day:.0%}'ini alan gün: neredeyse bulutsuz."
+    },
+    "sunny day": {
+      "term": "güneşli gün",
+      "aliases": [
+        "güneşli gün",
+        "güneşli günler",
+        "güneşli gün sayısı"
+      ],
+      "definition": "Olası güneşlenmesinin en az {sunny_day:.0%}'ini alan gün: bulut yerine daha çok güneş."
+    },
+    "overcast day": {
+      "term": "kapalı gün",
+      "aliases": [
+        "kapalı gün",
+        "kapalı günler",
+        "bulutlu günler",
+        "bulutlu gün"
+      ],
+      "definition": "Olası güneşlenmesinin {overcast_day:.0%}'inden azını alan gün: güneş neredeyse görünmez."
     }
   }
 }

@@ -282,6 +282,80 @@
         "koreksi lapse rate"
       ],
       "definition": "Kota yang terletak jauh di atas ketinggian rata-rata sel gridnya mendapat suhu yang dirasakan lebih sejuk, sesuai laju biasa udara mendingin seiring bertambahnya ketinggian."
+    },
+    "precipitation": {
+      "term": "curah hujan",
+      "aliases": [
+        "curah hujan",
+        "presipitasi",
+        "mm hujan",
+        "jumlah hujan"
+      ],
+      "definition": "Hujan, salju, dan gerimis bersama-sama, dalam milimeter air: 1 mm berarti satu liter di setiap meter persegi. Diambil dari sel grid ERA5, yang terlalu sering mencatat gerimis ringan dan meratakan hujan lebat setempat."
+    },
+    "wet day": {
+      "term": "hari hujan",
+      "aliases": [
+        "hari hujan",
+        "hari-hari hujan",
+        "jumlah hari hujan"
+      ],
+      "definition": "Hari dengan setidaknya {wet_day_mm:g} mm hujan atau salju, definisi klimatologis yang lazim untuk hari hujan."
+    },
+    "rainy hours": {
+      "term": "jam hujan",
+      "aliases": [
+        "jam hujan",
+        "jam-jam hujan",
+        "jam hujan lebat"
+      ],
+      "definition": "Jam dengan setidaknya {light_mm_h:g} mm hujan atau salju; jam hujan lebat setidaknya {heavy_mm_h:g} mm. Hujan ringan mengurangi kenyamanan satu jam, hujan lebat meniadakannya."
+    },
+    "sunshine hours": {
+      "term": "jam penyinaran matahari",
+      "aliases": [
+        "jam penyinaran matahari",
+        "penyinaran matahari",
+        "lama penyinaran",
+        "jam matahari"
+      ],
+      "definition": "Jam ketika matahari bersinar langsung, tidak tertutup awan. Diperkirakan dari radiasi matahari ERA5, bukan diukur dengan perekam sinar matahari; akurat sekitar 10%, dan pesisir berkabut tampak terlalu cerah."
+    },
+    "possible sunshine": {
+      "term": "fraksi penyinaran",
+      "aliases": [
+        "fraksi penyinaran",
+        "penyinaran yang mungkin",
+        "penyinaran relatif"
+      ],
+      "definition": "Jam penyinaran sebagai bagian dari jam ketika matahari di atas cakrawala. Nilai 1 berarti langit tanpa awan setiap hari."
+    },
+    "clear day": {
+      "term": "hari cerah",
+      "aliases": [
+        "hari cerah",
+        "hari-hari cerah",
+        "hari tanpa awan"
+      ],
+      "definition": "Hari yang mendapat setidaknya {clear_day:.0%} dari penyinaran yang mungkin: nyaris tanpa awan."
+    },
+    "sunny day": {
+      "term": "hari bermatahari",
+      "aliases": [
+        "hari bermatahari",
+        "hari-hari bermatahari",
+        "hari banyak matahari"
+      ],
+      "definition": "Hari yang mendapat setidaknya {sunny_day:.0%} dari penyinaran yang mungkin: lebih banyak matahari daripada awan."
+    },
+    "overcast day": {
+      "term": "hari mendung",
+      "aliases": [
+        "hari mendung",
+        "hari-hari mendung",
+        "hari berawan"
+      ],
+      "definition": "Hari yang mendapat kurang dari {overcast_day:.0%} dari penyinaran yang mungkin: matahari nyaris tak muncul."
     }
   }
 }

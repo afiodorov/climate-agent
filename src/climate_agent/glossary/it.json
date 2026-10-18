@@ -288,6 +288,85 @@
         "gradiente adiabatico"
       ],
       "definition": "Una città situata ben al di sopra dell'altezza media della sua cella di griglia riceve una temperatura percepita più fresca, al tasso abituale con cui l'aria si raffredda con la quota."
+    },
+    "precipitation": {
+      "term": "precipitazioni",
+      "aliases": [
+        "precipitazioni",
+        "precipitazione",
+        "pioggia cumulata",
+        "mm di pioggia",
+        "piovosità"
+      ],
+      "definition": "Pioggia, neve e pioviggine insieme, in millimetri d'acqua: 1 mm è un litro su ogni metro quadrato. Dalla cella di ERA5, che segnala pioviggine debole troppo spesso e spalma i rovesci locali."
+    },
+    "wet day": {
+      "term": "giorno di pioggia",
+      "aliases": [
+        "giorno di pioggia",
+        "giorni di pioggia",
+        "giorni piovosi",
+        "giorno piovoso"
+      ],
+      "definition": "Un giorno con almeno {wet_day_mm:g} mm di pioggia o neve, la definizione climatologica abituale di giorno di pioggia."
+    },
+    "rainy hours": {
+      "term": "ore di pioggia",
+      "aliases": [
+        "ore di pioggia",
+        "ora di pioggia",
+        "ore piovose",
+        "ore di pioggia forte"
+      ],
+      "definition": "Ore con almeno {light_mm_h:g} mm di pioggia o neve; quelle di pioggia forte ne hanno almeno {heavy_mm_h:g} mm. La pioggia debole riduce il comfort di un'ora, quella forte lo annulla."
+    },
+    "sunshine hours": {
+      "term": "ore di sole",
+      "aliases": [
+        "ore di sole",
+        "soleggiamento",
+        "eliofania",
+        "ore di soleggiamento"
+      ],
+      "definition": "Ore in cui il sole splende direttamente, non nascosto dalle nuvole. Stimate dalla radiazione solare di ERA5, non misurate con l'eliofanografo; precise al 10% circa, e le coste nebbiose risultano troppo soleggiate."
+    },
+    "possible sunshine": {
+      "term": "frazione di sole possibile",
+      "aliases": [
+        "frazione di sole possibile",
+        "sole possibile",
+        "eliofania relativa"
+      ],
+      "definition": "Le ore di sole come frazione delle ore con il sole sopra l'orizzonte. 1 sarebbe un cielo senza nuvole ogni giorno."
+    },
+    "clear day": {
+      "term": "giorno sereno",
+      "aliases": [
+        "giorno sereno",
+        "giorni sereni"
+      ],
+      "definition": "Un giorno che ha ricevuto almeno il {clear_day:.0%} del sole possibile: quasi senza nuvole."
+    },
+    "sunny day": {
+      "term": "giorno soleggiato",
+      "aliases": [
+        "giorno soleggiato",
+        "giorni soleggiati",
+        "giornate soleggiate",
+        "giornata soleggiata",
+        "giorni di sole"
+      ],
+      "definition": "Un giorno che ha ricevuto almeno il {sunny_day:.0%} del sole possibile: più sole che nuvole."
+    },
+    "overcast day": {
+      "term": "giorno coperto",
+      "aliases": [
+        "giorno coperto",
+        "giorni coperti",
+        "giornate grigie",
+        "giorni nuvolosi"
+      ],
+      "definition": "Un giorno che ha ricevuto meno del {overcast_day:.0%} del sole possibile: il sole si vede appena."
     }
   }
 }

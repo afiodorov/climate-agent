@@ -286,6 +286,97 @@
         "gradientu temperatury"
       ],
       "definition": "Miasto leżące wyraźnie powyżej średniej wysokości swojej komórki siatki dostaje chłodniejszą temperaturę odczuwalną, w zwykłym tempie, w jakim powietrze ochładza się z wysokością."
+    },
+    "precipitation": {
+      "term": "opady",
+      "aliases": [
+        "opady",
+        "opadów",
+        "suma opadów",
+        "mm opadów",
+        "opadach"
+      ],
+      "definition": "Deszcz, śnieg i mżawka razem, w milimetrach wody: 1 mm to litr na każdy metr kwadratowy. Z komórki ERA5, która zbyt często pokazuje słabą mżawkę i rozmywa lokalne ulewy."
+    },
+    "wet day": {
+      "term": "dzień deszczowy",
+      "aliases": [
+        "dzień deszczowy",
+        "dni deszczowe",
+        "dni deszczowych",
+        "dni z deszczem",
+        "deszczowe dni",
+        "deszczowych dni"
+      ],
+      "definition": "Dzień z co najmniej {wet_day_mm:g} mm deszczu lub śniegu — zwykła klimatologiczna definicja dnia deszczowego."
+    },
+    "rainy hours": {
+      "term": "godziny z deszczem",
+      "aliases": [
+        "godziny z deszczem",
+        "godzin z deszczem",
+        "godziny deszczu",
+        "godzin deszczu",
+        "godzin silnego deszczu",
+        "godziny silnego deszczu"
+      ],
+      "definition": "Godziny z co najmniej {light_mm_h:g} mm deszczu lub śniegu; godziny silnego deszczu — co najmniej {heavy_mm_h:g} mm. Słaby deszcz obniża komfort godziny, silny go zeruje."
+    },
+    "sunshine hours": {
+      "term": "godziny słoneczne",
+      "aliases": [
+        "godziny słoneczne",
+        "godzin słonecznych",
+        "usłonecznienie",
+        "usłonecznienia",
+        "godziny ze słońcem",
+        "godzin ze słońcem",
+        "godzin słońca"
+      ],
+      "definition": "Godziny, gdy słońce świeci bezpośrednio, nie zasłonięte chmurami. Szacowane z promieniowania słonecznego w ERA5, a nie mierzone heliografem; dokładność ok. 10%, mgliste wybrzeża wychodzą zbyt słonecznie."
+    },
+    "possible sunshine": {
+      "term": "udział możliwego słońca",
+      "aliases": [
+        "udział możliwego słońca",
+        "możliwego słońca",
+        "możliwego usłonecznienia"
+      ],
+      "definition": "Godziny słoneczne jako udział godzin, gdy słońce było nad horyzontem. 1 oznaczałoby bezchmurne niebo każdego dnia."
+    },
+    "clear day": {
+      "term": "dzień pogodny",
+      "aliases": [
+        "dzień pogodny",
+        "dni pogodne",
+        "dni pogodnych",
+        "pogodnych dni",
+        "bezchmurne dni",
+        "bezchmurnych dni"
+      ],
+      "definition": "Dzień, który dostał co najmniej {clear_day:.0%} możliwego słońca: niemal bezchmurny."
+    },
+    "sunny day": {
+      "term": "dzień słoneczny",
+      "aliases": [
+        "dzień słoneczny",
+        "dni słoneczne",
+        "dni słonecznych",
+        "słonecznych dni",
+        "słoneczne dni"
+      ],
+      "definition": "Dzień, który dostał co najmniej {sunny_day:.0%} możliwego słońca: więcej słońca niż chmur."
+    },
+    "overcast day": {
+      "term": "dzień pochmurny",
+      "aliases": [
+        "dzień pochmurny",
+        "dni pochmurne",
+        "dni pochmurnych",
+        "pochmurnych dni",
+        "pochmurne dni"
+      ],
+      "definition": "Dzień, który dostał mniej niż {overcast_day:.0%} możliwego słońca: słońce ledwo się pokazuje."
     }
   }
 }

@@ -268,6 +268,86 @@
         "lapse-rate-correctie"
       ],
       "definition": "Een stad die duidelijk boven de gemiddelde hoogte van haar rastercel ligt, krijgt een koelere gevoelstemperatuur, in het gebruikelijke tempo waarin lucht met de hoogte afkoelt."
+    },
+    "precipitation": {
+      "term": "neerslag",
+      "aliases": [
+        "neerslag",
+        "neerslaghoeveelheid",
+        "mm neerslag",
+        "regenval"
+      ],
+      "definition": "Regen, sneeuw en motregen samen, in millimeters water: 1 mm is een liter op elke vierkante meter. Uit de ERA5-rastercel, die lichte motregen te vaak meldt en lokale buien uitsmeert."
+    },
+    "wet day": {
+      "term": "regendag",
+      "aliases": [
+        "regendag",
+        "regendagen",
+        "natte dagen",
+        "dagen met regen"
+      ],
+      "definition": "Een dag met minstens {wet_day_mm:g} mm regen of sneeuw, de gebruikelijke klimatologische definitie van een regendag."
+    },
+    "rainy hours": {
+      "term": "regenuren",
+      "aliases": [
+        "regenuren",
+        "regenuur",
+        "uren met regen",
+        "uren regen",
+        "uren zware regen"
+      ],
+      "definition": "Uren met minstens {light_mm_h:g} mm regen of sneeuw; uren met zware regen hebben minstens {heavy_mm_h:g} mm. Lichte regen verlaagt het comfort van een uur, zware regen schrapt het."
+    },
+    "sunshine hours": {
+      "term": "zonuren",
+      "aliases": [
+        "zonuren",
+        "zonneschijnuren",
+        "zonneschijnduur",
+        "zonneschijn",
+        "uren zon"
+      ],
+      "definition": "Uren waarin de zon direct schijnt en niet achter wolken zit. Geschat uit de zonnestraling in ERA5, niet gemeten met een zonneschijnmeter; op ongeveer 10% nauwkeurig, mistige kusten komen te zonnig uit."
+    },
+    "possible sunshine": {
+      "term": "relatieve zonneschijn",
+      "aliases": [
+        "relatieve zonneschijn",
+        "mogelijke zonneschijn",
+        "van de mogelijke zon"
+      ],
+      "definition": "Zonuren als aandeel van de uren dat de zon boven de horizon stond. 1 zou elke dag een wolkeloze hemel betekenen."
+    },
+    "clear day": {
+      "term": "heldere dag",
+      "aliases": [
+        "heldere dag",
+        "heldere dagen",
+        "wolkeloze dagen",
+        "onbewolkte dagen"
+      ],
+      "definition": "Een dag met minstens {clear_day:.0%} van de mogelijke zonneschijn: vrijwel wolkeloos."
+    },
+    "sunny day": {
+      "term": "zonnige dag",
+      "aliases": [
+        "zonnige dag",
+        "zonnige dagen",
+        "zonnedagen"
+      ],
+      "definition": "Een dag met minstens {sunny_day:.0%} van de mogelijke zonneschijn: meer zon dan wolken."
+    },
+    "overcast day": {
+      "term": "bewolkte dag",
+      "aliases": [
+        "bewolkte dag",
+        "bewolkte dagen",
+        "grijze dagen",
+        "betrokken dagen"
+      ],
+      "definition": "Een dag met minder dan {overcast_day:.0%} van de mogelijke zonneschijn: de zon laat zich nauwelijks zien."
     }
   }
 }

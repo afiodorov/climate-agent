@@ -240,6 +240,65 @@ _ENTRIES: list[Entry] = [
         "feels-like temperature, at the usual rate air cools with altitude.",
         "elev_offset_k",
     ),
+    _e(
+        "precipitation",
+        ["precipitation", "rainfall", "mm of rain", "annual rainfall"],
+        "Rain, snow and drizzle together, in millimetres of water: 1 mm is one "
+        "litre on every square metre. Taken from the ERA5 grid cell, which "
+        "reports light drizzle too often and smears out local downpours.",
+        "precip_mm_yr",
+    ),
+    _e(
+        "wet day",
+        ["wet day", "wet days", "rain day", "rain days", "rainy day", "rainy days"],
+        "A day with at least {wet_day_mm:g} mm of rain or snow, the usual "
+        "climatological definition of a rainy day.",
+        "wet_days_yr",
+    ),
+    _e(
+        "rainy hours",
+        ["rainy hours", "rain hours", "hours of rain", "heavy rain hours"],
+        "Hours with at least {light_mm_h:g} mm of rain or snow; heavy-rain hours "
+        "have at least {heavy_mm_h:g} mm. Light rain cuts an hour's comfort, "
+        "heavy rain cancels it.",
+        "rain_hours_yr",
+    ),
+    _e(
+        "sunshine hours",
+        ["sunshine hours", "hours of sunshine", "hours of sun", "sunshine"],
+        "Hours when the sun shines directly, not hidden by cloud. Estimated from "
+        "the solar radiation in ERA5 rather than measured by a sunshine "
+        "recorder, and good to about 10%; foggy coasts come out too sunny.",
+        "sunshine_hours_yr",
+    ),
+    _e(
+        "possible sunshine",
+        ["possible sunshine", "share of possible sunshine", "sunshine fraction"],
+        "Sunshine hours as a share of the hours the sun was above the horizon. "
+        "1 would be a cloudless sky every day.",
+        "sunshine_fraction",
+    ),
+    _e(
+        "clear day",
+        ["clear day", "clear days"],
+        "A day that got at least {clear_day:.0%} of its possible sunshine: close "
+        "to cloudless.",
+        "clear_days_yr",
+    ),
+    _e(
+        "sunny day",
+        ["sunny day", "sunny days"],
+        "A day that got at least {sunny_day:.0%} of its possible sunshine: more "
+        "sun than cloud.",
+        "sunny_days_yr",
+    ),
+    _e(
+        "overcast day",
+        ["overcast day", "overcast days", "grey days", "gray days"],
+        "A day that got less than {overcast_day:.0%} of its possible sunshine: "
+        "the sun barely shows.",
+        "overcast_days_yr",
+    ),
 ]
 
 

@@ -272,6 +272,95 @@
         "Höhenlage-Korrektur"
       ],
       "definition": "Eine Stadt, die deutlich über der mittleren Höhe ihrer Gitterzelle liegt, bekommt eine kühlere gefühlte Temperatur, im üblichen Maß, in dem sich Luft mit der Höhe abkühlt."
+    },
+    "precipitation": {
+      "term": "Niederschlag",
+      "aliases": [
+        "Niederschlag",
+        "Niederschläge",
+        "Niederschlagsmenge",
+        "Regenmenge",
+        "mm Regen"
+      ],
+      "definition": "Regen, Schnee und Niesel zusammen, in Millimetern Wasser: 1 mm ist ein Liter auf jedem Quadratmeter. Aus der ERA5-Gitterzelle, die leichten Niesel zu oft meldet und örtliche Schauer verschmiert."
+    },
+    "wet day": {
+      "term": "Regentag",
+      "aliases": [
+        "Regentag",
+        "Regentage",
+        "Regentagen",
+        "nasse Tage",
+        "Tage mit Regen"
+      ],
+      "definition": "Ein Tag mit mindestens {wet_day_mm:g} mm Regen oder Schnee, die übliche klimatologische Definition eines Regentags."
+    },
+    "rainy hours": {
+      "term": "Regenstunden",
+      "aliases": [
+        "Regenstunden",
+        "Regenstunde",
+        "Stunden mit Regen",
+        "Starkregenstunden"
+      ],
+      "definition": "Stunden mit mindestens {light_mm_h:g} mm Regen oder Schnee; Starkregenstunden haben mindestens {heavy_mm_h:g} mm. Leichter Regen senkt den Komfort einer Stunde, starker hebt ihn auf."
+    },
+    "sunshine hours": {
+      "term": "Sonnenstunden",
+      "aliases": [
+        "Sonnenstunden",
+        "Sonnenscheinstunden",
+        "Sonnenscheindauer",
+        "Sonnenschein",
+        "Stunden Sonne"
+      ],
+      "definition": "Stunden, in denen die Sonne direkt scheint und nicht von Wolken verdeckt ist. Aus der Sonnenstrahlung in ERA5 geschätzt, nicht mit einem Sonnenscheinautographen gemessen; auf etwa 10 % genau, neblige Küsten kommen zu sonnig heraus."
+    },
+    "possible sunshine": {
+      "term": "relative Sonnenscheindauer",
+      "aliases": [
+        "relative Sonnenscheindauer",
+        "möglichen Sonnenscheins",
+        "möglichen Sonnenscheindauer"
+      ],
+      "definition": "Sonnenstunden als Anteil der Stunden, in denen die Sonne über dem Horizont stand. 1 wäre jeden Tag ein wolkenloser Himmel."
+    },
+    "clear day": {
+      "term": "heiterer Tag",
+      "aliases": [
+        "heiterer Tag",
+        "heitere Tage",
+        "heiteren Tage",
+        "heiteren Tagen",
+        "wolkenlose Tage",
+        "klare Tage"
+      ],
+      "definition": "Ein Tag mit mindestens {clear_day:.0%} des möglichen Sonnenscheins: nahezu wolkenlos."
+    },
+    "sunny day": {
+      "term": "sonniger Tag",
+      "aliases": [
+        "sonniger Tag",
+        "sonnige Tage",
+        "sonnigen Tage",
+        "sonnigen Tagen",
+        "Sonnentage",
+        "Sonnentagen"
+      ],
+      "definition": "Ein Tag mit mindestens {sunny_day:.0%} des möglichen Sonnenscheins: mehr Sonne als Wolken."
+    },
+    "overcast day": {
+      "term": "trüber Tag",
+      "aliases": [
+        "trüber Tag",
+        "trübe Tage",
+        "trüben Tage",
+        "trüben Tagen",
+        "bedeckte Tage",
+        "bedeckten Tagen",
+        "graue Tage"
+      ],
+      "definition": "Ein Tag mit weniger als {overcast_day:.0%} des möglichen Sonnenscheins: die Sonne zeigt sich kaum."
     }
   }
 }
