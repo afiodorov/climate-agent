@@ -1,6 +1,6 @@
 {
   "export_version": 1,
-  "generated_on": "2026-10-06",
+  "generated_on": "2026-10-18",
   "period": {
     "start_year": 2010,
     "end_year": 2024
@@ -30,6 +30,9 @@
     ],
     "dry_cutoff_c": 16.0,
     "muggy_c": 18.0
+  },
+  "rain": {
+    "wet_day_mm": 1.0
   },
   "exposure": {
     "sun_fraction": 0.5

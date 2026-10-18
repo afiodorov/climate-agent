@@ -55,6 +55,14 @@ _HUMIDITY = re.compile(
 )
 
 
+# Rain claims, when the caller cannot say what SQL ran. Not "rain-adjusted",
+# which describes the index, and not a passing "rainy season".
+_RAIN = re.compile(
+    r"\b(precipitation|rainfall|wet days?|rain days?|rainy (hours|days)|mm of rain)\b",
+    re.IGNORECASE,
+)
+
+
 @lru_cache(maxsize=1)
 def _aliases() -> dict[str, str]:
     """Spelling in prose -> name in `rankings`.
@@ -221,6 +229,21 @@ def caveats_for(answer: str, sql: list[str] | None = None) -> list[str]:
             "lakeside cities are often more humid than their cell, and UTCI already "
             "accounts for humidity, so a dew-point filter counts it a second time on "
             "purpose."
+        )
+
+    rain = (
+        any(query.reads_rain(s) for s in sql)
+        if sql is not None
+        else bool(_RAIN.search(answer))
+    )
+    if counts["has_agent_tables"] and rain:
+        notes.append(
+            "Rain is ERA5's total precipitation over a ~31 km grid cell. Reanalysis "
+            "drizzles too often, so wet-day and rainy-hour counts run above weather-"
+            "station figures, showers smaller than the grid are smeared out, and over "
+            "steep tropical relief (the Colombian Andes) totals can be several times "
+            "too high. Compare cities with each other, not with station climatologies; two "
+            "nearby cities can share most of a cell."
         )
 
     return notes

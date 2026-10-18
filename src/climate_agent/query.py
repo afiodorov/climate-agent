@@ -56,6 +56,12 @@ _RECOMPUTED_RELATIONS = re.compile(
 
 # The per-year relations: what a "has it changed" answer is built from.
 _TREND_RELATIONS = re.compile(r"\b(yearly|monthly)\b", re.IGNORECASE)
+_YEAR_READ = re.compile(r"\byear\b|\bselect\s+(\w+\.)?\*", re.IGNORECASE)
+
+# The raw precipitation columns (not the comfort penalty, `hours_rain_adj`).
+_RAIN_COLUMNS = re.compile(
+    r"\b(precip_mm\w*|wet_days\w*|(heavy_)?rain_(daylight_)?hours\w*)\b", re.IGNORECASE
+)
 
 
 def recomputes(sql: str) -> bool:
@@ -63,9 +69,18 @@ def recomputes(sql: str) -> bool:
     return bool(_RECOMPUTED_RELATIONS.search(sql))
 
 
+def reads_rain(sql: str) -> bool:
+    """True when a statement reads the raw precipitation columns."""
+    return bool(_RAIN_COLUMNS.search(sql))
+
+
 def reads_years(sql: str) -> bool:
-    """True when a statement reads individual years rather than the climatology."""
-    return bool(_TREND_RELATIONS.search(sql))
+    """True when a statement reads individual years rather than the climatology.
+
+    Averaging `monthly` over the years without naming `year` (a typical month's
+    rain) is still the climatology.
+    """
+    return bool(_TREND_RELATIONS.search(sql)) and bool(_YEAR_READ.search(sql))
 
 
 class QueryError(Exception):
@@ -278,6 +293,7 @@ def counts() -> dict:
     """The numbers the prompt and the caveats quote, read rather than typed."""
     m = manifest()
     period = m.get("period", {})
+    rain = m.get("penalties", {}).get("precipitation", {})
     return {
         "n_cities": _scalar("SELECT count(*) FROM rankings", 1118),
         # Exports before min_population was written were all at the 500k floor.
@@ -298,6 +314,11 @@ def counts() -> dict:
         "band": _band(m),
         "profile": m.get("comfort", {}).get("profile", "walking"),
         "has_agent_tables": bool(m),
+        # Exports before the rain columns carry no wet_day_mm; 1 mm is the
+        # convention the pipeline uses.
+        "wet_day_mm": m.get("rain", {}).get("wet_day_mm", 1.0),
+        "light_mm_h": rain.get("light_mm_h", 0.1),
+        "heavy_mm_h": rain.get("heavy_mm_h", 1.0),
     }
 
 
@@ -393,6 +414,9 @@ NOTES: dict[str, dict[str, str]] = {
         "rh_mean_daylight": "mean relative humidity over daylight hours, 0-1",
         "muggy_daylight_hours_yr": "daylight hours per year with dew point >= 18 C",
         "comfort_hours_dry_yr": "comfort_hours_yr counting only hours with dew point < 16 C: comfortable AND not humid",
+        "precip_mm_yr": "THE RAIN COLUMNS: precipitation per year, mm, raw ERA5 (not the comfort penalty)",
+        "wet_days_yr": "local days per year with >= {wet_day_mm:g} mm, the climatological 'rain day'",
+        "rain_hours_yr": "hours per year with >= {light_mm_h:g} mm/h; heavy_rain_hours_yr >= {heavy_mm_h:g} mm/h; rain_daylight_hours_yr only in daylight",
     },
     "sensitivity": {
         "baseline": "the city's rank under the published scoring. Each other variant column is its rank under that one change.",
@@ -432,6 +456,7 @@ NOTES: dict[str, dict[str, str]] = {
         "utci_mean_daylight_c": "mean daylight UTCI that year",
         "dewpoint_mean_daylight_c": "mean daylight dew point that year, degrees C",
         "muggy_daylight_hours": "daylight hours with dew point >= 18 C that year",
+        "precip_mm": "precipitation that year, mm; wet_days, rain_hours, heavy_rain_hours and rain_daylight_hours as in rankings' *_yr columns",
     },
     "monthly": {
         "year": "calendar year, local time; month 1-12",
@@ -439,6 +464,7 @@ NOTES: dict[str, dict[str, str]] = {
         "utci_mean_daylight_c": "mean daylight UTCI that month; dewpoint_mean_daylight_c likewise",
         "cold_daylight_hours": "daylight hours below the band's cold_full knot (too cold for full comfort)",
         "hot_daylight_hours": "daylight hours above the band's warm_full knot (too hot for full comfort)",
+        "precip_mm": "precipitation that month, mm; wet_days (days >= {wet_day_mm:g} mm), rain_hours, heavy_rain_hours, rain_daylight_hours likewise. AVG over years for a typical month",
     },
     "comfort_profiles": {
         "profile": "'walking' (the baseline), 'sitting', 'running'; the four knots of each trapezoid",
@@ -455,7 +481,7 @@ _TABLE_INTRO = {
     "utci_histogram": "the hourly record, aggregated: one row per city x month x light x dewpoint_class x 1 C UTCI bin, hours per year. Rebuilds the ranking under ANY whole-degree comfort band, by day or by night, with or without a humidity filter.",
     "hourly_profile": "one row per city x month x local hour: what a typical hour of that month is like. Answers 'best time of day', 'are evenings pleasant', diurnal shape.",
     "yearly": "one row per city x year ({start_year}-{end_year}): year-to-year variability, and the only way to ask whether a city has changed. Fifteen points: test any trend against the year-to-year spread (recipe e).",
-    "monthly": "one row per city x year x month: the yearly table split by month, so a change can be placed in a season. Milder winters and hotter summers can cancel in the annual total.",
+    "monthly": "one row per city x year x month: the yearly table split by month, so a change can be placed in a season. Milder winters and hotter summers can cancel in the annual total. Also the place for rain by month (recipe f).",
     "comfort_profiles": "the trapezoid knots of the named activity profiles.",
     "scoring_config": "name/value pairs describing the run that produced all of the above.",
 }
@@ -484,7 +510,7 @@ def _render_table(table: str, c: dict) -> str:
             if plain:
                 lines.append("  " + ", ".join(plain))
                 plain = []
-            lines.append(f"  {name:<24s} {notes[name]}")
+            lines.append(f"  {name:<24s} {notes[name].format(**c)}")
             seen_month = seen_month or name == "month_01_hours"
         else:
             plain.append(name)
@@ -573,6 +599,16 @@ FROM s GROUP BY 1 ORDER BY 1;
 -- The whole year: the same over `yearly` without the season column. Alias both sides:
 -- rankings also has utci_mean_daylight_c and dewpoint_mean_daylight_c.
 
+-- (f) Which of two cities is rainier? The annual figures are in rankings; by month, average
+--     monthly over the years. Put the year-to-year spread beside any difference.
+SELECT r.name, round(r.precip_mm_yr) AS mm_yr, round(r.wet_days_yr) AS wet_days_yr,
+       round(r.rain_daylight_hours_yr) AS rainy_daylight_hours_yr
+FROM rankings r WHERE (strip_accents(r.name) ILIKE '%oviedo%' OR strip_accents(r.name) ILIKE '%gijon%');
+SELECT r.name, m.month, round(avg(m.precip_mm)) AS mm, round(avg(m.wet_days), 1) AS wet_days,
+       round(stddev(m.wet_days), 1) AS wet_days_sd
+FROM monthly m JOIN rankings r USING (city_id)
+WHERE (strip_accents(r.name) ILIKE '%oviedo%' OR strip_accents(r.name) ILIKE '%gijon%') GROUP BY ALL ORDER BY 2, 1;
+
 What this data cannot answer: individual hours or dates (only climatological aggregates
 {start_year}-{end_year}), anything after {end_year}, anything before {start_year} (no older baseline to
 compare against), forecasts, a custom band restricted to one hour of the day
@@ -580,7 +616,9 @@ compare against), forecasts, a custom band restricted to one hour of the day
 (the histogram is at half-sun exposure; use sensitivity.exposure_* or the profile's sun/shade
 columns), streaks other than the published longest_bad_streak_days, cities not in the list.
 Night-time 'shade' is not meaningful and is not offered. Humidity is ERA5's 2 m dew point over a
-~31 km cell, so coastal and lakeside cities can be more humid than their cell."""
+~31 km cell, so coastal and lakeside cities can be more humid than their cell. Rain is ERA5's
+total precipitation over the same cell: it drizzles too often, so wet-day counts run above
+station figures; compare cities with each other, not with a weather station."""
 
 
 @lru_cache(maxsize=1)

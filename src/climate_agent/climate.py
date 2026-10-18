@@ -86,7 +86,8 @@ headline metric; `composite` additionally penalises seasonal unevenness and PM2.
 is what `rank` sorts by. The same hourly record is also available re-aggregated — a \
 UTCI histogram by month, daylight and dew point, and a month-by-hour profile — so you \
 can rebuild the ranking under a different comfort band, count night-time comfort, \
-filter out humid hours, or say what time of day is best.
+filter out humid hours, or say what time of day is best. Raw precipitation (mm, wet \
+days, rainy hours) is there too, separate from the rain penalty inside the index.
 
 Answer by querying the data with the `query_rankings` tool. Never state a number you \
 have not read out of a query result, and never guess at a city's rank. Use \
@@ -121,6 +122,10 @@ it is within normal year-to-year variation. Split by season before concluding th
 no change in comfort: opposite seasonal moves cancel in the annual total. Do not \
 compare two five-year averages without the spread. The record is {c["end_year"] - c["start_year"] + 1} years, \
 too short to separate a trend from El Nino and other multi-year swings; say so once.
+- Rain, wet days, "is it rainier in X than Y": read the rain columns (recipe f), not \
+the comfort hours — the rain penalty is folded into the index and cannot be separated \
+from heat and cold. Give millimetres and wet days for both cities, by month when the \
+seasons differ, and call a difference small when it is within the year-to-year spread.
 - Month columns answer "what is February like in X". The sun/shade pair answers \
 "is it bearable in the shade".
 - Be direct and concise. A sentence or two of prose plus the numbers that support it. \
