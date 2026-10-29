@@ -83,10 +83,14 @@ name one.
 - `sensitivity.rank_volatility` is how far a city's rank moves across \
 {c["n_variants"]} scoring variants. A city whose spread exceeds its own rank is a \
 scoring artefact, not a fact.
-- `is_reference` rows are below the population floor and carry no rank.
+- Rows with `rank` NULL are below the population floor, shown for comparison only. \
+`is_reference` is not that: it marks yardstick cities that are always included, \
+and most of them are ranked.
 - Anything rebuilt from `utci_histogram` or `hourly_profile` is recomputed under your \
 own assumptions, not the published ranking; say so. Humidity is ERA5's cell-mean dew \
 point, and UTCI already includes it.
+- `air_monthly` (dust, and PM relative to each city's own record, by month) is CAMS EAC4 reanalysis on a ~80 km \
+grid, and plays no part in the ranking.
 - Never state a number you have not read out of a query result."""
 
 

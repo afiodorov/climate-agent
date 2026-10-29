@@ -26,9 +26,17 @@ def flagged_city() -> str:
 
 def reference_city() -> str:
     for name, row in query.city_index().items():
-        if row.get("is_reference"):
+        if row.get("is_reference") and row.get("rank") is None:
             return name
     pytest.skip("no reference city in the data")
+
+
+def ranked_reference_city() -> str:
+    """A yardstick city above the floor: is_reference, but ranked."""
+    for name, row in query.city_index().items():
+        if row.get("is_reference") and row.get("rank") is not None:
+            return name
+    pytest.skip("no ranked reference city in the data")
 
 
 def unstable_city() -> str:

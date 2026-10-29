@@ -97,6 +97,24 @@
     "hourly_profile": 549504,
     "yearly": 28620,
     "monthly": 343440,
-    "city_extras": 1908
+    "city_extras": 1908,
+    "air_monthly": 343440
+  },
+  "air": {
+    "source": "CAMS global reanalysis EAC4 (Copernicus Atmosphere Data Store)",
+    "start_year": 2010,
+    "end_year": 2024,
+    "grid_deg": 0.75,
+    "samples_utc": [
+      "00:00",
+      "06:00",
+      "12:00",
+      "18:00"
+    ],
+    "n_cities": 1908,
+    "day_thresholds": {
+      "dust_aod": 0.3,
+      "pm10_spike_x_median": 2.0
+    }
   }
 }

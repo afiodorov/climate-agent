@@ -233,7 +233,7 @@
         "città fuori classifica",
         "riferimento soltanto"
       ],
-      "definition": "Una città sotto la soglia di popolazione di {min_population} abitanti. È mostrata solo per confronto e non ha una posizione in classifica."
+      "definition": "Una città che la classifica include sempre come termine di paragone. Se è sotto la soglia di popolazione di {min_population} abitanti è mostrata solo per confronto e non ha posizione; altrimenti è classificata come le altre."
     },
     "rank volatility": {
       "term": "volatilità della posizione",
@@ -367,6 +367,24 @@
         "giorni nuvolosi"
       ],
       "definition": "Un giorno che ha ricevuto meno del {overcast_day:.0%} del sole possibile: il sole si vede appena."
+    },
+    "dust day": {
+      "term": "giorno di polvere",
+      "aliases": [
+        "giorno di polvere",
+        "giorni di polvere",
+        "giorni di sabbia",
+        "giorni di calima"
+      ],
+      "definition": "Giorno in cui la polvere del deserto attenua chiaramente la luce del sole: uno spessore ottico della polvere di almeno {dust_aod_day:g}, secondo la rianalisi CAMS. Un cielo velato come durante la calima o l'harmattan, anche se la polvere può restare in quota invece che al suolo."
+    },
+    "PM10": {
+      "term": "PM10",
+      "aliases": [
+        "PM10",
+        "PM 10"
+      ],
+      "definition": "Particelle sospese più piccole di 10 micrometri: polvere, sale marino, fumo e fuliggine del traffico."
     }
   }
 }

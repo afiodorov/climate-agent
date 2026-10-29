@@ -11,7 +11,9 @@ so this repo has no dependency on a sibling checkout of the climate project:
   light and dew-point class), a month x hour-of-day profile, per-year totals
   and a few derived per-city columns. Small enough to vendor, rich enough that
   SQL can rebuild the ranking under a different comfort band, at night, or
-  with a humidity filter.
+  with a humidity filter. `air_monthly` is the odd one out: dust, PM10 and
+  PM2.5 by month from the CAMS EAC4 reanalysis, a separate fetch over the same
+  years, descriptive only — the ranking uses none of it.
 - `methodology.md` — the pipeline's generated write-up, served by a tool.
 
 All of `data/` must come from one pipeline run; `make data` copies it over.
@@ -46,7 +48,14 @@ _FORBIDDEN = re.compile(
 
 MAX_ROWS = 60
 
-AGENT_TABLES = ("utci_histogram", "hourly_profile", "yearly", "monthly", "city_extras")
+AGENT_TABLES = (
+    "utci_histogram",
+    "hourly_profile",
+    "yearly",
+    "monthly",
+    "city_extras",
+    "air_monthly",
+)
 
 # The relations whose numbers are recomputed rather than published.
 _RECOMPUTED_RELATIONS = re.compile(
@@ -65,6 +74,8 @@ _YEAR_READ = re.compile(r"\byear\b|\bselect\s+(\w+\.)?\*", re.IGNORECASE)
 _RAIN_COLUMNS = re.compile(
     r"\b(precip_mm\w*|wet_days\w*|(heavy_)?rain_(daylight_)?hours\w*)\b", re.IGNORECASE
 )
+
+_AIR_RELATIONS = re.compile(r"\bair_monthly\b", re.IGNORECASE)
 
 
 def recomputes(sql: str) -> bool:
@@ -89,6 +100,11 @@ def reads_years(sql: str) -> bool:
     rain) is still the climatology.
     """
     return bool(_TREND_RELATIONS.search(sql)) and bool(_YEAR_READ.search(sql))
+
+
+def reads_air(sql: str) -> bool:
+    """True when a statement reads the monthly dust / PM10 / PM2.5 table."""
+    return bool(_AIR_RELATIONS.search(sql))
 
 
 class QueryError(Exception):
@@ -154,7 +170,13 @@ def _connection() -> duckdb.DuckDBPyConnection:
     # model asks several per turn. The CSVs stay CSV on disk because they are
     # the pipeline's published, diffable format; the big tables are parquet.
     # Tens of MB in RAM, well under a second at boot.
-    for name in ("utci_histogram", "hourly_profile", "yearly", "monthly"):
+    for name in (
+        "utci_histogram",
+        "hourly_profile",
+        "yearly",
+        "monthly",
+        "air_monthly",
+    ):
         path = agent / f"{name}.parquet"
         if path.exists():
             con.execute(f"CREATE TABLE {name} AS SELECT * FROM read_parquet('{path}')")
@@ -303,6 +325,8 @@ def counts() -> dict:
     period = m.get("period", {})
     rain = m.get("penalties", {}).get("precipitation", {})
     sun = m.get("sunshine", {})
+    air = m.get("air", {})
+    air_days = air.get("day_thresholds", {})
     return {
         "n_cities": _scalar("SELECT count(*) FROM rankings", 1118),
         # Exports before min_population was written were all at the 500k floor.
@@ -331,6 +355,12 @@ def counts() -> dict:
         "clear_day": sun.get("clear_day", 0.8),
         "sunny_day": sun.get("sunny_day", 0.5),
         "overcast_day": sun.get("overcast_day", 0.2),
+        "has_air": bool(air),
+        "air_start": air.get("start_year", period.get("start_year", 2010)),
+        "air_end": air.get("end_year", period.get("end_year", 2024)),
+        "air_grid_km": round(float(air.get("grid_deg", 0.75)) * 111 / 5) * 5,
+        "dust_aod_day": air_days.get("dust_aod", 0.3),
+        "pm10_spike_x": air_days.get("pm10_spike_x_median", 2.0),
     }
 
 
@@ -401,11 +431,11 @@ def volatility_index() -> dict[str, dict]:
 NOTES: dict[str, dict[str, str]] = {
     "rankings": {
         "name": "UCDB's local spelling, accents kept, a few bilingual ('Gijón', 'Oviedo / Uviéu', 'Medellín'). Find a city with strip_accents(name) ILIKE '%oviedo%', not name = '...'",
-        "rank": "1 = most comfortable. NULL for reference cities.",
+        "rank": "1 = most comfortable. NULL only for cities below the population floor.",
         "rank_if_eligible": "rank the city would hold if the population floor were dropped",
         "microclimate_risk": "BOOLEAN. True when the ERA5 grid cell probably does not represent the city (coast or steep relief).",
         "microclimate_reason": "'coastal', 'relief', or 'coastal+relief'",
-        "is_reference": "BOOLEAN. True for cities below the population floor, shown for comparison only.",
+        "is_reference": "BOOLEAN. True for the yardstick cities the pipeline always includes. NOT the same as unranked: those above the floor carry a normal rank; only rank IS NULL means shown for comparison only.",
         "comfort_hours_yr": "THE HEADLINE METRIC: daylight hours per year in the comfort band (baseline band, half-sun exposure, rain-adjusted)",
         "comfort_fraction": "comfort_hours_yr / daylight_hours_yr",
         "worst_month_hours": "the lowest of the 12 month_XX_hours",
@@ -415,7 +445,7 @@ NOTES: dict[str, dict[str, str]] = {
         "comfort_hours_sun": "comfort hours assuming full sun exposure",
         "comfort_hours_shade": "comfort hours assuming full shade",
         "elev_offset_k": "lapse-rate correction applied, kelvin",
-        "pm25_ugm3": "CAMS 2021-2023 mean PM2.5",
+        "pm25_ugm3": "mean PM2.5 from CAMS, the one air-quality number the ranking uses. Requested as 2021-2023, but the archive starts in August 2022, so it is about 17 months. For seasons, dust or PM10 use air_monthly",
         "aq_factor": "the air-quality multiplier derived from pm25_ugm3 (1 = no penalty, floor 0.25)",
         "month_01_hours": "comfort hours in January; month_02_hours .. month_12_hours likewise",
         "composite": "comfort_hours_yr * evenness_factor * aq_factor. Drives `rank`.",
@@ -483,6 +513,15 @@ NOTES: dict[str, dict[str, str]] = {
         "precip_mm": "precipitation that month, mm; wet_days (days >= {wet_day_mm:g} mm), rain_hours, heavy_rain_hours, rain_daylight_hours likewise. AVG over years for a typical month",
         "sunshine_hours": "hours of direct sun that month, out of possible_sunshine_hours; clear_days, sunny_days, overcast_days as in rankings. AVG over years for a typical month",
     },
+    "air_monthly": {
+        "year": "calendar year, UTC days; month 1-12. {air_start}-{air_end}. AVG over years for a typical month",
+        "dust_aod": "THE DUST COLUMN (calima, harmattan, Saharan / Gobi dust): mean dust aerosol optical depth at 550 nm that month, unitless. Column-integrated: it also sees dust passing aloft that never reaches the ground",
+        "max_day_dust_aod": "the worst single day's mean dust AOD that month",
+        "dust_days": "days that month with daily-mean dust AOD >= {dust_aod_day:g}, a visibly dusty sky. Dust that reaches the ground shows in pm10_spike_days too",
+        "pm10_spike_days": "days with surface PM10 at least {pm10_spike_x:g}x the city's own median day: ground-level episodes (calima reaching the street, harmattan, smog, smoke)",
+        "pm10_index": "mean surface PM10 that month / the city's long-run mean; 1.5 = 50% dirtier than usual. pm25_index likewise for PM2.5 (smog seasons). RELATIVE ONLY: no concentrations are published, because EAC4's are biased high (2-3x in China and India). Never compare cities' air with these; for that the only number is rankings.pm25_ugm3",
+        "n_days": "days with data that month",
+    },
     "comfort_profiles": {
         "profile": "'walking' (the baseline), 'sitting', 'running'; the four knots of each trapezoid",
     },
@@ -499,6 +538,7 @@ _TABLE_INTRO = {
     "hourly_profile": "one row per city x month x local hour: what a typical hour of that month is like. Answers 'best time of day', 'are evenings pleasant', diurnal shape.",
     "yearly": "one row per city x year ({start_year}-{end_year}): year-to-year variability, and the only way to ask whether a city has changed. Fifteen points: test any trend against the year-to-year spread (recipe e).",
     "monthly": "one row per city x year x month: the yearly table split by month, so a change can be placed in a season. Milder winters and hotter summers can cancel in the annual total. Also the place for rain and sunshine by month (recipe f).",
+    "air_monthly": "one row per city x year x month of air quality from the CAMS EAC4 reanalysis: dust, PM10 spike days, and PM10 / PM2.5 relative to the city's own average. NOT part of the ranking. Answers 'when is the calima', 'which months have dust', 'when is the smog season' (recipe g).",
     "comfort_profiles": "the trapezoid knots of the named activity profiles.",
     "scoring_config": "name/value pairs describing the run that produced all of the above.",
 }
@@ -628,7 +668,7 @@ SELECT r.name, m.month, round(avg(m.precip_mm)) AS mm, round(avg(m.wet_days), 1)
        round(avg(m.clear_days), 1) AS clear_days
 FROM monthly m JOIN rankings r USING (city_id)
 WHERE (strip_accents(r.name) ILIKE '%oviedo%' OR strip_accents(r.name) ILIKE '%gijon%') GROUP BY ALL ORDER BY 2, 1;
-
+{air_recipe}
 What this data cannot answer: individual hours or dates (only climatological aggregates
 {start_year}-{end_year}), anything after {end_year}, anything before {start_year} (no older baseline to
 compare against), forecasts, a custom band restricted to one hour of the day
@@ -641,7 +681,19 @@ total precipitation over the same cell: it drizzles too often, so wet-day counts
 station figures; compare cities with each other, not with a weather station. Sunshine is
 estimated from ERA5's direct beam against a clear-sky model: typically within ~10% of station
 normals, so a smaller gap between two cities is a tie; ERA5 misses coastal low cloud, so foggy
-coasts (Lima, the Cantabrian coast) come out much too sunny."""
+coasts (Lima, the Cantabrian coast) come out much too sunny. Air quality (air_monthly) is CAMS
+EAC4 on a ~80 km grid: it times dust episodes and smog seasons well but smears one city's
+traffic over its cell, and a coastal city's cell can be mostly sea."""
+
+_AIR_RECIPE = """
+-- (g) When is the dust (calima), or the smog? By month, averaged over the years, with the
+--     spread: one strong episode can carry a month in a single year.
+SELECT a.month, round(avg(a.dust_days), 1) AS dust_days, round(stddev(a.dust_days), 1) AS dust_days_sd,
+       round(avg(a.dust_aod), 2) AS dust_aod, round(max(a.max_day_dust_aod), 2) AS worst_day_aod,
+       round(avg(a.pm10_spike_days), 1) AS pm10_spike_days, round(avg(a.pm25_index), 2) AS pm25_index
+FROM air_monthly a JOIN rankings r USING (city_id)
+WHERE strip_accents(r.name) ILIKE '%palmas de gran canaria%' GROUP BY 1 ORDER BY 1;
+"""
 
 
 @lru_cache(maxsize=1)
@@ -669,6 +721,7 @@ def schema() -> str:
             "hourly_profile",
             "yearly",
             "monthly",
+            "air_monthly",
             "comfort_profiles",
             "scoring_config",
         )
@@ -694,6 +747,7 @@ def schema() -> str:
                 profile=c["profile"],
                 start_year=c["start_year"],
                 end_year=c["end_year"],
+                air_recipe=_AIR_RECIPE.format(**c) if c["has_air"] else "",
             )
         )
     return "\n\n".join(parts) + "\n"

@@ -232,7 +232,7 @@
         "cidade sem classificação",
         "somente referência"
       ],
-      "definition": "Uma cidade abaixo do limiar de população de {min_population} habitantes. É mostrada apenas para comparação e não tem posição no ranking."
+      "definition": "Uma cidade que o ranking inclui sempre como referência. Se estiver abaixo do limiar de população de {min_population} habitantes, é mostrada apenas para comparação e não tem posição; caso contrário, é classificada como qualquer outra."
     },
     "rank volatility": {
       "term": "volatilidade da posição",
@@ -369,6 +369,24 @@
         "dias cinzentos"
       ],
       "definition": "Um dia que recebeu menos de {overcast_day:.0%} do seu sol possível: o sol mal aparece."
+    },
+    "dust day": {
+      "term": "dia de poeira",
+      "aliases": [
+        "dia de poeira",
+        "dias de poeira",
+        "dias de calima",
+        "dias com poeira"
+      ],
+      "definition": "Dia em que a poeira do deserto atenua claramente a luz do sol: uma espessura ótica de poeira de pelo menos {dust_aod_day:g}, segundo a reanálise CAMS. Um céu enevoado como num episódio de calima ou de harmatão, embora a poeira possa ir em altitude e não junto ao solo."
+    },
+    "PM10": {
+      "term": "PM10",
+      "aliases": [
+        "PM10",
+        "PM 10"
+      ],
+      "definition": "Partículas em suspensão com menos de 10 micrómetros: poeira, sal marinho, fumo e fuligem do trânsito."
     }
   }
 }

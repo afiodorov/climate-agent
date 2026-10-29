@@ -1,5 +1,5 @@
 import pytest
-from conftest import flagged_city, reference_city, unstable_city
+from conftest import flagged_city, ranked_reference_city, reference_city, unstable_city
 
 from climate_agent import caveats, query
 
@@ -42,6 +42,12 @@ def test_flags_unstable_rank():
 def test_flags_reference_cities():
     notes = caveats.caveats_for(f"{reference_city()} looks excellent.")
     assert any("population floor" in n for n in notes)
+
+
+def test_a_ranked_yardstick_city_is_not_called_unranked():
+    # Las Palmas: on the always-include list, but above the floor and ranked.
+    notes = caveats.caveats_for(f"{ranked_reference_city()} looks excellent.")
+    assert not any("no rank" in n for n in notes)
 
 
 @pytest.mark.parametrize(
@@ -187,3 +193,20 @@ def test_sunshine_note_follows_the_sunshine_columns():
     assert not sun("Here.", sql=["SELECT comfort_hours_sun FROM rankings"])
     assert sun("Madrid gets 2,800 hours of sunshine.")
     assert not sun("Comfort at full sun exposure.")
+
+
+def test_air_note_follows_the_air_table():
+    if not query.counts()["has_air"]:
+        pytest.skip("no air_monthly in this export")
+
+    def dusty(answer, sql=None):
+        return any(
+            "CAMS EAC4 reanalysis" in n for n in caveats.caveats_for(answer, sql=sql)
+        )
+
+    assert dusty(
+        "Here.", sql=["SELECT month, avg(dust_days) FROM air_monthly GROUP BY 1"]
+    )
+    assert not dusty("Here.", sql=["SELECT pm25_ugm3, aq_factor FROM rankings"])
+    assert dusty("La calima llega sobre todo en diciembre.")
+    assert not dusty("PM2.5 enters the index as a multiplier.")

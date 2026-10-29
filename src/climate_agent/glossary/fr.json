@@ -232,7 +232,7 @@
         "ville non classée",
         "simple référence"
       ],
-      "definition": "Une ville sous le seuil de population de {min_population} habitants. Elle est affichée à titre de comparaison seulement et n'a pas de rang."
+      "definition": "Une ville que le classement inclut toujours comme point de repère. Si elle est sous le seuil de population de {min_population} habitants, elle est affichée à titre de comparaison seulement et n'a pas de rang ; sinon elle est classée comme les autres."
     },
     "rank volatility": {
       "term": "volatilité du rang",
@@ -368,6 +368,24 @@
         "journées couvertes"
       ],
       "definition": "Un jour qui a reçu moins de {overcast_day:.0%} de son ensoleillement possible : le soleil se montre à peine."
+    },
+    "dust day": {
+      "term": "jour de poussière",
+      "aliases": [
+        "jour de poussière",
+        "jours de poussière",
+        "jours de sable",
+        "jours de calima"
+      ],
+      "definition": "Jour où la poussière désertique atténue nettement la lumière du soleil : une épaisseur optique de poussière d'au moins {dust_aod_day:g}, d'après la réanalyse CAMS. Un ciel voilé comme lors d'un épisode de calima ou d'harmattan, même si la poussière peut rester en altitude plutôt qu'au sol."
+    },
+    "PM10": {
+      "term": "PM10",
+      "aliases": [
+        "PM10",
+        "PM 10"
+      ],
+      "definition": "Particules en suspension de moins de 10 micromètres : poussière, sel marin, fumée et suie du trafic."
     }
   }
 }

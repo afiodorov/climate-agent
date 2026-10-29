@@ -216,7 +216,7 @@
         "nur als Referenz",
         "nur Referenz"
       ],
-      "definition": "Eine Stadt unterhalb der Bevölkerungsgrenze von {min_population} Einwohnern. Sie wird nur zum Vergleich gezeigt und hat keinen Rang."
+      "definition": "Eine Stadt, die die Rangliste immer als Maßstab mitführt. Liegt sie unter der Bevölkerungsgrenze von {min_population} Einwohnern, wird sie nur zum Vergleich gezeigt und hat keinen Rang; sonst wird sie wie jede andere Stadt eingestuft."
     },
     "rank volatility": {
       "term": "Rangvolatilität",
@@ -361,6 +361,25 @@
         "graue Tage"
       ],
       "definition": "Ein Tag mit weniger als {overcast_day:.0%} des möglichen Sonnenscheins: die Sonne zeigt sich kaum."
+    },
+    "dust day": {
+      "term": "Staubtag",
+      "aliases": [
+        "Staubtag",
+        "Staubtage",
+        "Staubtagen",
+        "Calima-Tage"
+      ],
+      "definition": "Ein Tag, an dem Wüstenstaub das Sonnenlicht deutlich abschwächt: eine optische Dicke des Staubs von mindestens {dust_aod_day:g}, laut der CAMS-Reanalyse. Ein diesiger Himmel wie bei Calima oder Harmattan, auch wenn der Staub hoch oben statt in Bodennähe ziehen kann."
+    },
+    "PM10": {
+      "term": "PM10",
+      "aliases": [
+        "PM10",
+        "PM 10",
+        "Feinstaub PM10"
+      ],
+      "definition": "Schwebeteilchen unter 10 Mikrometern: Staub, Meersalz, Rauch und Ruß aus dem Verkehr."
     }
   }
 }

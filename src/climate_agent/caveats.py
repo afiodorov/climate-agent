@@ -67,6 +67,11 @@ _SUN = re.compile(
     r"\b(sunshine|sunny days?|clear days?|overcast days?|hours of sun)\b", re.IGNORECASE
 )
 
+# Dust and pollution-season claims: the air_monthly table, not the PM2.5 penalty.
+_AIR = re.compile(
+    r"\b(calima|harmattan|dust days?|saharan dust|pm10|smog season)\b", re.IGNORECASE
+)
+
 
 @lru_cache(maxsize=1)
 def _aliases() -> dict[str, str]:
@@ -184,12 +189,16 @@ def caveats_for(answer: str, sql: list[str] | None = None) -> list[str]:
             "Treat it as indicative, not exact."
         )
 
-    reference = [c for c in cities if index.get(c, {}).get("is_reference")]
+    # Not `is_reference`: that marks the yardstick cities the pipeline always
+    # includes, and since the floor came down most of them are ranked.
+    reference = [c for c in cities if c in index and index[c].get("rank") is None]
     if reference:
+        one = len(reference) == 1
         notes.append(
-            f"{_join(reference)} sit below the {counts['min_population']:,} population floor "
-            "and are shown "
-            "for comparison only — they carry no rank."
+            f"{_join(reference)} {'sits' if one else 'sit'} below the "
+            f"{counts['min_population']:,} population floor and "
+            f"{'is' if one else 'are'} shown for comparison only — "
+            f"{'it carries' if one else 'they carry'} no rank."
         )
 
     if _ORDERING.search(answer) and not _ALREADY_HEDGED.search(answer):
@@ -264,6 +273,23 @@ def caveats_for(answer: str, sql: list[str] | None = None) -> list[str]:
             "a smaller gap between two cities is a tie. ERA5 misses coastal low cloud "
             "and fog: foggy coasts (Lima, the Cantabrian coast of Spain) come out much "
             "sunnier than they are."
+        )
+
+    air = (
+        any(query.reads_air(s) for s in sql)
+        if sql is not None
+        else bool(_AIR.search(answer))
+    )
+    if counts["has_air"] and air:
+        notes.append(
+            "Dust and PM by month are CAMS EAC4 reanalysis "
+            f"({counts['air_start']}-{counts['air_end']}, ~{counts['air_grid_km']} km "
+            "grid): good at timing dust episodes and smog seasons, poor at differences "
+            "within a city, and a coastal city's cell can be mostly sea. Dust days count "
+            "dust anywhere in the air column, including layers passing aloft. PM is "
+            "given only relative to each city's own record: EAC4's concentrations run "
+            "high, so they say when a city's air is worse, not how bad it is. None of it "
+            "enters the ranking, which uses one PM2.5 mean."
         )
 
     return notes

@@ -219,7 +219,7 @@
         "kota hanya referensi",
         "status referensi"
       ],
-      "definition": "Kota yang berada di bawah ambang populasi {min_population}. Kota ini ditampilkan hanya untuk perbandingan dan tidak memiliki peringkat."
+      "definition": "Kota yang selalu disertakan dalam peringkat sebagai tolok ukur. Jika berada di bawah ambang populasi {min_population}, kota ini ditampilkan hanya untuk perbandingan dan tidak memiliki peringkat; jika tidak, kota ini diperingkat seperti kota lain."
     },
     "rank volatility": {
       "term": "volatilitas peringkat",
@@ -356,6 +356,23 @@
         "hari berawan"
       ],
       "definition": "Hari yang mendapat kurang dari {overcast_day:.0%} dari penyinaran yang mungkin: matahari nyaris tak muncul."
+    },
+    "dust day": {
+      "term": "hari berdebu",
+      "aliases": [
+        "hari berdebu",
+        "hari-hari berdebu",
+        "hari debu"
+      ],
+      "definition": "Hari ketika debu gurun jelas meredupkan sinar matahari: kedalaman optik debu setidaknya {dust_aod_day:g} menurut reanalisis CAMS. Langit berkabut seperti saat calima atau harmattan, meski debunya bisa melayang tinggi, bukan di permukaan."
+    },
+    "PM10": {
+      "term": "PM10",
+      "aliases": [
+        "PM10",
+        "PM 10"
+      ],
+      "definition": "Partikel melayang yang lebih kecil dari 10 mikrometer: debu, garam laut, asap, dan jelaga lalu lintas."
     }
   }
 }

@@ -200,8 +200,9 @@ _ENTRIES: list[Entry] = [
     _e(
         "reference city",
         ["reference city", "reference cities", "reference-only"],
-        "A city below the {min_population} population floor. It is shown for "
-        "comparison only and carries no rank.",
+        "A city the ranking always includes as a yardstick. If it is below the "
+        "{min_population} population floor it is shown for comparison only and "
+        "carries no rank; otherwise it is ranked like any other.",
         "is_reference",
     ),
     _e(
@@ -298,6 +299,22 @@ _ENTRIES: list[Entry] = [
         "A day that got less than {overcast_day:.0%} of its possible sunshine: "
         "the sun barely shows.",
         "overcast_days_yr",
+    ),
+    _e(
+        "dust day",
+        ["dust day", "dust days", "dusty days", "calima days"],
+        "A day when desert dust dims the sunlight noticeably: a dust optical "
+        "depth of at least {dust_aod_day:g}, from the CAMS reanalysis. A hazy "
+        "sky as in a calima or harmattan episode, though the dust can be high "
+        "overhead rather than at street level.",
+        None,
+    ),
+    _e(
+        "PM10",
+        ["PM10", "PM 10"],
+        "Airborne particles smaller than 10 micrometres: dust, sea salt, smoke "
+        "and traffic soot.",
+        None,
     ),
 ]
 

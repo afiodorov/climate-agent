@@ -229,7 +229,7 @@
         "tylko referencyjne",
         "tylko do porównania"
       ],
-      "definition": "Miasto poniżej progu ludności {min_population}. Jest pokazywane tylko dla porównania i nie ma miejsca w rankingu."
+      "definition": "Miasto, które ranking zawsze uwzględnia jako punkt odniesienia. Jeśli jest poniżej progu ludności {min_population}, jest pokazywane tylko dla porównania i nie ma miejsca w rankingu; w przeciwnym razie jest klasyfikowane jak każde inne."
     },
     "rank volatility": {
       "term": "zmienność rangi",
@@ -377,6 +377,27 @@
         "pochmurne dni"
       ],
       "definition": "Dzień, który dostał mniej niż {overcast_day:.0%} możliwego słońca: słońce ledwo się pokazuje."
+    },
+    "dust day": {
+      "term": "dzień pyłowy",
+      "aliases": [
+        "dzień pyłowy",
+        "dni pyłowe",
+        "dni pyłowych",
+        "dniach pyłowych",
+        "dni z pyłem saharyjskim"
+      ],
+      "definition": "Dzień, w którym pył pustynny wyraźnie osłabia światło słoneczne: grubość optyczna pyłu co najmniej {dust_aod_day:g} według reanalizy CAMS. Mętne niebo jak podczas calimy lub harmattanu, choć pył może przechodzić wysoko, a nie przy ziemi."
+    },
+    "PM10": {
+      "term": "PM10",
+      "aliases": [
+        "PM10",
+        "PM 10",
+        "pyłu PM10",
+        "pył PM10"
+      ],
+      "definition": "Cząstki zawieszone mniejsze niż 10 mikrometrów: pył, sól morska, dym i sadza z ruchu drogowego."
     }
   }
 }

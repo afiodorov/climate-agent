@@ -232,7 +232,7 @@
         "yalnızca referans",
         "sadece referans"
       ],
-      "definition": "{min_population} nüfus tabanının altındaki bir şehir. Yalnızca karşılaştırma için gösterilir ve sıralamada yeri yoktur."
+      "definition": "Sıralamanın her zaman karşılaştırma ölçütü olarak dahil ettiği bir şehir. {min_population} nüfus tabanının altındaysa yalnızca karşılaştırma için gösterilir ve sıralamada yeri yoktur; değilse diğer şehirler gibi sıralanır."
     },
     "rank volatility": {
       "term": "sıra oynaklığı",
@@ -369,6 +369,24 @@
         "bulutlu gün"
       ],
       "definition": "Olası güneşlenmesinin {overcast_day:.0%}'inden azını alan gün: güneş neredeyse görünmez."
+    },
+    "dust day": {
+      "term": "tozlu gün",
+      "aliases": [
+        "tozlu gün",
+        "tozlu günler",
+        "tozlu gün sayısı",
+        "toz taşınımı günleri"
+      ],
+      "definition": "Çöl tozunun güneş ışığını belirgin biçimde zayıflattığı gün: CAMS yeniden analizine göre toz optik derinliği en az {dust_aod_day:g}. Kalima ya da harmattandaki gibi puslu bir gökyüzü; ancak toz yerde değil yüksekte de olabilir."
+    },
+    "PM10": {
+      "term": "PM10",
+      "aliases": [
+        "PM10",
+        "PM 10"
+      ],
+      "definition": "10 mikrometreden küçük havada asılı parçacıklar: toz, deniz tuzu, duman ve trafik isi."
     }
   }
 }

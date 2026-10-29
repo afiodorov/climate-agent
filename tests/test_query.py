@@ -156,6 +156,25 @@ def test_config_tables_carry_the_band():
 
 
 @needs_agent_tables
+def test_air_table_is_a_balanced_record_of_known_cities():
+    if not query.counts()["has_air"]:
+        pytest.skip("no air_monthly in this export")
+    out = query.run_query(
+        "SELECT count(*) FILTER (WHERE r.city_id IS NULL),"
+        " count(DISTINCT n) FROM air_monthly a"
+        " LEFT JOIN rankings r USING (city_id)"
+        " JOIN (SELECT city_id, month, count(*) AS n FROM air_monthly GROUP BY 1, 2)"
+        " USING (city_id, month)"
+    )
+    orphans, distinct_counts = out.rows[0]
+    assert orphans == 0
+    assert distinct_counts == 1  # every city has every month equally often
+    c = query.counts()
+    years = query.run_query("SELECT count(DISTINCT year) FROM air_monthly").rows[0][0]
+    assert years == c["air_end"] - c["air_start"] + 1
+
+
+@needs_agent_tables
 @pytest.mark.parametrize(
     "sql",
     [

@@ -212,7 +212,7 @@
         "alleen ter referentie",
         "alleen referentie"
       ],
-      "definition": "Een stad onder de bevolkingsgrens van {min_population} inwoners. Ze wordt alleen ter vergelijking getoond en heeft geen rang."
+      "definition": "Een stad die de ranglijst altijd als ijkpunt meeneemt. Ligt ze onder de bevolkingsgrens van {min_population} inwoners, dan wordt ze alleen ter vergelijking getoond en heeft ze geen rang; anders wordt ze gerangschikt zoals elke andere stad."
     },
     "rank volatility": {
       "term": "rangvolatiliteit",
@@ -348,6 +348,24 @@
         "betrokken dagen"
       ],
       "definition": "Een dag met minder dan {overcast_day:.0%} van de mogelijke zonneschijn: de zon laat zich nauwelijks zien."
+    },
+    "dust day": {
+      "term": "stofdag",
+      "aliases": [
+        "stofdag",
+        "stofdagen",
+        "dagen met woestijnstof"
+      ],
+      "definition": "Een dag waarop woestijnstof het zonlicht duidelijk dempt: een optische dikte van stof van minstens {dust_aod_day:g}, volgens de CAMS-heranalyse. Een heiige lucht zoals bij calima of harmattan, al kan het stof hoog in de lucht zitten in plaats van op straatniveau."
+    },
+    "PM10": {
+      "term": "PM10",
+      "aliases": [
+        "PM10",
+        "PM 10",
+        "fijnstof PM10"
+      ],
+      "definition": "Zwevende deeltjes kleiner dan 10 micrometer: stof, zeezout, rook en roet van het verkeer."
     }
   }
 }

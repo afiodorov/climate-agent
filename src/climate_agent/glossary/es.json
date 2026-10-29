@@ -231,7 +231,7 @@
         "ciudad sin clasificar",
         "referencia únicamente"
       ],
-      "definition": "Una ciudad por debajo del umbral de población de {min_population} habitantes. Se muestra solo a modo de comparación y no tiene puesto en la clasificación."
+      "definition": "Una ciudad que la clasificación incluye siempre como referencia. Si está por debajo del umbral de población de {min_population} habitantes, se muestra solo a modo de comparación y no tiene puesto; si no, se clasifica como cualquier otra."
     },
     "rank volatility": {
       "term": "volatilidad del puesto",
@@ -363,6 +363,25 @@
         "días grises"
       ],
       "definition": "Un día que recibió menos del {overcast_day:.0%} de su sol posible: el sol apenas asoma."
+    },
+    "dust day": {
+      "term": "día de calima",
+      "aliases": [
+        "día de calima",
+        "días de calima",
+        "día de polvo",
+        "días de polvo",
+        "días con calima"
+      ],
+      "definition": "Día en que el polvo del desierto atenúa claramente la luz del sol: un espesor óptico de polvo de al menos {dust_aod_day:g}, según el reanálisis CAMS. Un cielo turbio como en un episodio de calima, aunque el polvo puede ir en altura y no a ras de suelo."
+    },
+    "PM10": {
+      "term": "PM10",
+      "aliases": [
+        "PM10",
+        "PM 10"
+      ],
+      "definition": "Partículas en suspensión de menos de 10 micrómetros: polvo, sal marina, humo y hollín del tráfico."
     }
   }
 }
