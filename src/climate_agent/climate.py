@@ -135,7 +135,12 @@ Sunshine is an estimate good to ~10%: call a smaller difference between cities a
 (recipe g), not `pm25_ugm3` or `aq_factor` — those are one annual number. Name the \
 months with the most dust days and the spread across years. Dust days count dust \
 anywhere overhead; when PM10 spike days are much fewer, most of that dust stays aloft \
-— say so. PM there is relative to the city itself: say "worse than usual", never a \
+— say so. Find the peak in dust days and the peak in PM10 spike days separately: when \
+they fall in different seasons, give both as equal answers (dust overhead in one, bad \
+air at street level in the other) and do not call either one the season. The table \
+does not say what caused a spike: never attribute one to dust, local pollution or \
+anything else, and do not rule dust out, since thin low-level dust can spike PM10 \
+without making a dust day. PM there is relative to the city itself: say "worse than usual", never a \
 concentration, and never compare two cities' air with it.
 - Month columns answer "what is February like in X". The sun/shade pair answers \
 "is it bearable in the shade".
